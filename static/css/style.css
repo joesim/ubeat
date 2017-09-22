@@ -5,3 +5,20 @@ body {
 .rouge-bordeau {
     background-color: #990000;
 }
+
+.navbar.navbar-dark form input[type=text]:focus:not([readonly]) {
+    border-color: white;
+    box-shadow: none;
+ }
+
+.navbar .navbar-nav .nav-item .dropdown-menu a:hover {
+  background-color: #c70000;
+}
+
+#navbarNav .mr-auto:nth-child(2) {
+  width: 50%;
+}
+
+.navbar-search-size {
+  width: 100% !important; /* For overwrite mdb properties */
+}
