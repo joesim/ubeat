@@ -37,3 +37,10 @@ body {
 .btn {
 	background-color: #990000;
 }
+
+.liste {
+	background-color: #fff;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	border-radius: 5px;
+}
