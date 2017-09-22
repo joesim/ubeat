@@ -2,8 +2,9 @@ body {
     background-color: #f1f1f1;
 }
 
-.rouge-bordeau {
-    background-color: #990000;
+.navbar {
+	margin-bottom: 2em;
+	background-color: #990000;
 }
 
 .navbar.navbar-dark form input[type=text]:focus:not([readonly]) {
@@ -20,5 +21,19 @@ body {
 }
 
 .navbar-search, .navbar-search input[type=text] {
-  width: 100%; /* For overwrite mdb properties */
+  width: 100%;
+}
+
+.login {
+	max-width: 450px;
+	margin: 0 auto;
+}
+
+.signup {
+	max-width: 550px;
+	margin: 0 auto;
+}
+
+.btn {
+	background-color: #990000;
 }
