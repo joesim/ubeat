@@ -16,9 +16,9 @@
         </ul>
 
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item navbar-search-size">
+          <li class="nav-item navbar-search">
             <form class="form-inline waves-effect waves-light">
-              <input class="form-control navbar-search-size" type="text" placeholder="Search" aria-label="Search">
+              <input class="form-control" type="text" placeholder="Search" aria-label="Search">
             </form>
           </li>
         </ul>
