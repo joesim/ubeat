@@ -5,3 +5,8 @@ body {
 .rouge-bordeau {
     background-color: #990000
 }
+
+.navbar.navbar-dark form input[type=text]:focus:not([readonly]) {
+    border-color: white;
+    box-shadow: none;
+ }
