@@ -23,7 +23,7 @@
 				    </div>
 
 				    <div class="text-center">
-				        <button class="btn">Sign up</button>
+				        <button class="btn btn-light-blue">Sign up</button>
 				    </div>
 				</form>
 			</div>

@@ -1,8 +1,8 @@
 <template>
 
-  <nav class="navbar navbar-expand-lg navbar-dark">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-light-blue">
     <div class="container">
-      <a class="navbar-brand" href="#">UBeat</a>
+      <a class="navbar-brand waves-effect waves-light" href="#">UBeat</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
               aria-controls="navbarNav" aria-expanded="false"
               aria-label="Toggle navigation">
@@ -11,7 +11,7 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
-            <router-link class="nav-link waves-effect waves-light" to="/">Playlist</router-link>
+            <router-link class="nav-link waves-effect waves-light" to="/"><i class="fa fa-list-ul"></i> Playlist</router-link>
           </li>
         </ul>
 
@@ -27,9 +27,9 @@
           <li class="nav-item dropdown show">
             <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
                aria-expanded="false"><i class="fa fa-user"></i> Username</a>
-            <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">
-              <a class="dropdown-item waves-effect waves-light" href="#">Settings</a>
-              <a class="dropdown-item aves-effect waves-light" href="#">Logout</a>
+            <div class="dropdown-menu dropdown-light-blue" aria-labelledby="navbarDropdownMenuLink">
+              <a class="dropdown-item waves-effect waves-light" href="#"><i class="fa fa-gear"></i> Settings</a>
+              <a class="dropdown-item aves-effect waves-light" href="#"><i class="fa fa-sign-out"></i> Logout</a>
             </div>
           </li>
         </ul>

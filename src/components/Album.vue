@@ -2,7 +2,7 @@
     <div class="container content">
         <div class="row">
             <div class="col-md-4">
-                <div class="z-depth-3">
+                <div class="z-depth-2">
                     <img src="http://artisticmanifesto.com/wp-content/uploads/2014/06/sam-smith-in-the-lonely-hour-track-list-album-cover-1-e1402968875856.jpg" class="img-fluid">
                 </div>
             </div>
@@ -20,25 +20,25 @@
                 </div>
             </div>
         </div>
-        <table class="table table-hover liste z-depth-1 text-center">
+        <table class="table liste z-depth-1 text-center animated fadeIn">
             <tbody>
                 <tr>
                 <th scope="row" class="align-middle">#1</th>
                 <td class="align-middle">Stay With Me</td>
                 <td class="align-middle">5:33</td>
-                <td><button class="btn dark-red waves-effect waves-light"><i class="fa fa-caret-right mr-1"></i> Play</button></td>
+                <td><button class="btn btn-light-blue waves-effect waves-light"><i class="fa fa-caret-right mr-1"></i> Play</button></td>
                 </tr>
                 <tr>
                 <th scope="row" class="align-middle">#2</th>
                 <td class="align-middle">Stay With Me</td>
                 <td class="align-middle">4:48</td>
-                <td><button class="btn dark-red waves-effect waves-light"><i class="fa fa-caret-right mr-1"></i> Play</button></td>
+                <td><button class="btn btn-light-blue waves-effect waves-light"><i class="fa fa-caret-right mr-1"></i> Play</button></td>
                 </tr>
                 <tr>
                 <th scope="row" class="align-middle">#3</th>
                 <td class="align-middle">Stay With Me</td>
                 <td class="align-middle">3:59</td>
-                <td><button class="btn dark-red waves-effect waves-light"><i class="fa fa-caret-right mr-1"></i> Play</button></td>
+                <td><button class="btn btn-light-blue waves-effect waves-light"><i class="fa fa-caret-right mr-1"></i> Play</button></td>
                 </tr>
             </tbody>
         </table>

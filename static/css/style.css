@@ -4,7 +4,6 @@ body {
 
 .navbar {
 	margin-bottom: 2em;
-	background-color: #990000;
 }
 
 .navbar.navbar-dark form input[type=text]:focus:not([readonly]) {
@@ -13,7 +12,7 @@ body {
  }
 
 .navbar .navbar-nav .nav-item .dropdown-menu a:hover {
-  background-color: #c70000;
+  background-color: #82B1FF;
 }
 
 #navbarNav .mr-auto:nth-child(2) {
@@ -34,10 +33,6 @@ body {
 	margin: 0 auto;
 }
 
-.btn {
-	background-color: #990000;
-}
-
 .liste {
 	background-color: #fff;
 	margin-top: 20px;
@@ -49,6 +44,6 @@ button {
 	margin: 0px !important;
 }
 
-btn {
+.btn {
 	margin: 0px !important;
 }

@@ -18,7 +18,7 @@
 				    </div>
 
 				    <div class="text-center">
-				        <button class="btn">Login</button>
+				        <button class="btn btn-light-blue">Login</button>
 				    </div>
 				</form>
 			</div>
