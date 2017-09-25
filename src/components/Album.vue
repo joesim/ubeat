@@ -23,22 +23,22 @@
         <table class="table table-hover liste z-depth-1 text-center">
             <tbody>
                 <tr>
-                <th scope="row">#1</th>
-                <td>Stay With Me</td>
-                <td>5:33</td>
-                <td><button class="dark-red waves-effect waves-light"><i class="fa fa-caret-right mr-1"></i> Play</button></td>
+                <th scope="row" class="align-middle">#1</th>
+                <td class="align-middle">Stay With Me</td>
+                <td class="align-middle">5:33</td>
+                <td><button class="btn dark-red waves-effect waves-light"><i class="fa fa-caret-right mr-1"></i> Play</button></td>
                 </tr>
                 <tr>
-                <th scope="row">#2</th>
-                <td>Stay With Me</td>
-                <td>4:48</td>
-                <td><button class="dark-red waves-effect waves-light"><i class="fa fa-caret-right mr-1"></i> Play</button></td>
+                <th scope="row" class="align-middle">#2</th>
+                <td class="align-middle">Stay With Me</td>
+                <td class="align-middle">4:48</td>
+                <td><button class="btn dark-red waves-effect waves-light"><i class="fa fa-caret-right mr-1"></i> Play</button></td>
                 </tr>
                 <tr>
-                <th scope="row">#3</th>
-                <td>Stay With Me</td>
-                <td>3:59</td>
-                <td><button class="dark-red waves-effect waves-light"><i class="fa fa-caret-right mr-1"></i> Play</button></td>
+                <th scope="row" class="align-middle">#3</th>
+                <td class="align-middle">Stay With Me</td>
+                <td class="align-middle">3:59</td>
+                <td><button class="btn dark-red waves-effect waves-light"><i class="fa fa-caret-right mr-1"></i> Play</button></td>
                 </tr>
             </tbody>
         </table>

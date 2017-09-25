@@ -44,3 +44,11 @@ body {
 	margin-bottom: 20px;
 	border-radius: 5px;
 }
+
+button {
+	margin: 0px !important;
+}
+
+btn {
+	margin: 0px !important;
+}
