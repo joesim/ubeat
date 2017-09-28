@@ -87,7 +87,7 @@ button {
   border-bottom: double;
 }
 
-.page-background-image {
+body {
   background-image: url("https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-433673.jpg");
   background-repeat: no-repeat;
   background-position: center center;
@@ -98,4 +98,9 @@ button {
 
 .logo-itunes {
   width: 100px;
+}
+
+table.table th, table.table td {
+  padding-top: 0.7rem; 
+  padding-bottom: 0.7rem; 
 }
