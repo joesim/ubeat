@@ -1,9 +1,9 @@
 <template>
   <div class="container content">
-    <div class="row mb-md-4">
-      <div class="col-md-4 hm-black-strong">
+    <div class="row">
+      <div class="col-md-3 hm-black-strong">
         <a href="https://itunes.apple.com/ca/artist/michael-jackson/id32940" target="_blank">
-          <div class="view overlay hm-zoom z-depth-3 rounded">
+          <div class="view overlay hm-zoom z-depth-3 rounded mb-4">
             <img src="http://www.lovemarks.com/wp-content/uploads/lovemark-michael-jackson-standard-600x600.jpg" class="img-fluid" alt="artist picture">
             <div class="mask flex-center waves-effect waves-light">
               <p class="white-text">See on iTunes</p>
@@ -11,13 +11,13 @@
           </div>
         </a>
       </div>
-      <div class="col-md-8">
-        <h1>Michael Jackson</h1>
-        <h2 class="light-blue-text"><em>Pop</em></h2>
+      <div class="col-md-9">
+        <h2>Michael Jackson</h2>
+        <h3 class="light-blue-text"><em>Pop</em></h3>
         <div class="row">
           <div class="col-md-3">
             <a href="https://itunes.apple.com/ca/artist/michael-jackson/id32940" target="_blank">
-              <div class="hoverable rounded-circle hm-zoom">
+              <div class="hoverable rounded-circle hm-zoom logo-itunes">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/ITunes_12.2_logo.png/240px-ITunes_12.2_logo.png" class="img-fluid" alt="iTunes logo">
               </div>
             </a>
@@ -25,16 +25,16 @@
         </div>
       </div>
     </div>
-    <div class="card">
+    <div class="card mt-4 mb-4">
       <div class="card-body">
         <table class="table table-hover">
           <thead>
           <tr class="light-blue-text">
             <th>#</th>
-            <th>Album Name</th>
+            <th>Album</th>
             <th>Date</th>
             <th>Tracks</th>
-            <th>Total Length</th>
+            <th>Duration</th>
           </tr>
           </thead>
           <tbody>
