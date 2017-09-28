@@ -87,7 +87,7 @@ button {
   border-bottom: double;
 }
 
-.page-background-image {
+body {
   background-image: url("https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-433673.jpg");
   background-repeat: no-repeat;
   background-position: center center;
