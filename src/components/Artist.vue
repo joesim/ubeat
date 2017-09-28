@@ -63,4 +63,9 @@
 </template>
 
 <style>
+  .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+    background-color: RGB(130,177,255);
+    color: white;
+    cursor: pointer;
+  }
 </style>
