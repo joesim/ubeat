@@ -1,6 +1,4 @@
 <template>
-  <div class="page-background-image">
-
     <div class="container content">
       <div class="card-body">
         <h1 class="light-blue-text text-center">My music, my rhythm!</h1>
@@ -114,8 +112,6 @@
 
       </div>
     </div>
-
-  </div>
 </template>
 
 <style>

@@ -1,5 +1,10 @@
 body {
-    background-color: #f1f1f1;
+    background-image: url("https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-433673.jpg");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    background-attachment: fixed;
+    min-height: 100vh;
 }
 
 .content {
@@ -63,15 +68,6 @@ button {
 .table-icon {
   max-height: 50px;
   width: auto;
-}
-
-.page-background-image {
-  background-image: url("https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-433673.jpg");
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: cover;
-  background-attachment: fixed;
-  min-height: 100vh;
 }
 
 .logo-itunes {
