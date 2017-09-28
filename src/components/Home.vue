@@ -2,7 +2,7 @@
   <div class="page-background-image">
     <div class="container content">
 
-      <div class="card card-spacing">
+      <div class="card">
         <div class="card-body">
           <h1 class="text-title z-depth-2">My music, my rhythm!</h1>
           <br/>
@@ -24,7 +24,7 @@
 
           <div class="tab-content card-spacing">
             <div class="tab-pane fade in show active tab-pane-border-bottom card-body" id="panel1" role="tabpanel">
-              <table class="table table-striped text-center" id="table-list-all-albums">
+              <table class="table table-striped table-border-bottom table-column-proportion text-center" id="table-list-all-albums">
                 <tbody>
                 <tr>
                   <th scope="row" class="align-middle"><img src="http://www.lovemarks.com/wp-content/uploads/lovemark-michael-jackson-standard-600x600.jpg" class="img-fluid table-icon" alt="artist picture"></th>

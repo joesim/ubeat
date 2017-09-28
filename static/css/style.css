@@ -2,8 +2,9 @@ body {
     background-color: #f1f1f1;
 }
 
-.navbar {
-	margin-bottom: 2em;
+.content {
+  padding-top: 80px;
+  padding-bottom: 10px;
 }
 
 .navbar.navbar-dark form input[type=text]:focus:not([readonly]) {
@@ -65,8 +66,21 @@ button {
 }
 
 .table-icon {
-  height: 100px;
+  max-height: 100px;
   width: auto;
+}
+
+.table-column-proportion {
+  width: 100%;
+  overflow: scroll;
+}
+
+.table-column-proportion th {
+  width: 20%;
+}
+
+.table-column-proportion td {
+  width: 40%;
 }
 
 .tab-pane-border-bottom {
@@ -74,9 +88,10 @@ button {
 }
 
 .page-background-image {
-  background-image: url("");
+  background-image: url("https://i.pinimg.com/736x/f2/f5/87/f2f58733e96ad4662e13199e2208e2ba--pastel-ombre-background-pastel-watercolour-background.jpg");
   background-repeat: no-repeat;
   background-size: cover;
+  height : 100%;
 }
 
 .logo-itunes {
