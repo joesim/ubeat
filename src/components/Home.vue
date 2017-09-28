@@ -27,21 +27,21 @@
                 <th scope="row" class="align-middle"><img src="http://www.lovemarks.com/wp-content/uploads/lovemark-michael-jackson-standard-600x600.jpg" class="img-fluid table-icon rounded z-depth-1" alt="artist picture"></th>
                 <td class="align-middle">Michael Jackson</td>
                 <td class="align-middle">
-                  <a class="btn btn-light-blue waves-effect waves-light btn-sm" href="./#/artist"><i class="fa fa-caret-right mr-1"></i>See more</a>
+                  <a class="btn btn-light-blue waves-effect waves-light btn-sm" href="./#/artist"><i class="fa fa-search mr-1"></i>See more</a>
                 </td>
               </tr>
               <tr>
                 <th scope="row" class="align-middle"><img src="http://www.lovemarks.com/wp-content/uploads/lovemark-michael-jackson-standard-600x600.jpg" class="img-fluid table-icon rounded z-depth-1" alt="artist picture"></th>
                 <td class="align-middle">Michael Jackson</td>
                 <td class="align-middle">
-                  <a class="btn btn-light-blue waves-effect waves-light btn-sm" href="./#/artist"><i class="fa fa-caret-right mr-1"></i>See more</a>
+                  <a class="btn btn-light-blue waves-effect waves-light btn-sm" href="./#/artist"><i class="fa fa-search mr-1"></i>See more</a>
                 </td>
               </tr>
               <tr>
                 <th scope="row" class="align-middle"><img src="http://www.lovemarks.com/wp-content/uploads/lovemark-michael-jackson-standard-600x600.jpg" class="img-fluid table-icon rounded z-depth-1" alt="artist picture"></th>
                 <td class="align-middle">Michael Jackson</td>
                 <td class="align-middle">
-                  <a class="btn btn-light-blue waves-effect waves-light btn-sm" href="./#/artist"><i class="fa fa-caret-right mr-1"></i>See more</a>
+                  <a class="btn btn-light-blue waves-effect waves-light btn-sm" href="./#/artist"><i class="fa fa-search mr-1"></i>See more</a>
                 </td>
               </tr>
             </tbody>
@@ -54,17 +54,17 @@
             <tr>
               <th scope="row" class="align-middle"><img src="https://upload.wikimedia.org/wikipedia/en/9/91/Xscape.png" class="img-fluid table-icon" alt="album picture"></th>
               <td class="align-middle">Xscape</td>
-              <td class="align-middle"><a class="btn btn-light-blue waves-effect waves-light btn-sm" href="./#/album"><i class="fa fa-caret-right mr-1"></i>See more</a></td>
+              <td class="align-middle"><a class="btn btn-light-blue waves-effect waves-light btn-sm" href="./#/album"><i class="fa fa-search mr-1"></i>See more</a></td>
             </tr>
             <tr>
               <th scope="row" class="align-middle"><img src="https://upload.wikimedia.org/wikipedia/en/8/8f/Michaelalbumcover.jpg" class="img-fluid table-icon" alt="album picture"></th>
               <td class="align-middle">Michael</td>
-              <td class="align-middle"><a class="btn btn-light-blue waves-effect waves-light btn-sm disabled" href="./#/album"><i class="fa fa-caret-right mr-1"></i>See more</a></td>
+              <td class="align-middle"><a class="btn btn-light-blue waves-effect waves-light btn-sm disabled" href="./#/album"><i class="fa fa-search mr-1"></i>See more</a></td>
             </tr>
             <tr>
               <th scope="row" class="align-middle"><img src="https://upload.wikimedia.org/wikipedia/en/9/98/Mjinvincible.jpg" class="img-fluid table-icon" alt="album picture"></th>
               <td class="align-middle">Invincible</td>
-              <td class="align-middle"><a class="btn btn-light-blue waves-effect waves-light btn-sm disabled" href="./#/album"><i class="fa fa-caret-right mr-1"></i>See more</a></td>
+              <td class="align-middle"><a class="btn btn-light-blue waves-effect waves-light btn-sm disabled" href="./#/album"><i class="fa fa-search mr-1"></i>See more</a></td>
             </tr>
             </tbody>
           </table>
