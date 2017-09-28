@@ -14,36 +14,36 @@
 
       <ul class="nav nav-tabs nav-justified bg-light-blue">
         <li class="nav-item">
-          <a class="nav-link active" data-toggle="tab" href="#panel1" role="tab">Profile</a>
+          <a class="nav-link active" data-toggle="tab" href="#panel1" role="tab">Artists</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" data-toggle="tab" href="#panel2" role="tab">Follow</a>
+          <a class="nav-link" data-toggle="tab" href="#panel2" role="tab">Albums</a>
         </li>
       </ul>
 
       <div class="tab-content card">
         <div class="tab-pane fade in show active" id="panel1" role="tabpanel">
-          <table class="table text-center" id="table-list-all-albums">
+          <table class="table text-center" id="table-list-all-artists">
             <tbody>
               <tr>
                 <th scope="row" class="align-middle"><img src="http://www.lovemarks.com/wp-content/uploads/lovemark-michael-jackson-standard-600x600.jpg" class="img-fluid table-icon rounded z-depth-1" alt="artist picture"></th>
                 <td class="align-middle">Michael Jackson</td>
                 <td class="align-middle">
-                  <a href="./#/artist">Go to artist page</a>
+                  <a class="btn btn-light-blue waves-effect waves-light btn-sm" href="./#/artist"><i class="fa fa-caret-right mr-1"></i>See more</a>
                 </td>
               </tr>
               <tr>
                 <th scope="row" class="align-middle"><img src="http://www.lovemarks.com/wp-content/uploads/lovemark-michael-jackson-standard-600x600.jpg" class="img-fluid table-icon rounded z-depth-1" alt="artist picture"></th>
                 <td class="align-middle">Michael Jackson</td>
                 <td class="align-middle">
-                  <a href="./#/artist">Go to artist page</a>
+                  <a class="btn btn-light-blue waves-effect waves-light btn-sm" href="./#/artist"><i class="fa fa-caret-right mr-1"></i>See more</a>
                 </td>
               </tr>
               <tr>
                 <th scope="row" class="align-middle"><img src="http://www.lovemarks.com/wp-content/uploads/lovemark-michael-jackson-standard-600x600.jpg" class="img-fluid table-icon rounded z-depth-1" alt="artist picture"></th>
                 <td class="align-middle">Michael Jackson</td>
                 <td class="align-middle">
-                  <a href="./#/artist">Go to artist page</a>
+                  <a class="btn btn-light-blue waves-effect waves-light btn-sm" href="./#/artist"><i class="fa fa-caret-right mr-1"></i>See more</a>
                 </td>
               </tr>
             </tbody>
@@ -51,9 +51,25 @@
         </div>
 
         <div class="tab-pane fade" id="panel2" role="tabpanel">
-          <br>
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nihil odit magnam minima, soluta doloribus reiciendis molestiae placeat unde eos molestias. Quisquam aperiam, pariatur. Tempora, placeat ratione porro voluptate odit minima.</p>
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nihil odit magnam minima, soluta doloribus reiciendis molestiae placeat unde eos molestias. Quisquam aperiam, pariatur. Tempora, placeat ratione porro voluptate odit minima.</p>
+          <table class="table text-center" id="table-list-all-albums">
+            <tbody>
+            <tr>
+              <th scope="row" class="align-middle"><img src="https://upload.wikimedia.org/wikipedia/en/9/91/Xscape.png" class="img-fluid table-icon" alt="album picture"></th>
+              <td class="align-middle">Xscape</td>
+              <td class="align-middle"><a class="btn btn-light-blue waves-effect waves-light btn-sm" href="./#/album"><i class="fa fa-caret-right mr-1"></i>See more</a></td>
+            </tr>
+            <tr>
+              <th scope="row" class="align-middle"><img src="https://upload.wikimedia.org/wikipedia/en/8/8f/Michaelalbumcover.jpg" class="img-fluid table-icon" alt="album picture"></th>
+              <td class="align-middle">Michael</td>
+              <td class="align-middle"><a class="btn btn-light-blue waves-effect waves-light btn-sm disabled" href="./#/album"><i class="fa fa-caret-right mr-1"></i>See more</a></td>
+            </tr>
+            <tr>
+              <th scope="row" class="align-middle"><img src="https://upload.wikimedia.org/wikipedia/en/9/98/Mjinvincible.jpg" class="img-fluid table-icon" alt="album picture"></th>
+              <td class="align-middle">Invincible</td>
+              <td class="align-middle"><a class="btn btn-light-blue waves-effect waves-light btn-sm disabled" href="./#/album"><i class="fa fa-caret-right mr-1"></i>See more</a></td>
+            </tr>
+            </tbody>
+          </table>
         </div>
 
         <div class="d-flex justify-content-center">

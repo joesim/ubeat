@@ -60,31 +60,9 @@ button {
   color: white;
 }
 
-.nav-item-tab-color a {
-  background-color: #82B1FF;
-  color: white;
-}
-
 .table-icon {
   max-height: 50px;
   width: auto;
-}
-
-.table-column-proportion {
-  width: 100%;
-  overflow: scroll;
-}
-
-.table-column-proportion th {
-  width: 20%;
-}
-
-.table-column-proportion td {
-  width: 40%;
-}
-
-.tab-pane-border-bottom {
-  border-bottom: double;
 }
 
 .page-background-image {
@@ -101,6 +79,6 @@ button {
 }
 
 table.table th, table.table td {
-  padding-top: 0.7rem; 
-  padding-bottom: 0.7rem; 
+  padding-top: 0.7rem;
+  padding-bottom: 0.7rem;
 }
