@@ -1,15 +1,12 @@
 <template>
   <div class="page-background-image">
-    <div class="container content">
 
-      <div class="card">
+    <div class="container content">
         <div class="card-body">
-          <h1 class="text-title z-depth-2">My music, my rhythm!</h1>
+          <h1 class="light-blue-text text-center">My music, my rhythm!</h1>
           <br/>
           <p class="text-justify">Bienvenue sur le site <b>le plus musical</b> du web! Vous aimez la musique et aimeriez disposer d'un outil vous permettant de <b>créer</b> et <b>partager</b> à vos amis <b>vos différentes compilations musicales</b>, ce site est ce que vous recherchez. Pour avoir une idée des artistes et albums disponibles sur le site, vous pouvez regarder dans la section ci-dessous ou encore utiliser l'outil de recherche présent dans la barre de menu. N'hésitez pas à vous inscrire dès maintenant et bonne écoute!</p>
         </div>
-      </div>
-
       <div class="card card-spacing">
         <div class="card-body">
 
@@ -94,6 +91,7 @@
         </div>
       </div>
     </div>
+
   </div>
 </template>
 

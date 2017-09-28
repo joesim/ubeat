@@ -88,10 +88,12 @@ button {
 }
 
 .page-background-image {
-  background-image: url("https://i.pinimg.com/736x/f2/f5/87/f2f58733e96ad4662e13199e2208e2ba--pastel-ombre-background-pastel-watercolour-background.jpg");
+  background-image: url("https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-433673.jpg");
   background-repeat: no-repeat;
+  background-position: center center;
   background-size: cover;
-  height : 100%;
+  background-attachment: fixed;
+  min-height: 100vh;
 }
 
 .logo-itunes {
