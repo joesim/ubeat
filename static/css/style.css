@@ -99,3 +99,8 @@ button {
 .logo-itunes {
   width: 100px;
 }
+
+table.table th, table.table td {
+  padding-top: 0.7rem; 
+  padding-bottom: 0.7rem; 
+}

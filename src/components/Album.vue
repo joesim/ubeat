@@ -42,8 +42,8 @@
                             <th scope="row" class="align-middle">1</th>
                             <td class="align-middle">Love Never Felt So Good</td>
                             <td class="align-middle">3:54</td>
-                            <td>
-                                <button class="btn btn-light-blue waves-effect waves-light">
+                            <td class="align-middle">
+                                <button class="btn btn-sm align-middle btn-light-blue waves-effect waves-light">
                                     <i class="fa fa-caret-right mr-1"></i> Play</button>
                             </td>
                         </tr>
@@ -51,8 +51,8 @@
                             <th scope="row" class="align-middle">2</th>
                             <td class="align-middle">Chicago</td>
                             <td class="align-middle">4:05</td>
-                            <td>
-                                <button class="btn btn-light-blue waves-effect waves-light">
+                            <td class="align-middle">
+                                <button class="btn btn-sm btn-light-blue align-middle waves-effect waves-light">
                                     <i class="fa fa-caret-right mr-1"></i> Play</button>
                             </td>
                         </tr>
@@ -60,8 +60,8 @@
                             <th scope="row" class="align-middle">3</th>
                             <td class="align-middle">Loving You</td>
                             <td class="align-middle">3:15</td>
-                            <td>
-                                <button class="btn btn-light-blue waves-effect waves-light">
+                            <td class="align-middle">
+                                <button class="btn btn-sm btn-light-blue align-middle waves-effect waves-light">
                                     <i class="fa fa-caret-right mr-1"></i> Play</button>
                             </td>
                         </tr>
@@ -69,40 +69,40 @@
                           <th scope="row" class="align-middle">4</th>
                           <td class="align-middle">A Place with No Name</td>
                           <td class="align-middle">5:35</td>
-                          <td>
-                            <button class="btn btn-light-blue waves-effect waves-light">
+                          <td class="align-middle">
+                            <button class="btn btn-sm btn-light-blue align-middle waves-effect waves-light">
                               <i class="fa fa-caret-right mr-1"></i> Play</button>
                           </td>
                         </tr><tr>
                           <th scope="row" class="align-middle">5</th>
                           <td class="align-middle">Slave to the Rhythm</td>
                           <td class="align-middle">4:15</td>
-                          <td>
-                            <button class="btn btn-light-blue waves-effect waves-light">
+                          <td class="align-middle">
+                            <button class="btn btn-light-blue align-middle btn-sm waves-effect waves-light">
                               <i class="fa fa-caret-right mr-1"></i> Play</button>
                           </td>
                         </tr><tr>
                           <th scope="row" class="align-middle">6</th>
                           <td class="align-middle">Do You Know Where Your Children Are</td>
                           <td class="align-middle">4:36</td>
-                          <td>
-                            <button class="btn btn-light-blue waves-effect waves-light">
+                          <td class="align-middle">
+                            <button class="btn btn-light-blue align-middle btn-sm waves-effect waves-light">
                               <i class="fa fa-caret-right mr-1"></i> Play</button>
                           </td>
                         </tr><tr>
                           <th scope="row" class="align-middle">7</th>
                           <td class="align-middle">Blue Gangsta</td>
                           <td class="align-middle">4:14</td>
-                          <td>
-                            <button class="btn btn-light-blue waves-effect waves-light">
+                          <td class="align-middle">
+                            <button class="btn btn-light-blue align-middle btn-sm waves-effect waves-light">
                               <i class="fa fa-caret-right mr-1"></i> Play</button>
                           </td>
                         </tr><tr>
                           <th scope="row" class="align-middle">8</th>
                           <td class="align-middle">Xscape</td>
                           <td class="align-middle">4:04</td>
-                          <td>
-                            <button class="btn btn-light-blue waves-effect waves-light">
+                          <td class="align-middle">
+                            <button class="btn btn-light-blue align-middle btn-sm waves-effect waves-light">
                               <i class="fa fa-caret-right mr-1"></i> Play</button>
                           </td>
                         </tr>
