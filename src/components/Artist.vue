@@ -16,7 +16,7 @@
         <h3 class="light-blue-text"><em>Pop</em></h3>
         <div class="row">
           <div class="col-md-3">
-             <a href="https://geo.itunes.apple.com/ca/album/evolve/id1233502263?mt=1&app=music" class="hoverable rounded" style="display:inline-block;overflow:hidden;background:url(//linkmaker.itunes.apple.com/assets/shared/badges/en-us/music-lrg.svg) no-repeat;width:110px;height:40px;background-size:contain;"></a>
+             <a href="https://itunes.apple.com/ca/artist/michael-jackson/id32940" target="_blank" class="hoverable rounded" style="display:inline-block;overflow:hidden;background:url(//linkmaker.itunes.apple.com/assets/shared/badges/en-us/music-lrg.svg) no-repeat;width:110px;height:40px;background-size:contain;"></a>
           </div>
         </div>
       </div>
@@ -34,7 +34,7 @@
           </tr>
           </thead>
           <tbody>
-          <tr>
+          <tr onclick="document.location ='./#/album';">
             <th scope="row">1</th>
             <td>Xscape</td>
             <td>2014</td>
