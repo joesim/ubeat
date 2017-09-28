@@ -2,8 +2,8 @@
     <div class="container content">
         <div class="row">
             <div class="col-md-3 hm-black-strong">
-                <div class="view overlay hm-zoom z-depth-2">
-                    <img src="https://upload.wikimedia.org/wikipedia/en/9/91/Xscape.png" class="img-fluid">
+                <div class="view overlay hm-zoom z-depth-2 rounded mb-4">
+                    <img src="https://timedotcom.files.wordpress.com/2014/04/michael-jackson-album-xscape.jpg?h=580" class="img-fluid">
                     <div class="mask flex-center waves-effect waves-light">
                         <p class="white-text">See on iTunes</p>
                     </div>
@@ -11,7 +11,7 @@
             </div>
             <div class="col-md-9">
                 <h1>Xscape</h1>
-                <h2>Mickael Jackson</h2>
+                <h2>Michael Jackson</h2>
                 <h3 class="light-blue-text">
                     <em>Pop-rock</em>
                 </h3>
@@ -25,37 +25,50 @@
                 </div>
             </div>
         </div>
-        <table class="table liste z-depth-1 text-center animated fadeIn">
-            <tbody>
-                <tr>
-                    <th scope="row" class="align-middle">#1</th>
-                    <td class="align-middle">Stay With Me</td>
-                    <td class="align-middle">5:33</td>
-                    <td>
-                        <button class="btn btn-light-blue waves-effect waves-light">
-                            <i class="fa fa-caret-right mr-1"></i> Play</button>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row" class="align-middle">#2</th>
-                    <td class="align-middle">Stay With Me</td>
-                    <td class="align-middle">4:48</td>
-                    <td>
-                        <button class="btn btn-light-blue waves-effect waves-light">
-                            <i class="fa fa-caret-right mr-1"></i> Play</button>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row" class="align-middle">#3</th>
-                    <td class="align-middle">Stay With Me</td>
-                    <td class="align-middle">3:59</td>
-                    <td>
-                        <button class="btn btn-light-blue waves-effect waves-light">
-                            <i class="fa fa-caret-right mr-1"></i> Play</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+
+        <div class="card mt-4 mb-4 animated fadeIn">
+            <div class="card-body">
+                <table class="table text-center">
+                    <thead>
+                        <tr class="light-blue-text">
+                            <th>#</th>
+                            <th class="text-center">Album</th>
+                            <th class="text-center">Tracks</th>
+                            <th class="text-center">Duration</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row" class="align-middle">1</th>
+                            <td class="align-middle">Stay With Me</td>
+                            <td class="align-middle">5:33</td>
+                            <td>
+                                <button class="btn btn-light-blue waves-effect waves-light">
+                                    <i class="fa fa-caret-right mr-1"></i> Play</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row" class="align-middle">2</th>
+                            <td class="align-middle">Stay With Me</td>
+                            <td class="align-middle">4:48</td>
+                            <td>
+                                <button class="btn btn-light-blue waves-effect waves-light">
+                                    <i class="fa fa-caret-right mr-1"></i> Play</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row" class="align-middle">3</th>
+                            <td class="align-middle">Stay With Me</td>
+                            <td class="align-middle">3:59</td>
+                            <td>
+                                <button class="btn btn-light-blue waves-effect waves-light">
+                                    <i class="fa fa-caret-right mr-1"></i> Play</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </template>
 
