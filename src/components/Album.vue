@@ -2,12 +2,14 @@
   <div class="container content">
     <div class="row">
       <div class="col-md-3 hm-black-strong">
+        <a href="https://geo.itunes.apple.com/ca/album/xscape-deluxe/id850697616?mt=1&app=music" target="_blank">
         <div class="view overlay hm-zoom z-depth-2 rounded mb-4">
           <img src="https://timedotcom.files.wordpress.com/2014/04/michael-jackson-album-xscape.jpg?h=580" class="img-fluid">
           <div class="mask flex-center waves-effect waves-light">
             <p class="white-text">See on iTunes</p>
           </div>
         </div>
+        </a>
       </div>
       <div class="col-md-9">
         <h1>Xscape</h1>
@@ -20,7 +22,7 @@
             <p>16/08/2014 <br> 8 tracks</p>
           </div>
           <div class="col">
-            <a href="https://geo.itunes.apple.com/ca/album/evolve/id1233502263?mt=1&app=music" class="hoverable rounded" style="display:inline-block;overflow:hidden;background:url(//linkmaker.itunes.apple.com/assets/shared/badges/en-us/music-lrg.svg) no-repeat;width:110px;height:40px;background-size:contain;"></a>
+            <a href="https://geo.itunes.apple.com/ca/album/xscape-deluxe/id850697616?mt=1&app=music" target="_blank" class="hoverable rounded" style="display:inline-block;overflow:hidden;background:url(//linkmaker.itunes.apple.com/assets/shared/badges/en-us/music-lrg.svg) no-repeat;width:110px;height:40px;background-size:contain;"></a>
           </div>
         </div>
       </div>
