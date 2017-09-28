@@ -47,3 +47,34 @@ button {
 .btn {
 	margin: 0px !important;
 }
+
+.card-spacing {
+  margin-top : 10px;
+  margin-bottom : 10px;
+}
+
+.text-title {
+  text-align: center;
+  background-color: #82B1FF;
+  color: white;
+}
+
+.nav-item-tab-color a {
+  background-color: #82B1FF;
+  color: white;
+}
+
+.table-icon {
+  height: 100px;
+  width: auto;
+}
+
+.tab-pane-border-bottom {
+  border-bottom: double;
+}
+
+.page-background-image {
+  background-image: url("");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
