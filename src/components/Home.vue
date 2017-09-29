@@ -3,11 +3,11 @@
       <div class="card-body">
         <h1 class="light-blue-text text-center">My music, my rhythm!</h1>
         <br/>
-        <p class="text-justify">Bienvenue sur le site
-          <b>le plus musical</b> du web! Vous aimez la musique et aimeriez disposer d'un outil vous permettant de
-          <b>créer</b> et
-          <b>partager</b> à vos amis
-          <b>vos différentes compilations musicales</b>, ce site est ce que vous recherchez. Pour avoir une idée des artistes et albums disponibles sur le site, vous pouvez regarder dans la section ci-dessous ou encore utiliser l'outil de recherche présent dans la barre de menu. N'hésitez pas à vous inscrire dès maintenant et bonne écoute!</p>
+        <p class="text-justify">Welcome to the
+          <b>most musical</b> website on the Internet! You love music and would like to have a tool that allows you to
+          <b>create</b> and
+          <b>share</b> to your friends
+          <b>your custom music compilations</b>, then this site is what you are looking for. To get an idea of the various artists and albums available on the website, you can look in the section below or use the search tool located in the menu bar. Do not hesitate to register now and good music listening!</p>
       </div>
 
       <ul class="nav nav-tabs nav-justified bg-light-blue">
