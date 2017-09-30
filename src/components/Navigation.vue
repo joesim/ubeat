@@ -1,6 +1,6 @@
 <template>
 
-  <nav class="navbar navbar-expand-lg navbar-dark bg-light-blue fixed-top">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-light-blue">
     <div class="container">
       <a class="navbar-brand waves-effect waves-light" href="#">UBeat</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"

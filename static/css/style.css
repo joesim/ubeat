@@ -8,8 +8,11 @@ body {
 }
 
 .content {
-  padding-top: 80px;
-  padding-bottom: 10px;
+  padding: 10px 0 ;
+}
+
+.navbar {
+  margin-bottom: 30px;
 }
 
 .navbar.navbar-dark form input[type=text]:focus:not([readonly]) {
