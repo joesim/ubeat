@@ -1,5 +1,5 @@
 <template>
-    <div class="container content">
+    <div class="container">
       <div class="card-body">
         <h1 class="light-blue-text text-center">My music, my rhythm!</h1>
         <br/>
