@@ -19,7 +19,7 @@
         </li>
       </ul>
 
-      <div class="tab-content card">
+      <div class="tab-content card mb-4">
         <div class="tab-pane fade in show active" id="panel1" role="tabpanel">
           <table class="table text-center" id="table-list-all-artists">
             <tbody>
