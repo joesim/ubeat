@@ -8,6 +8,10 @@ body {
     padding-top: 80px;
 }
 
+.brand{
+  height: 35px;
+}
+
 .content {
   padding: 10px 0 ;
 }
