@@ -41,8 +41,6 @@
 <script>
 import Vue from 'vue';
 
-const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiI1OWZjZmE3ODI5NTgzODE4YzI0ZTUxYjUiLCJleHAiOjE1MDk4NDExNjY0OTN9.odKJlbUZk5Nr51tczcToIuAgXK9zSDLHkcHoK9f9_rI';
-
 export default {
   data() {
     return {
@@ -54,7 +52,7 @@ export default {
   },
   created: async function created() {
     const reqHeaders = new Headers({
-      Authorization: token,
+      Authorization: Vue.config.ubeatToken,
     });
 
     const artistId = this.$route.params.id;
