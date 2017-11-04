@@ -1,22 +1,12 @@
 <template>
   <div class="container content">
     <div class="row">
-      <div class="col-md-3 hm-black-strong">
-        <a href="https://itunes.apple.com/ca/artist/michael-jackson/id32940" target="_blank">
-          <div class="view overlay hm-zoom z-depth-2 rounded mb-4">
-            <img src="http://www.lovemarks.com/wp-content/uploads/lovemark-michael-jackson-standard-600x600.jpg" class="img-fluid" alt="artist picture">
-            <div class="mask flex-center waves-effect waves-light">
-              <p class="white-text">See on iTunes</p>
-            </div>
-          </div>
-        </a>
-      </div>
-      <div class="col-md-9">
-        <h2>Michael Jackson</h2>
-        <h3 class="light-blue-text"><em>Pop</em></h3>
+      <div class="col-md-12">
+        <h2>{{ name }}</h2>
+        <h3 class="light-blue-text"><em>{{ genre }}</em></h3>
         <div class="row">
           <div class="col-md-3">
-             <a href="https://itunes.apple.com/ca/artist/michael-jackson/id32940" target="_blank" class="hoverable rounded" style="display:inline-block;overflow:hidden;background:url(//linkmaker.itunes.apple.com/assets/shared/badges/en-us/music-lrg.svg) no-repeat;width:110px;height:40px;background-size:contain;"></a>
+             <a v-bind:href="itunesLink" target="_blank" class="hoverable rounded" style="display:inline-block;overflow:hidden;background:url(//linkmaker.itunes.apple.com/assets/shared/badges/en-us/music-lrg.svg) no-repeat;width:110px;height:40px;background-size:contain;"></a>
           </div>
         </div>
       </div>
@@ -34,26 +24,12 @@
           </tr>
           </thead>
           <tbody>
-          <tr onclick="document.location ='./#/album';">
-            <th scope="row">1</th>
-            <td>Xscape</td>
-            <td>2014</td>
-            <td>8</td>
-            <td>32:25</td>
-          </tr>
-          <tr>
-            <th scope="row">2</th>
-            <td>Michael</td>
-            <td>2010</td>
-            <td>10</td>
-            <td>42:13</td>
-          </tr>
-          <tr>
-            <th scope="row">3</th>
-            <td>Invincible</td>
-            <td>2001</td>
-            <td>16</td>
-            <td>76:08</td>
+          <tr v-for="(album, key, index) in albumsFiltered" onclick="document.location ='./#/album';">
+            <th scope="row">{{ key + 1 }}</th>
+            <td>{{ album.collectionName }}</td>
+            <td>{{ album.releaseDate }}</td>
+            <td>{{ album.trackCount }}</td>
+            <td>{{ album.collectionPrice }}</td>
           </tr>
           </tbody>
         </table>
@@ -61,6 +37,58 @@
     </div>
   </div>
 </template>
+
+<script>
+import Vue from 'vue';
+
+const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiI1OWZjZmE3ODI5NTgzODE4YzI0ZTUxYjUiLCJleHAiOjE1MDk4NDExNjY0OTN9.odKJlbUZk5Nr51tczcToIuAgXK9zSDLHkcHoK9f9_rI';
+
+export default {
+  data() {
+    return {
+      name: '',
+      genre: '',
+      itunesLink: '',
+      albums: []
+    };
+  },
+  created: async function created() {
+    const reqHeaders = new Headers({
+      Authorization: token,
+    });
+
+    const artistId = this.$route.params.id;
+
+    const reqLoc = `${Vue.config.ubeatApiLocation}/artists/${artistId}`;
+
+    fetch(new Request(reqLoc, { method: 'GET', headers: reqHeaders }))
+    .then(resp => resp.json())
+    .then((data) => {
+      const artist = data.results[0];
+      this.name = artist.artistName;
+      this.genre = artist.primaryGenreName;
+      this.itunesLink = artist.artistLinkUrl;
+    });
+
+    const reqLocAlbums = `${Vue.config.ubeatApiLocation}/artists/${artistId}/albums`;
+
+    fetch(new Request(reqLocAlbums, { method: 'GET', headers: reqHeaders }))
+    .then(resp => resp.json())
+    .then((data) => {
+      this.albums = data.results;
+    });
+  },
+  computed: {
+    albumsFiltered: function albumsFiltered() {
+      return this.albums.filter((album) => {
+        const albumFiltered = album;
+        albumFiltered.releaseDate = album.releaseDate.substr(0, 4);
+        return albumFiltered;
+      });
+    }
+  }
+};
+</script>
 
 <style>
   .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {

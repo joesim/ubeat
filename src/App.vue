@@ -7,6 +7,7 @@
 
 <script>
 import Navigation from '@/components/Navigation';
+import Vue from 'vue';
 
 export default {
   name: 'app',
@@ -14,6 +15,7 @@ export default {
     'nav-menu': Navigation
   }
 };
+Vue.config.ubeatApiLocation = 'http://localhost:3000';
 </script>
 
 <style>

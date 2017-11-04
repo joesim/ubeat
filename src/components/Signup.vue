@@ -1,35 +1,67 @@
 <template>
     <div class="container">
-	    <div class="signup card">
-	    	<div class="card-body">
-				<form>
-				    <p class="h5 text-center mb-4">Sign up</p>
+      <div class="signup card">
+        <div class="card-body">
+        <form>
+            <p class="h5 text-center mb-4">Sign up</p>
 
-				    <div class="md-form">
-				        <i class="fa fa-user prefix grey-text"></i>
-				        <input type="text" id="orangeForm-name" class="form-control">
-				        <label for="orangeForm-name">Your name</label>
-				    </div>
-				    <div class="md-form">
-				        <i class="fa fa-envelope prefix grey-text"></i>
-				        <input type="text" id="orangeForm-email" class="form-control">
-				        <label for="orangeForm-email">Your email</label>
-				    </div>
+            <div class="md-form">
+                <i class="fa fa-user prefix grey-text"></i>
+                <input v-model="name" type="text" id="orangeForm-name" class="form-control">
+                <label for="orangeForm-name">Your name</label>
+            </div>
+            <div class="md-form">
+                <i class="fa fa-envelope prefix grey-text"></i>
+                <input v-model="email" type="text" id="orangeForm-email" class="form-control">
+                <label for="orangeForm-email">Your email</label>
+            </div>
 
-				    <div class="md-form">
-				        <i class="fa fa-lock prefix grey-text"></i>
-				        <input type="password" id="orangeForm-pass" class="form-control">
-				        <label for="orangeForm-pass">Your password</label>
-				    </div>
+            <div class="md-form">
+                <i class="fa fa-lock prefix grey-text"></i>
+                <input v-model="password" type="password" id="orangeForm-pass" class="form-control">
+                <label for="orangeForm-pass">Your password</label>
+            </div>
 
-				    <div class="text-center">
-				        <button class="btn btn-light-blue">Sign up</button>
-				    </div>
-				</form>
-			</div>
-		</div>
+            <div class="text-center">
+                <button v-on:click="signup" class="btn btn-light-blue">Sign up</button>
+            </div>
+        </form>
+      </div>
+    </div>
     </div>
 </template>
 
+
+<script>
+/*
+import Vue from 'vue';
+
+export default {
+  data() {
+    return {
+      email: '',
+      name: '',
+      password: ''
+    };
+  },
+  methods: {
+    signup: async function signup() {
+      try {
+        const reqLoc = `${Vue.config.ubeatApiLocation}/signup`;
+        const reqBody = { email: this.email, password: this.password, name: this.name };
+        const reqHeaders = new Headers({
+          'Content-Type': 'application/x-www-form-urlencoded',
+        });
+        const res = await fetch(new Request(reqLoc, { method: 'POST',
+        body: JSON.stringify(reqBody), headers: reqHeaders }));
+        if (!res.ok) throw new Error(res.statusText);
+      } catch (e) {
+        throw new Error(e);
+      }
+    }
+  }
+};
+*/
+</script>
 <style>
 </style>
