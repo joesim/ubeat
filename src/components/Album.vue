@@ -115,6 +115,17 @@
   </div>
 </template>
 
-<style>
+<script>
+  export default {
+    data() {
+        return {}
+    },
+    created: function created() {
+    	const albumId = this.$route.params.id;
 
+    }
+  }
+</script>
+
+<style>
 </style>
