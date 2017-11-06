@@ -11,7 +11,7 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
-            <router-link class="nav-link waves-effect waves-light" to="/"><i class="fa fa-list-ul"></i> Playlist</router-link>
+            <router-link class="nav-link waves-effect waves-light" to="/playlists"><i class="fa fa-list-ul"></i> Playlists</router-link>
           </li>
         </ul>
 

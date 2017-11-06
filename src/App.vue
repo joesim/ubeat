@@ -15,8 +15,8 @@ export default {
     'nav-menu': Navigation
   }
 };
-Vue.config.ubeatApiLocation = 'http://localhost:3000';
-Vue.config.ubeatToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiI1OWZjZmE3ODI5NTgzODE4YzI0ZTUxYjUiLCJleHAiOjE1MDk4NDExNjY0OTN9.odKJlbUZk5Nr51tczcToIuAgXK9zSDLHkcHoK9f9_rI';
+Vue.config.ubeatApiLocation = 'http://ubeat.herokuapp.com';
+Vue.config.ubeatToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiI1OWZlMWU3ODQ1NmIxYjAwMDQ5M2RhNDQiLCJleHAiOjE1MTAwMDg5Njg4NTB9.qZnr0-qXHKT_qEVaRVAdnpb4wPH_a6mFQUpfxPm20K4';
 </script>
 
 <style>
