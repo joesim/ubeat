@@ -82,3 +82,7 @@ table.table th, table.table td {
   padding-top: 0.7rem;
   padding-bottom: 0.7rem;
 }
+
+.audio-player {
+  width: 100%;
+}

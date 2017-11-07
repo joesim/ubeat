@@ -45,7 +45,7 @@
             <td class="align-middle">{{ track.trackName }}</td>
             <td class="align-middle">{{ track.trackDuration }}</td>
             <td>
-              <audio controls>
+              <audio controls class="audio-player">
                 <source v-bind:src="track.previewUrl" type="audio/mp4">
               </audio>
            </td>
