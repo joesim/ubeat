@@ -6,6 +6,9 @@
         <h1 style="display:inline-block;" id="playlistname"> {{playlist.name}}
           <i class="fa fa-pencil" v-on:click="editPlaylistName"></i>
         </h1>
+        <h5 style="margin-left:10px">
+          By {{playlist.owner.name}}
+        </h5>
       </div>
 
       <!-- The input html to change the playlist name (invisible by default) -->
@@ -31,7 +34,7 @@
         </button>
       </div>
     </div>
-    
+    <hr>
     <div class="card mt-4 mb-4">
       <div class="card-body">
         <table class="table text-center">
