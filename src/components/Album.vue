@@ -45,9 +45,12 @@
             <td class="align-middle">{{ track.trackName }}</td>
             <td class="align-middle">{{ track.trackDuration }}</td>
             <td>
-              <button class="btn btn-light-blue waves-effect waves-light">
-                <i class="fa fa-caret-right mr-1"></i> Play</button>
-            </td>
+              <audio controls>
+                <source v-bind:src="track.previewUrl" type="audio/mp4">
+              </audio>
+              <!--<button class="btn btn-light-blue waves-effect waves-light">-->
+                <!--<i class="fa fa-caret-right mr-1"></i> Play</button>-->
+           </td>
           </tr>
           </tbody>
         </table>
@@ -110,7 +113,8 @@
             this.tracks.push({
               trackName: track.trackName,
               trackDuration: trackDurationFormat,
-              previewUrl: track.previewUrl
+              previewUrl: track.previewUrl,
+              artwork: track.artworkUrl30
             });
           });
           this.numberTracks = this.tracks.length;
