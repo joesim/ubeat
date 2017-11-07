@@ -1,5 +1,5 @@
 <template>
-    <div class="container animated fadeIn">
+    <div class="container animated">
         <div class="row align-items-center">
             <!-- The playlist name -->
             <div class="col-md-8 text-xs-center text-sm-center text-md-left">
