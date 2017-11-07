@@ -2,7 +2,7 @@
   <div class="container animated fadeIn">
     <div class="row align-items-center">
       <!-- The playlist name -->
-      <div class="col-md-8 editable text-xs-center text-sm-center text-md-left" v-if="!editing">
+      <div class="col-md-8 editable text-center text-xs-center text-sm-center text-md-left" v-if="!editing">
         <h1 style="display:inline-block;" id="playlistname"> {{playlist.name}}
           <i class="fa fa-pencil" v-on:click="editPlaylistName"></i>
         </h1>
@@ -12,7 +12,7 @@
       </div>
 
       <!-- The input html to change the playlist name (invisible by default) -->
-      <div class="col-md-8 editable text-xs-center text-sm-center text-md-left" style="padding:5px" v-if="editing">
+      <div class="col-md-8 editable text-center text-xs-center text-sm-center text-md-left" style="padding:5px" v-if="editing">
         <div class="input-group">
           <input type="text" class="form-control editInput" v-model="newPlaylistName" v-bind:placeholder="playlist.name">
           <span class="input-group-btn">
@@ -27,7 +27,7 @@
           </span>
         </div>
       </div>
-      <div class="col-md-4 text-xs-center text-sm-center text-md-right">
+      <div class="col-md-4 text-center text-xs-center text-sm-center text-md-right">
         <button class="btn btn-danger waves-effect waves-light" v-on:click="deletePlaylist">
           Delete playlist
           <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>

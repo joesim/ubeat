@@ -2,10 +2,10 @@
     <div class="container animated">
         <div class="row align-items-center">
             <!-- The playlist name -->
-            <div class="col-md-8 text-xs-center text-sm-center text-md-left">
+            <div class="col-md-8 text-center text-xs-center text-sm-center text-md-left">
                 <h1 style="display:inline-block;" id="playlistname"> Playlists </h1>
             </div>
-            <div class="col-md-4 text-xs-center text-sm-center text-md-right">
+            <div class="col-md-4 text-center text-xs-center text-sm-center text-md-right">
                 <button type="button" class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-target="#exampleModal">
                     Create new playlist
                     <i class="fa fa-headphones fa-lg" aria-hidden="true"></i>
