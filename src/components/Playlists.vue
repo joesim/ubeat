@@ -6,7 +6,7 @@
                 <h1 style="display:inline-block;" id="playlistname"> Playlists </h1>
             </div>
             <div class="col-md-4 text-center text-xs-center text-sm-center text-md-right">
-                <button type="button" class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-target="#exampleModal">
+                <button type="button" class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-target="#newPlaylistModal">
                     Create new playlist
                     <i class="fa fa-headphones fa-lg" aria-hidden="true"></i>
                 </button>
@@ -47,11 +47,11 @@
         </div>
 
         <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="newPlaylistModal" tabindex="-1" role="dialog" aria-labelledby="newPlaylistModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">New playlist</h5>
+                        <h5 class="modal-title" id="newPlaylistModalLabel">New playlist</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
