@@ -28,6 +28,11 @@
                                         {{playlist.name}}
                                     </h4>
                                 </div>
+                                <p style="color:black;margin:0px">
+                                    <small class="">
+                                        {{playlist.owner.name}}
+                                    </small>
+                                </p>
                                 <p class="card-text">
                                     <small class="text-time">
                                         <em>{{playlist.tracks.length}} songs</em>
