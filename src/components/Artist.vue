@@ -24,7 +24,7 @@
           </tr>
           </thead>
           <tbody>
-          <tr v-for="(album, key, index) in albumsFiltered" onclick="document.location ='./#/album';">
+          <tr v-for="(album, key, index) in albumsFiltered" v-on:click="redirectAlbum(album.collectionId)">
             <th scope="row">{{ key + 1 }}</th>
             <td>{{ album.collectionName }}</td>
             <td>{{ album.releaseDate }}</td>
@@ -83,6 +83,11 @@ export default {
         albumFiltered.releaseDate = album.releaseDate.substr(0, 4);
         return albumFiltered;
       });
+    }
+  },
+  methods: {
+    redirectAlbum: (nav) => {
+      document.location = `./#/album/${nav}`;
     }
   }
 };

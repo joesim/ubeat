@@ -48,8 +48,6 @@
               <audio controls>
                 <source v-bind:src="track.previewUrl" type="audio/mp4">
               </audio>
-              <!--<button class="btn btn-light-blue waves-effect waves-light">-->
-                <!--<i class="fa fa-caret-right mr-1"></i> Play</button>-->
            </td>
           </tr>
           </tbody>
