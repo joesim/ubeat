@@ -47,7 +47,7 @@
             <td>
               <button class="btn btn-light-blue waves-effect waves-light">
                 <i class="fa fa-caret-right mr-1"></i> Play</button>
-            </td>
+           </td>
           </tr>
           </tbody>
         </table>
@@ -110,7 +110,8 @@
             this.tracks.push({
               trackName: track.trackName,
               trackDuration: trackDurationFormat,
-              previewUrl: track.previewUrl
+              previewUrl: track.previewUrl,
+              artwork: track.artworkUrl30
             });
           });
           this.numberTracks = this.tracks.length;
