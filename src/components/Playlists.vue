@@ -1,14 +1,26 @@
 <template>
-    <div class="container">
-        <h1> Playlists <hr></h1>
+    <div class="container animated fadeIn">
+        <div class="row align-items-center">
+            <!-- The playlist name -->
+            <div class="col-md-8 text-xs-center text-sm-center text-md-left">
+                <h1 style="display:inline-block;" id="playlistname"> Playlists </h1>
+            </div>
+            <div class="col-md-4 text-xs-center text-sm-center text-md-right">
+                <button type="button" class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-target="#exampleModal">
+                    Create new playlist
+                    <i class="fa fa-headphones fa-lg" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+        <hr>
         <div class="row">
             <div class="col-6 col-lg-4 col-md-6 col-sm-6" v-for="playlist of playlists" v-if="playlists.length>0">
                 <a v-bind:href="`/#/playlists/${playlist.id}`">
                     <div class="card" style="margin:5px;">
-                        <div class="row align-items-center" style="padding:3px">
-                            <div class="col-md-4">
-                                <img class="img-fluid" style="height:100px" :src="playlist.tracks[0].artworkUrl100" v-if="playlist.tracks.length!=0">
-                                <img class="img-fluid" style="height:100px;" src="http://www.iconarchive.com/download/i7804/hopstarter/sleek-xp-software/VLC-Media-Player.ico" v-if="playlist.tracks.length==0">
+                        <div class="row align-items-center" style="padding:15px">
+                            <div class="col-md-4 text-center">
+                                <img class="" style="width:80px;height:100px" :src="playlist.tracks[0].artworkUrl100" v-if="playlist.tracks.length!=0">
+                                <img class="" style="width:80px;height:100px;" src="https://cdn2.iconfinder.com/data/icons/smiling-face/512/Nothing_Face-512.png" v-if="playlist.tracks.length==0">
                             </div>
                             <div class="col-md-8">
                                 <div class="">
@@ -27,7 +39,31 @@
                     </div>
                 </a>
             </div>
+        </div>
 
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">New playlist</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="md-form">
+                            <i class="fa fa-headphones prefix" aria-hidden="true"></i>
+                            <input type="text" id="form2" class="form-control" v-model="newPlaylistName">
+                            <label for="form2">New playlist name</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" v-on:click="createPlaylist" v-if="newPlaylistName!==''">Create</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -39,7 +75,8 @@ export default {
   data() {
     return {
       playlists: [],
-      errors: []
+      errors: [],
+      newPlaylistName: ''
     };
   },
   created: async function created() {
@@ -51,7 +88,7 @@ export default {
     .then(resp => resp.json())
     .then((data) => {
       for (let i = 0; i < data.length; i += 1) {
-        if (data[i].owner !== undefined && data[i].owner.name !== undefined &&
+        if (data[i].owner !== undefined &&
          data[i].owner.email !== undefined) {
           this.playlists.push(data[i]);
         }
@@ -60,10 +97,28 @@ export default {
     .catch((error) => {
       this.error.push(error);
     });
+  },
+  methods: {
+    createPlaylist: function createPlaylist() {
+      const reqHeaders = new Headers({
+        Authorization: Vue.config.ubeatToken
+      });
+      const reqBody = new URLSearchParams({
+        name: this.newPlaylistName
+      });
+      const reqLoc = `${Vue.config.ubeatApiLocation}/playlists`;
+      fetch(new Request(reqLoc, { method: 'POST', headers: reqHeaders, body: reqBody }))
+        .then(resp => resp.json())
+        .then((data) => {
+          this.playlists.push(data);
+        })
+        .catch((error) => {
+          this.errors.push(error);
+        });
+    }
   }
 };
 </script>
-
 
 <style scoped>
 .btn-stick-corner {
