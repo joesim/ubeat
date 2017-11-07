@@ -4,7 +4,7 @@
       <div class="col-md-3 hm-black-strong">
         <a href="https://geo.itunes.apple.com/ca/album/xscape-deluxe/id850697616?mt=1&app=music" target="_blank">
         <div class="view overlay hm-zoom z-depth-2 rounded mb-4">
-          <img src="https://timedotcom.files.wordpress.com/2014/04/michael-jackson-album-xscape.jpg?h=580" class="img-fluid">
+          <img v-bind:src="artworkUrl" class="img-fluid">
           <div class="mask flex-center waves-effect waves-light">
             <p class="white-text">See on iTunes</p>
           </div>
@@ -12,14 +12,14 @@
         </a>
       </div>
       <div class="col-md-9">
-        <h1>Xscape</h1>
-        <a href="./#/artist"><h2 class="black-text">Michael Jackson</h2></a>
+       <h1>{{ collectionName }}</h1>
+        <a href="./#/artist"><h2 class="black-text">{{ artistName }}</h2></a>
         <h3 class="light-blue-text">
-          <em>Pop-rock</em>
+          <em>{{ primaryGenreName }}</em>
         </h3>
         <div class="row">
           <div class="col">
-            <p>16/08/2014 <br> 8 tracks</p>
+            <p>{{ releaseDate }} <br> {{ numberTracks }} tracks</p>
           </div>
           <div class="col">
             <a href="https://geo.itunes.apple.com/ca/album/xscape-deluxe/id850697616?mt=1&app=music" target="_blank" class="hoverable rounded" style="display:inline-block;overflow:hidden;background:url(//linkmaker.itunes.apple.com/assets/shared/badges/en-us/music-lrg.svg) no-repeat;width:110px;height:40px;background-size:contain;"></a>
@@ -114,6 +114,63 @@
     </div>
   </div>
 </template>
+
+<script>
+  import Vue from 'vue';
+
+  export default {
+    data() {
+      return {
+        artistName: '',
+        collectionName: '',
+        primaryGenreName: '',
+        releaseDate: '',
+        artworkUrl: '',
+        collectionUrl: '',
+        numberTracks: 0,
+        tracks: []
+      };
+    },
+    created: async function created() {
+      const reqHeaders = new Headers({
+        Authorization: Vue.config.ubeatToken,
+      });
+
+      const albumId = this.$route.params.id;
+
+      const reqLoc = `${Vue.config.ubeatApiLocation}/albums/${albumId}`;
+
+      fetch(new Request(reqLoc, { method: 'GET', headers: reqHeaders }))
+        .then(resp => resp.json())
+        .then((data) => {
+          const album = data.results[0];
+          const releaseDate = new Date(album.releaseDate);
+
+          this.artistName = album.artistName;
+          this.collectionName = album.collectionName;
+          this.primaryGenreName = album.primaryGenreName;
+          this.releaseDate = `${releaseDate.getDate()}/${releaseDate.getMonth()}/${releaseDate.getFullYear()}`;
+          this.artworkUrl = album.artworkUrl100.replace('100x100', '500x500');
+          this.collectionUrl = album.collectionViewUrl;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+      const reqLocTracks = `${Vue.config.ubeatApiLocation}/albums/${albumId}/tracks`;
+
+      fetch(new Request(reqLocTracks, { method: 'GET', headers: reqHeaders }))
+        .then(resp => resp.json())
+        .then((data) => {
+          this.tracks = data.results;
+          this.numberTracks = this.tracks.length;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
+</script>
 
 <style>
 
