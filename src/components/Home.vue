@@ -8,112 +8,127 @@
           <b>create</b> and
           <b>share</b> to your friends
           <b>your custom music compilations</b>, then this site is what you are looking for. To get an idea of the various artists and albums available on the website, you can look in the section below or use the search tool located in the menu bar. Do not hesitate to register now and good music listening!</p>
+        <br/>
+        <h3 class="text-center">Here are some random albums & artists to discover, enjoy!</h3>
       </div>
 
       <ul class="nav nav-tabs nav-justified bg-light-blue">
         <li class="nav-item">
-          <a class="nav-link active" data-toggle="tab" href="#panel1" role="tab">Artists</a>
+          <a class="nav-link active" v-on:click="indexPageAlbum = 0" data-toggle="tab" href="#panel1" role="tab">Albums</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" data-toggle="tab" href="#panel2" role="tab">Albums</a>
+          <a class="nav-link" v-on:click="indexPageArtist = 0"  data-toggle="tab" href="#panel2" role="tab">Artists</a>
         </li>
       </ul>
 
       <div class="tab-content card mb-4">
+
         <div class="tab-pane fade in show active" id="panel1" role="tabpanel">
-          <table class="table text-center" id="table-list-all-artists">
-            <tbody>
-              <tr>
-                <th scope="row" class="align-middle"><img src="http://www.lovemarks.com/wp-content/uploads/lovemark-michael-jackson-standard-600x600.jpg" class="img-fluid table-icon rounded z-depth-1" alt="artist picture"></th>
-                <td class="align-middle">Michael Jackson</td>
-                <td class="align-middle">
-                  <a class="btn btn-light-blue waves-effect waves-light btn-sm" href="./#/artist"><i class="fa fa-search mr-1"></i>See more</a>
-                </td>
-              </tr>
-              <tr>
-                <th scope="row" class="align-middle"><img src="http://www.lovemarks.com/wp-content/uploads/lovemark-michael-jackson-standard-600x600.jpg" class="img-fluid table-icon rounded z-depth-1" alt="artist picture"></th>
-                <td class="align-middle">Michael Jackson</td>
-                <td class="align-middle">
-                  <a class="btn btn-light-blue waves-effect waves-light btn-sm" href="./#/artist"><i class="fa fa-search mr-1"></i>See more</a>
-                </td>
-              </tr>
-              <tr>
-                <th scope="row" class="align-middle"><img src="http://www.lovemarks.com/wp-content/uploads/lovemark-michael-jackson-standard-600x600.jpg" class="img-fluid table-icon rounded z-depth-1" alt="artist picture"></th>
-                <td class="align-middle">Michael Jackson</td>
-                <td class="align-middle">
-                  <a class="btn btn-light-blue waves-effect waves-light btn-sm" href="./#/artist"><i class="fa fa-search mr-1"></i>See more</a>
-                </td>
-              </tr>
+          <table class="table text-center" id="table-list-all-albums">
+            <tbody v-for="(item, index) in albums">
+            <tr v-if="index < indexPageAlbum + 3 && index >=  indexPageAlbum">
+              <th scope="row" class="align-middle"><img v-bind:src="item.artworkUrl100" class="img-fluid table-icon" alt="album picture"></th>
+              <td class="align-middle">{{ item.collectionName }}</td>
+              <td class="align-middle"><a class="btn btn-light-blue waves-effect waves-light btn-sm" v-bind:href="'./#/album/'+item.collectionId"><i class="fa fa-search mr-1"></i>See more</a></td>
+            </tr>
             </tbody>
           </table>
         </div>
 
         <div class="tab-pane fade" id="panel2" role="tabpanel">
-          <table class="table text-center" id="table-list-all-albums">
-            <tbody>
-            <tr>
-              <th scope="row" class="align-middle"><img src="https://upload.wikimedia.org/wikipedia/en/9/91/Xscape.png" class="img-fluid table-icon" alt="album picture"></th>
-              <td class="align-middle">Xscape</td>
-              <td class="align-middle"><a class="btn btn-light-blue waves-effect waves-light btn-sm" href="./#/album"><i class="fa fa-search mr-1"></i>See more</a></td>
-            </tr>
-            <tr>
-              <th scope="row" class="align-middle"><img src="https://upload.wikimedia.org/wikipedia/en/8/8f/Michaelalbumcover.jpg" class="img-fluid table-icon" alt="album picture"></th>
-              <td class="align-middle">Michael</td>
-              <td class="align-middle"><a class="btn btn-light-blue waves-effect waves-light btn-sm disabled" href="./#/album"><i class="fa fa-search mr-1"></i>See more</a></td>
-            </tr>
-            <tr>
-              <th scope="row" class="align-middle"><img src="https://upload.wikimedia.org/wikipedia/en/9/98/Mjinvincible.jpg" class="img-fluid table-icon" alt="album picture"></th>
-              <td class="align-middle">Invincible</td>
-              <td class="align-middle"><a class="btn btn-light-blue waves-effect waves-light btn-sm disabled" href="./#/album"><i class="fa fa-search mr-1"></i>See more</a></td>
-            </tr>
+          <table class="table text-center" id="table-list-all-artists">
+            <tbody v-for="(item, index) in artists">
+              <tr v-if="index < indexPageArtist + 3 && index >=  indexPageArtist">
+                <td class="align-middle">{{ item.artistName }}</td>
+                <td class="align-middle light-blue-text"><em>{{ item.primaryGenreName }}</em></td>
+                <td class="align-middle">
+                  <a class="btn btn-light-blue waves-effect waves-light btn-sm" v-bind:href="'./#/artist/'+item.artistId"><i class="fa fa-search mr-1"></i>See more</a>
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>
 
         <div class="d-flex justify-content-center">
           <ul class="pagination pagination-square pg-blue mb-0">
-
-            <li class="page-item clearfix d-none d-md-block">
-              <a class="page-link">First</a>
-            </li>
-
             <li class="page-item">
-              <a class="page-link" aria-label="Previous">
+              <a class="page-link" aria-label="Previous" v-on:click="previousPage">
                 <span aria-hidden="true">&laquo;</span>
                 <span class="sr-only">Previous</span>
               </a>
             </li>
-
-            <li class="page-item active">
-              <a class="page-link">1</a>
-            </li>
-
             <li class="page-item">
-              <a class="page-link">2</a>
-            </li>
-
-            <li class="page-item">
-              <a class="page-link">3</a>
-            </li>
-
-            <li class="page-item">
-              <a class="page-link" aria-label="Next">
+              <a class="page-link" aria-label="Next" v-on:click="nextPage">
                 <span aria-hidden="true">&raquo;</span>
                 <span class="sr-only">Next</span>
               </a>
             </li>
-
-            <li class="page-item clearfix d-none d-md-block">
-              <a class="page-link">Last</a>
-            </li>
-
           </ul>
         </div>
+
 
       </div>
     </div>
 </template>
 
-<style>
+<script>
+  import Vue from 'vue';
 
-</style>
+  export default {
+    data() {
+      return {
+        indexPageAlbum: 0,
+        indexPageArtist: 0,
+        artists: [],
+        albums: []
+      };
+    },
+    created: async function created() {
+      const reqHeaders = new Headers({
+        Authorization: Vue.config.ubeatToken,
+      });
+
+      const character = Math.random().toString(36).substring(2, 3);
+
+      const reqLocArtists = `${Vue.config.ubeatApiLocation}/search/artists?q=${character}`;
+
+      fetch(new Request(reqLocArtists, { method: 'GET', headers: reqHeaders }))
+        .then(resp => resp.json())
+        .then((data) => {
+          this.artists = data.results;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+      const reqLocAlbums = `${Vue.config.ubeatApiLocation}/search/albums?q=${character}`;
+
+      fetch(new Request(reqLocAlbums, { method: 'GET', headers: reqHeaders }))
+        .then(resp => resp.json())
+        .then((data) => {
+          this.albums = data.results;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    methods: {
+      nextPage: function nextPage() {
+        if (this.indexPageAlbum + 3 < this.albums.length) {
+          this.indexPageAlbum += 3;
+        }
+        if (this.indexPageArtist + 3 < this.artists.length) {
+          this.indexPageArtist += 3;
+        }
+      },
+      previousPage: function nextPage() {
+        if (this.indexPageAlbum - 3 >= 0) {
+          this.indexPageAlbum -= 3;
+        }
+        if (this.indexPageArtist - 3 >= 0) {
+          this.indexPageArtist -= 3;
+        }
+      }
+    }
+  };
+</script>

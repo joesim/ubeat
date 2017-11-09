@@ -6,7 +6,7 @@
         <h3 class="light-blue-text"><em>{{ genre }}</em></h3>
         <div class="row">
           <div class="col-md-3">
-             <a v-bind:href="itunesLink" target="_blank" class="hoverable rounded" style="display:inline-block;overflow:hidden;background:url(//linkmaker.itunes.apple.com/assets/shared/badges/en-us/music-lrg.svg) no-repeat;width:110px;height:40px;background-size:contain;"></a>
+             <a v-bind:href="itunesLink" target="_blank" class="hoverable rounded itunes"></a>
           </div>
         </div>
       </div>
@@ -24,7 +24,7 @@
           </tr>
           </thead>
           <tbody>
-          <tr v-for="(album, key, index) in albumsFiltered" onclick="document.location ='./#/album';">
+          <tr v-for="(album, key, index) in albumsFiltered" v-on:click="redirectAlbum(album.collectionId)">
             <th scope="row">{{ key + 1 }}</th>
             <td>{{ album.collectionName }}</td>
             <td>{{ album.releaseDate }}</td>
@@ -84,14 +84,11 @@ export default {
         return albumFiltered;
       });
     }
+  },
+  methods: {
+    redirectAlbum: (nav) => {
+      document.location = `./#/album/${nav}`;
+    }
   }
 };
 </script>
-
-<style>
-  .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
-    background-color: RGB(130,177,255);
-    color: white;
-    cursor: pointer;
-  }
-</style>

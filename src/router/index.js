@@ -6,6 +6,8 @@ import Artist from '@/components/Artist';
 import Settings from '@/components/Settings';
 import Login from '@/components/Login';
 import Signup from '@/components/Signup';
+import Playlists from '@/components/Playlists';
+import Playlist from '@/components/Playlist';
 
 Vue.use(Router);
 
@@ -20,7 +22,7 @@ export default new Router({
       name: 'Artist',
       component: Artist
     }, {
-      path: '/album',
+      path: '/album/:id',
       name: 'Album',
       component: Album
     }, {
@@ -35,6 +37,14 @@ export default new Router({
       path: '/signup',
       name: 'Signup',
       component: Signup
+    }, {
+      path: '/playlists',
+      name: 'Playlists',
+      component: Playlists
+    }, {
+      path: '/playlists/:id',
+      name: 'Playlist',
+      component: Playlist
     }
   ],
 });
