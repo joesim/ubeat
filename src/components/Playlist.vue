@@ -49,7 +49,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(track, index) of playlist.tracks" v-if="track.trackId !== undefined" v-on:click="playSong(track.previewUrl, index)" v-bind:class="{'table-active-song': (index==indexSongPlaying)}">
+            <tr v-for="(track, index) of playlist.tracks" v-if="track !== undefined && track !== null" v-on:click="playSong(track.previewUrl, index)" v-bind:class="{'table-active-song': (index==indexSongPlaying)}">
               <th scope="row" class="align-middle"><img class="picture-size-50" v-bind:src="track.artworkUrl60"></th>
               <th scope="row" class="align-middle">
                 {{index + 1}}
@@ -172,6 +172,7 @@ export default {
       const reqHeaders = new Headers({
         Authorization: Vue.config.ubeatToken
       });
+      console.log(this.playlist);
       const reqBody = new URLSearchParams(this.playlist);
       reqBody.set('name', this.newPlaylistName);
       const playlistId = this.$route.params.id;
@@ -180,7 +181,6 @@ export default {
         .then(resp => resp.json())
         .then((data) => {
           this.playlist = data;
-          console.log(data);
           this.editing = false;
         })
         .catch((error) => {

@@ -19,8 +19,8 @@
                     <div class="card card-playlist-margin">
                         <div class="row align-items-center card-playlist-padding">
                             <div class="col-md-4 text-center">
-                                <img class="picture-size-80" :src="playlist.tracks[0].artworkUrl100" v-if="playlist.tracks.length!=0">
-                                <img class="picture-size-80" src="https://cdn2.iconfinder.com/data/icons/smiling-face/512/Nothing_Face-512.png" v-if="playlist.tracks.length==0">
+                                <img class="picture-size-80" :src="playlist.tracks[0].artworkUrl100" v-if="playlist.tracks.length!=0 && playlist.tracks[0] !== null">
+                                <img class="picture-size-80" src="https://cdn2.iconfinder.com/data/icons/smiling-face/512/Nothing_Face-512.png" v-if="playlist.tracks.length===0 || playlist.tracks[0]===null">
                             </div>
                             <div class="col-md-8">
                                 <div>
@@ -84,7 +84,7 @@ export default {
     const reqHeaders = new Headers({
       Authorization: Vue.config.ubeatToken,
     });
-    const reqLocTok = `${Vue.config.ubeatApiLocation}/tokeninfo`;
+    const reqLocTok = `${Vue.config.ubeatApiLocation}/playlists`;
     fetch(new Request(reqLocTok, { method: 'GET', headers: reqHeaders }))
     .then(resp => resp.json())
     .then((data) => {
