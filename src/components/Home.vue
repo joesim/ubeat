@@ -14,10 +14,10 @@
 
       <ul class="nav nav-tabs nav-justified bg-light-blue">
         <li class="nav-item">
-          <a class="nav-link active" data-toggle="tab" href="#panel1" role="tab">Albums</a>
+          <a class="nav-link active" v-on:click="indexPageAlbum = 0" data-toggle="tab" href="#panel1" role="tab">Albums</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" data-toggle="tab" href="#panel2" role="tab">Artists</a>
+          <a class="nav-link" v-on:click="indexPageArtist = 0"  data-toggle="tab" href="#panel2" role="tab">Artists</a>
         </li>
       </ul>
 
@@ -25,8 +25,8 @@
 
         <div class="tab-pane fade in show active" id="panel1" role="tabpanel">
           <table class="table text-center" id="table-list-all-albums">
-            <tbody v-for="item in albums">
-            <tr>
+            <tbody v-for="(item, index) in albums">
+            <tr v-if="index < indexPageAlbum + 3 && index >=  indexPageAlbum">
               <th scope="row" class="align-middle"><img v-bind:src="item.artworkUrl100" class="img-fluid table-icon" alt="album picture"></th>
               <td class="align-middle">{{ item.collectionName }}</td>
               <td class="align-middle"><a class="btn btn-light-blue waves-effect waves-light btn-sm" v-bind:href="'./#/album/'+item.collectionId"><i class="fa fa-search mr-1"></i>See more</a></td>
@@ -37,8 +37,8 @@
 
         <div class="tab-pane fade" id="panel2" role="tabpanel">
           <table class="table text-center" id="table-list-all-artists">
-            <tbody v-for="item in artists">
-              <tr>
+            <tbody v-for="(item, index) in artists">
+              <tr v-if="index < indexPageArtist + 3 && index >=  indexPageArtist">
                 <td class="align-middle">{{ item.artistName }}</td>
                 <td class="align-middle light-blue-text"><em>{{ item.primaryGenreName }}</em></td>
                 <td class="align-middle">
@@ -48,6 +48,24 @@
             </tbody>
           </table>
         </div>
+
+        <div class="d-flex justify-content-center">
+          <ul class="pagination pagination-square pg-blue mb-0">
+            <li class="page-item">
+              <a class="page-link" aria-label="Previous" v-on:click="previousPage">
+                <span aria-hidden="true">&laquo;</span>
+                <span class="sr-only">Previous</span>
+              </a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" aria-label="Next" v-on:click="nextPage">
+                <span aria-hidden="true">&raquo;</span>
+                <span class="sr-only">Next</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
 
       </div>
     </div>
@@ -59,6 +77,8 @@
   export default {
     data() {
       return {
+        indexPageAlbum: 0,
+        indexPageArtist: 0,
         artists: [],
         albums: []
       };
@@ -91,6 +111,24 @@
         .catch((err) => {
           console.log(err);
         });
+    },
+    methods: {
+      nextPage: function nextPage() {
+        if (this.indexPageAlbum + 3 < this.albums.length) {
+          this.indexPageAlbum += 3;
+        }
+        if (this.indexPageArtist + 3 < this.artists.length) {
+          this.indexPageArtist += 3;
+        }
+      },
+      previousPage: function nextPage() {
+        if (this.indexPageAlbum - 3 >= 0) {
+          this.indexPageAlbum -= 3;
+        }
+        if (this.indexPageArtist - 3 >= 0) {
+          this.indexPageArtist -= 3;
+        }
+      }
     }
   };
 </script>
