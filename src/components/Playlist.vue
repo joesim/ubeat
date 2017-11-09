@@ -3,13 +3,13 @@
     <div class="row align-items-center animated fadeIn">
       <!-- The playlist name -->
       <div class="col-md-8 editable text-center text-xs-center text-sm-center text-md-left" v-if="!editing">
-        <h1 style="display:inline-block;" id="playlistname"> {{playlist.name}}
+        <h1 class="inline-block" id="playlistname"> {{playlist.name}}
           <i class="fa fa-pencil" v-on:click="editPlaylistName"></i>
         </h1>
       </div>
 
       <!-- The input html to change the playlist name (invisible by default) -->
-      <div class="col-md-8 editable text-center text-xs-center text-sm-center text-md-left" style="padding:5px" v-if="editing">
+      <div class="col-md-8 editable text-center text-xs-center text-sm-center text-md-left change-name-padding" v-if="editing">
         <div class="input-group">
           <input type="text" class="form-control editInput" v-model="newPlaylistName" v-bind:placeholder="playlist.name">
           <span class="input-group-btn">
@@ -50,7 +50,7 @@
           </thead>
           <tbody>
             <tr v-for="(track, index) of playlist.tracks" v-if="track.trackId !== undefined" v-on:click="playSong(track.previewUrl, index)" v-bind:class="{'table-active-song': (index==indexSongPlaying)}">
-              <th scope="row" class="align-middle"><img style="height:50px;width:50px" v-bind:src="track.artworkUrl60"></th>
+              <th scope="row" class="align-middle"><img class="picture-size-50" v-bind:src="track.artworkUrl60"></th>
               <th scope="row" class="align-middle">
                 {{index + 1}}
               </th>
@@ -58,7 +58,7 @@
               <td class="align-middle">{{track.artistName}}</td>
               <td class="align-middle">{{timeInMinutes(track.trackTimeMillis)}}</td>
               <td class="align-middle">
-                <button style="padding:10px" class="btn btn-red waves-effect waves-light" v-on:click="deleteSong(track.trackId)">
+                <button class="btn btn-red waves-effect waves-light delete-song-padding" v-on:click="deleteSong(track.trackId)">
                   <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
                 </button>
               </td>
@@ -206,45 +206,3 @@ export default {
   }
 };
 </script>
-
-
-<style scoped>
-.editable .fa-pencil {
-  display: none;
-  cursor: pointer;
-  margin-left: 5px;
-}
-
-.editable:hover .fa-pencil {
-  display: inline-block;
-}
-
-.editable span:hover .fa-pencil {
-  display: inline-block;
-}
-
-.editable input:hover .fa-pencil {
-  display: none;
-}
-
-.editInput {
-  font-size: 2em;
-}
-
-.table-hover tbody tr:hover td,
-.table-hover tbody tr:hover th {
-  background-color: RGB(130, 177, 255);
-  color: white;
-  cursor: pointer;
-}
-
-.table-active-song {
-  background-color: RGB(130, 177, 255);
-  color: white;
-}
-
-.audio-playlist {
-  width: 100%;
-}
-</style>
-

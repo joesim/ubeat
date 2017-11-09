@@ -201,14 +201,3 @@
     }
   };
 </script>
-
-<style>
-  .itunes {
-    display:inline-block;
-    overflow:hidden;
-    background:url(//linkmaker.itunes.apple.com/assets/shared/badges/en-us/music-lrg.svg) no-repeat;
-    width:110px;
-    height:40px;
-    background-size:contain;
-  }
-</style>
