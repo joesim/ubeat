@@ -6,9 +6,6 @@
         <h1 style="display:inline-block;" id="playlistname"> {{playlist.name}}
           <i class="fa fa-pencil" v-on:click="editPlaylistName"></i>
         </h1>
-        <h5 style="margin-left:10px">
-          By {{playlist.owner.name}}
-        </h5>
       </div>
 
       <!-- The input html to change the playlist name (invisible by default) -->
@@ -52,7 +49,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(track, index) of playlist.tracks" v-on:click="playSong(track.previewUrl, index)" v-bind:class="{'table-active-song': (index==indexSongPlaying)}">
+            <tr v-for="(track, index) of playlist.tracks" v-if="track.trackId !== undefined" v-on:click="playSong(track.previewUrl, index)" v-bind:class="{'table-active-song': (index==indexSongPlaying)}">
               <th scope="row" class="align-middle"><img style="height:50px;width:50px" v-bind:src="track.artworkUrl60"></th>
               <th scope="row" class="align-middle">
                 {{index + 1}}

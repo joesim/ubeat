@@ -20,6 +20,9 @@
         <div class="row">
           <div class="col">
             <p>{{ releaseDate }} <br> {{ numberTracks }} tracks</p>
+            <button type="button" v-on:click="addAllTracks" class="btn btn-light-blue btn-sm" data-toggle="modal" data-target="#addToPlaylistModal">
+              Add all tracks in playlist
+            </button>
           </div>
           <div class="col">
             <a v-bind:href="collectionUrl" target="_blank" class="rounded itunes"></a>
@@ -49,9 +52,40 @@
                 <source v-bind:src="track.previewUrl" type="audio/mp4">
               </audio>
            </td>
+            <td>
+              <button type="button" v-on:click="addTrack(allTracks[index])" class="btn btn-light-blue btn-sm" data-toggle="modal" data-target="#addToPlaylistModal">
+                <i class="fa fa-plus" aria-hidden="true"></i>
+              </button>
+            </td>
           </tr>
           </tbody>
         </table>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="addToPlaylistModal" tabindex="-1" role="dialog" aria-labelledby="addToPlaylistModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addToPlaylistModalLabel">Add to playlist</h5>
+          </div>
+          <div class="text-center text-xs-center text-sm-center">
+          <div class="modal-body">
+            <div class="btn-group">
+              <button class="btn btn-light-blue dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ playlists.length > 0 ? playlists[selectedPlaylistIdx].name : '' }}</button>
+              <div class="dropdown-menu">
+                <a v-for="(playlist, index) in playlists" v-on:click="selectedPlaylistIdx = index" class="dropdown-item">{{playlist.name}}</a>
+              </div>
+            </div>
+
+          </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-light-blue" v-on:click="addToPlaylist" data-dismiss="modal">Add</button>
+            <button type="button" class="btn btn-red btn-space-between" data-dismiss="modal">Close</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -63,6 +97,9 @@
   export default {
     data() {
       return {
+        tracksToAdd: [],
+        selectedPlaylistIdx: 0,
+        playlists: [],
         artistName: '',
         artistId: '',
         collectionName: '',
@@ -71,7 +108,8 @@
         artworkUrl: '',
         collectionUrl: '',
         numberTracks: 0,
-        tracks: []
+        tracks: [],
+        allTracks: []
       };
     },
     created: async function created() {
@@ -106,6 +144,7 @@
       fetch(new Request(reqLocTracks, { method: 'GET', headers: reqHeaders }))
         .then(resp => resp.json())
         .then((data) => {
+          this.allTracks = data.results;
           data.results.forEach((track) => {
             const trackDurationFormat = `${Math.floor(track.trackTimeMillis / 60000)}:${((track.trackTimeMillis % 60000) / 1000).toFixed(0)}`;
             this.tracks.push({
@@ -120,6 +159,45 @@
         .catch((err) => {
           console.log(err);
         });
+
+      const reqLocPlaylists = `${Vue.config.ubeatApiLocation}/playlists`;
+      fetch(new Request(reqLocPlaylists, {
+        method: 'GET',
+        headers: reqHeaders
+      }))
+        .then(resp => resp.json())
+        .then((data) => {
+          for (let i = 0; i < data.length; i += 1) {
+            if (data[i].name !== undefined) {
+              this.playlists.push({
+                name: data[i].name,
+                id: data[i].id
+              });
+            }
+          }
+        });
+    },
+    methods: {
+      addToPlaylist: function addToPlaylist() {
+        if (this.selectedPlaylistIdx < this.playlists.length) {
+          const reqLocAdd = `${Vue.config.ubeatApiLocation}/playlists/${this.playlists[this.selectedPlaylistIdx].id}/tracks`;
+          const reqHeaders = new Headers({
+            Authorization: Vue.config.ubeatToken
+          });
+          this.tracksToAdd.forEach((track) => {
+            const data = new URLSearchParams(track);
+            fetch(new Request(reqLocAdd, { method: 'POST', headers: reqHeaders, body: data }));
+          });
+          this.tracksToAdd = [];
+        }
+      },
+      addTrack: function addTrack(track) {
+        this.allTracks = [];
+        this.tracksToAdd.push(track);
+      },
+      addAllTracks: function addAllTracks() {
+        this.tracksToAdd = this.allTracks;
+      }
     }
   };
 </script>
