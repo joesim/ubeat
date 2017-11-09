@@ -28,11 +28,6 @@
                                         {{playlist.name}}
                                     </h4>
                                 </div>
-                                <p style="color:black;margin:0px">
-                                    <small class="">
-                                        {{playlist.owner.name}}
-                                    </small>
-                                </p>
                                 <p class="card-text">
                                     <small class="text-time">
                                         <em>{{playlist.tracks.length}} songs</em>
@@ -93,8 +88,7 @@ export default {
     .then(resp => resp.json())
     .then((data) => {
       for (let i = 0; i < data.length; i += 1) {
-        if (data[i].owner !== undefined &&
-         data[i].owner.email !== undefined) {
+        if (data[i].name !== undefined) {
           this.playlists.push(data[i]);
         }
       }
