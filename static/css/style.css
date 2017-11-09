@@ -86,3 +86,7 @@ table.table th, table.table td {
 .audio-player {
   width: 100%;
 }
+
+.btn-space-between {
+  margin-left: 10px !important;
+}
