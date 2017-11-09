@@ -87,7 +87,9 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
+            <router-link to="/playlists">
             <button type="button" class="btn btn-danger" data-dismiss="modal" v-on:click="deletePlaylist">Yes</button>
+            </router-link>
           </div>
         </div>
       </div>
