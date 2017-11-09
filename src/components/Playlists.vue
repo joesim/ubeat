@@ -19,8 +19,8 @@
                     <div class="card" style="margin:5px;">
                         <div class="row align-items-center" style="padding:15px">
                             <div class="col-md-4 text-center">
-                                <img class="" style="width:80px;height:100px" :src="playlist.tracks[0].artworkUrl100" v-if="playlist.tracks.length!=0 || playlist.tracks[0]!=null">
-                                <img class="" style="width:80px;height:100px;" src="https://cdn2.iconfinder.com/data/icons/smiling-face/512/Nothing_Face-512.png" v-if="playlist.tracks.length==0">
+                                <img class="" style="width:80px;height:80px" :src="playlist.tracks[0].artworkUrl100" v-if="playlist.tracks.length!=0">
+                                <img class="" style="width:80px;height:80px;" src="https://cdn2.iconfinder.com/data/icons/smiling-face/512/Nothing_Face-512.png" v-if="playlist.tracks.length==0">
                             </div>
                             <div class="col-md-8">
                                 <div class="">
@@ -28,11 +28,6 @@
                                         {{playlist.name}}
                                     </h4>
                                 </div>
-                                <p style="color:black;margin:0px">
-                                    <small class="">
-                                        {{playlist.owner.name}}
-                                    </small>
-                                </p>
                                 <p class="card-text">
                                     <small class="text-time">
                                         <em>{{playlist.tracks.length}} songs</em>
@@ -64,8 +59,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" data-dismiss="modal" v-on:click="createPlaylist" v-if="newPlaylistName!==''">Create</button>
+                        <button type="button" class="btn btn-light-blue" data-dismiss="modal" v-on:click="createPlaylist" v-if="newPlaylistName!==''">Create</button>
+                        <button type="button" class="btn btn-red btn-space-between" data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
@@ -93,11 +88,14 @@ export default {
     fetch(new Request(reqLocTok, { method: 'GET', headers: reqHeaders }))
     .then(resp => resp.json())
     .then((data) => {
-      this.userEmail = data.email;
-      this.showPlaylists();
+      for (let i = 0; i < data.length; i += 1) {
+        if (data[i].name !== undefined) {
+          this.playlists.push(data[i]);
+        }
+      }
     })
     .catch((error) => {
-      this.error.push(error);
+      this.errors.push(error);
     });
   },
   methods: {

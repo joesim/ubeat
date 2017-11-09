@@ -131,7 +131,7 @@
           this.collectionName = album.collectionName;
           this.primaryGenreName = album.primaryGenreName;
           this.releaseDate = `${releaseDate.getDate()}/${releaseDate.getMonth()}/${releaseDate.getFullYear()}`;
-          this.artworkUrl = album.artworkUrl100.replace('100x100', '500x500');
+          this.artworkUrl = album.artworkUrl100.replace('100x100', '510x510');
           this.collectionUrl = album.collectionViewUrl;
           this.artistId = album.artistId;
         })

@@ -6,9 +6,6 @@
         <h1 style="display:inline-block;" id="playlistname"> {{playlist.name}}
           <i class="fa fa-pencil" v-on:click="editPlaylistName"></i>
         </h1>
-        <h5 style="margin-left:10px">
-          By {{playlist.owner.name}}
-        </h5>
       </div>
 
       <!-- The input html to change the playlist name (invisible by default) -->
@@ -16,19 +13,19 @@
         <div class="input-group">
           <input type="text" class="form-control editInput" v-model="newPlaylistName" v-bind:placeholder="playlist.name">
           <span class="input-group-btn">
-            <button class="btn btn-success" type="button" v-on:click="updatePlaylistName">
+            <button class="btn btn-light-blue" type="button" v-on:click="updatePlaylistName">
               <i class="fa fa-check"></i>
             </button>
           </span>
           <span class="input-group-btn">
-            <button class="btn btn-danger" type="button" v-on:click="cancelEdit">
+            <button class="btn btn-red btn-space-between" type="button" v-on:click="cancelEdit">
               <i class="fa fa-ban"></i>
             </button>
           </span>
         </div>
       </div>
       <div class="col-md-4 text-center text-xs-center text-sm-center text-md-right">
-        <button class="btn btn-danger waves-effect waves-light" data-toggle="modal" data-target="#deleteConfirm">
+        <button class="btn btn-red waves-effect waves-light" data-toggle="modal" data-target="#deleteConfirm">
           Delete playlist
           <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
         </button>
@@ -52,7 +49,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(track, index) of playlist.tracks" v-on:click="playSong(track.previewUrl, index)" v-bind:class="{'table-active-song': (index==indexSongPlaying)}">
+            <tr v-for="(track, index) of playlist.tracks" v-if="track.trackId !== undefined" v-on:click="playSong(track.previewUrl, index)" v-bind:class="{'table-active-song': (index==indexSongPlaying)}">
               <th scope="row" class="align-middle"><img style="height:50px;width:50px" v-bind:src="track.artworkUrl60"></th>
               <th scope="row" class="align-middle">
                 {{index + 1}}
@@ -86,10 +83,10 @@
             </p>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
             <router-link to="/playlists">
-            <button type="button" class="btn btn-danger" data-dismiss="modal" v-on:click="deletePlaylist">Yes</button>
+              <button type="button" class="btn btn-light-blue" data-dismiss="modal" v-on:click="deletePlaylist">Yes</button>
             </router-link>
+            <button type="button" class="btn btn-red btn-space-between" data-dismiss="modal">No</button>
           </div>
         </div>
       </div>
@@ -137,6 +134,7 @@ export default {
       const reqHeaders = new Headers({
         Authorization: Vue.config.ubeatToken,
       });
+      this.$refs.audio.pause();
       const playlistId = this.$route.params.id;
       const reqLoc = `${Vue.config.ubeatApiLocation}/playlists/${playlistId}`;
       fetch(new Request(reqLoc, { method: 'DELETE', headers: reqHeaders }))
