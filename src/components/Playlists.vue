@@ -3,7 +3,7 @@
         <div class="row align-items-center">
             <!-- The playlist name -->
             <div class="col-md-8 text-center text-xs-center text-sm-center text-md-left">
-                <h1 style="display:inline-block;" id="playlistname"> Playlists </h1>
+                <h1 class="inline-block" id="playlistname"> Playlists </h1>
             </div>
             <div class="col-md-4 text-center text-xs-center text-sm-center text-md-right">
                 <button type="button" class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-target="#newPlaylistModal">
@@ -16,15 +16,15 @@
         <div class="row">
             <div class="col-6 col-lg-4 col-md-6 col-sm-6" v-for="playlist of playlists" v-if="playlists.length>0">
                 <a v-bind:href="`/#/playlists/${playlist.id}`">
-                    <div class="card" style="margin:5px;">
-                        <div class="row align-items-center" style="padding:15px">
+                    <div class="card card-playlist-margin">
+                        <div class="row align-items-center card-playlist-padding">
                             <div class="col-md-4 text-center">
-                                <img class="" style="width:80px;height:80px" :src="playlist.tracks[0].artworkUrl100" v-if="playlist.tracks.length!=0">
-                                <img class="" style="width:80px;height:80px;" src="https://cdn2.iconfinder.com/data/icons/smiling-face/512/Nothing_Face-512.png" v-if="playlist.tracks.length==0">
+                                <img class="picture-size-80" :src="playlist.tracks[0].artworkUrl100" v-if="playlist.tracks.length!=0">
+                                <img class="picture-size-80" src="https://cdn2.iconfinder.com/data/icons/smiling-face/512/Nothing_Face-512.png" v-if="playlist.tracks.length==0">
                             </div>
                             <div class="col-md-8">
-                                <div class="">
-                                    <h4 style="display:inline-block">
+                                <div>
+                                    <h4 class="inline-block">
                                         {{playlist.name}}
                                     </h4>
                                 </div>
@@ -118,13 +118,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-.btn-stick-corner {
-    padding: 6px;
-    position: absolute;
-    right: 30px;
-    bottom: 5px;
-}
-</style>
-
