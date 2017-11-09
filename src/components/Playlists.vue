@@ -59,8 +59,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" data-dismiss="modal" v-on:click="createPlaylist" v-if="newPlaylistName!==''">Create</button>
+                        <button type="button" class="btn btn-light-blue" data-dismiss="modal" v-on:click="createPlaylist" v-if="newPlaylistName!==''">Create</button>
+                        <button type="button" class="btn btn-red btn-space-between" data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>

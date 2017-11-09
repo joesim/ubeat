@@ -83,10 +83,10 @@
             </p>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
             <router-link to="/playlists">
-            <button type="button" class="btn btn-danger" data-dismiss="modal" v-on:click="deletePlaylist">Yes</button>
+              <button type="button" class="btn btn-light-blue" data-dismiss="modal" v-on:click="deletePlaylist">Yes</button>
             </router-link>
+            <button type="button" class="btn btn-red btn-space-between" data-dismiss="modal">No</button>
           </div>
         </div>
       </div>
