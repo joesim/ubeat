@@ -13,19 +13,19 @@
         <div class="input-group">
           <input type="text" class="form-control editInput" v-model="newPlaylistName" v-bind:placeholder="playlist.name">
           <span class="input-group-btn">
-            <button class="btn btn-success" type="button" v-on:click="updatePlaylistName">
+            <button class="btn btn-light-blue" type="button" v-on:click="updatePlaylistName">
               <i class="fa fa-check"></i>
             </button>
           </span>
           <span class="input-group-btn">
-            <button class="btn btn-danger" type="button" v-on:click="cancelEdit">
+            <button class="btn btn-red btn-space-between" type="button" v-on:click="cancelEdit">
               <i class="fa fa-ban"></i>
             </button>
           </span>
         </div>
       </div>
       <div class="col-md-4 text-center text-xs-center text-sm-center text-md-right">
-        <button class="btn btn-danger waves-effect waves-light" data-toggle="modal" data-target="#deleteConfirm">
+        <button class="btn btn-red waves-effect waves-light" data-toggle="modal" data-target="#deleteConfirm">
           Delete playlist
           <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
         </button>
@@ -134,6 +134,7 @@ export default {
       const reqHeaders = new Headers({
         Authorization: Vue.config.ubeatToken,
       });
+      this.$refs.audio.pause();
       const playlistId = this.$route.params.id;
       const reqLoc = `${Vue.config.ubeatApiLocation}/playlists/${playlistId}`;
       fetch(new Request(reqLoc, { method: 'DELETE', headers: reqHeaders }))

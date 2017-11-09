@@ -20,7 +20,7 @@
                         <div class="row align-items-center" style="padding:15px">
                             <div class="col-md-4 text-center">
                                 <img class="" style="width:80px;height:80px" :src="playlist.tracks[0].artworkUrl100" v-if="playlist.tracks.length!=0">
-                                <img class="" style="width:80px;height:100px;" src="https://cdn2.iconfinder.com/data/icons/smiling-face/512/Nothing_Face-512.png" v-if="playlist.tracks.length==0">
+                                <img class="" style="width:80px;height:80px;" src="https://cdn2.iconfinder.com/data/icons/smiling-face/512/Nothing_Face-512.png" v-if="playlist.tracks.length==0">
                             </div>
                             <div class="col-md-8">
                                 <div class="">
@@ -94,7 +94,7 @@ export default {
       }
     })
     .catch((error) => {
-      this.error.push(error);
+      this.errors.push(error);
     });
   },
   methods: {
