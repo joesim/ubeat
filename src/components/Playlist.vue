@@ -133,7 +133,7 @@ export default {
       const min = Math.floor(x % 60);
       return `${min}:${sec}`;
     },
-    deletePlaylist: function deletePlaylist() {
+    deletePlaylist: async function deletePlaylist() {
       const reqHeaders = new Headers({
         Authorization: Vue.config.ubeatToken,
       });
@@ -147,7 +147,7 @@ export default {
           this.errors.push(error);
         });
     },
-    deleteSong: function deleteSong(trackId) {
+    deleteSong: async function deleteSong(trackId) {
       const reqHeaders = new Headers({
         Authorization: Vue.config.ubeatToken,
       });
@@ -174,18 +174,19 @@ export default {
       const reqHeaders = new Headers({
         Authorization: Vue.config.ubeatToken
       });
-      const reqBody = new URLSearchParams({
-        name: this.newPlaylistName
-      });
+      const reqBody = new URLSearchParams(this.playlist);
+      reqBody.set('name', this.newPlaylistName);
       const playlistId = this.$route.params.id;
       const reqLoc = `${Vue.config.ubeatApiLocation}/playlists/${playlistId}`;
       fetch(new Request(reqLoc, { method: 'PUT', headers: reqHeaders, body: reqBody }))
         .then(resp => resp.json())
         .then((data) => {
           this.playlist = data;
+          console.log(data);
           this.editing = false;
         })
         .catch((error) => {
+          console.log(error);
           this.errors.push(error);
         });
     },
