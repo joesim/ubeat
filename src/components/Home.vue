@@ -65,18 +65,25 @@
             </li>
           </ul>
         </div>
-
-
       </div>
+
+      <!-- Modal for error handler -->
+      <ErrorHandler v-bind:message="errorMessage" v-if="showErrorHandler"/>
     </div>
 </template>
 
 <script>
   import Vue from 'vue';
+  import ErrorHandler from './ErrorHandler';
 
   export default {
+    components: {
+      ErrorHandler
+    },
     data() {
       return {
+        showErrorHandler: false,
+        errorMessage: '',
         indexPageAlbum: 0,
         indexPageArtist: 0,
         artists: [],
@@ -98,7 +105,8 @@
           this.artists = data.results;
         })
         .catch((err) => {
-          console.log(err);
+          this.errorMessage = err.message;
+          this.showErrorHandler = true;
         });
 
       const reqLocAlbums = `${Vue.config.ubeatApiLocation}/search/albums?q=${character}`;
@@ -109,7 +117,8 @@
           this.albums = data.results;
         })
         .catch((err) => {
-          console.log(err);
+          this.errorMessage = err.message;
+          this.showErrorHandler = true;
         });
     },
     methods: {
