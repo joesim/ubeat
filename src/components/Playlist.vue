@@ -172,7 +172,6 @@ export default {
       const reqHeaders = new Headers({
         Authorization: Vue.config.ubeatToken
       });
-      console.log(this.playlist);
       const reqBody = new URLSearchParams(this.playlist);
       reqBody.set('name', this.newPlaylistName);
       const playlistId = this.$route.params.id;
