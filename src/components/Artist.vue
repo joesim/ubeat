@@ -35,15 +35,23 @@
         </table>
       </div>
     </div>
+    <!-- Modal for error handler -->
+    <ErrorHandler v-bind:message="errorMessage" v-if="showErrorHandler"/>
   </div>
 </template>
 
 <script>
 import Vue from 'vue';
+import ErrorHandler from './ErrorHandler';
 
 export default {
+  components: {
+    ErrorHandler
+  },
   data() {
     return {
+      errorMessage: '',
+      showErrorHandler: false,
       name: '',
       genre: '',
       itunesLink: '',
@@ -66,6 +74,10 @@ export default {
       this.name = artist.artistName;
       this.genre = artist.primaryGenreName;
       this.itunesLink = artist.artistLinkUrl;
+    })
+    .catch((err) => {
+      this.errorMessage = err.message;
+      this.showErrorHandler = true;
     });
 
     const reqLocAlbums = `${Vue.config.ubeatApiLocation}/artists/${artistId}/albums`;
@@ -74,6 +86,10 @@ export default {
     .then(resp => resp.json())
     .then((data) => {
       this.albums = data.results;
+    })
+    .catch((err) => {
+      this.errorMessage = err.message;
+      this.showErrorHandler = true;
     });
   },
   computed: {

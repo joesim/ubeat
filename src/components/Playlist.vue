@@ -49,8 +49,8 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(track, index) of playlist.tracks" v-if="track !== undefined && track !== null" v-on:click="playSong(track.previewUrl, index)" v-bind:class="{'table-active-song': (index==indexSongPlaying)}">
-              <th scope="row" class="align-middle"><img class="picture-size-50" v-bind:src="track.artworkUrl60"></th>
+            <tr v-for="(track, index) of playlist.tracks" v-if="track !== undefined && track !== null" v-bind:class="{'table-active-song': (index==indexSongPlaying)}">
+              <th v-on:click="playSong(track.previewUrl, index)" scope="row" class="align-middle"><img class="picture-size-50" v-bind:src="track.artworkUrl60" onError="this.onerror=null;this.src='https://cdn2.iconfinder.com/data/icons/smiling-face/512/Nothing_Face-512.png'"></th>
               <th scope="row" class="align-middle">
                 {{index + 1}}
               </th>
@@ -58,7 +58,7 @@
               <td class="align-middle">{{track.artistName}}</td>
               <td class="align-middle">{{timeInMinutes(track.trackTimeMillis)}}</td>
               <td class="align-middle">
-                <button class="btn btn-red waves-effect waves-light delete-song-padding" v-on:click="deleteSong(track.trackId)">
+                <button class="btn btn-red waves-effect waves-light delete-song-padding" v-on:click="trackToDelete = track.trackId" data-toggle="modal" data-target="#deleteTrackConfirm">
                   <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
                 </button>
               </td>
@@ -91,15 +91,43 @@
         </div>
       </div>
     </div>
+    <div class="modal fade" id="deleteTrackConfirm" tabindex="-1" role="dialog" aria-labelledby="deleteTrackConfirmLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteTrackConfirmLabel">Delete confirmation</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>
+              Are you sure you want to delete this track?
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-light-blue" data-dismiss="modal" v-on:click="deleteSong(trackToDelete)">Yes</button>
+            <button type="button" class="btn btn-red btn-space-between" data-dismiss="modal">No</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import Vue from 'vue';
+import ErrorHandler from './ErrorHandler';
 
 export default {
+  components: {
+    ErrorHandler
+  },
   data() {
     return {
+      errorMessage: '',
+      showErrorHandler: false,
+      trackToDelete: 0,
       playlist: undefined,
       errors: [],
       editing: false,
@@ -138,11 +166,13 @@ export default {
       const playlistId = this.$route.params.id;
       const reqLoc = `${Vue.config.ubeatApiLocation}/playlists/${playlistId}`;
       fetch(new Request(reqLoc, { method: 'DELETE', headers: reqHeaders }))
+        .then(resp => resp.json())
         .then(() => {
           this.playlist = undefined;
         })
         .catch((error) => {
-          this.errors.push(error);
+          this.errorMessage = error.message;
+          this.showErrorHandler = true;
         });
     },
     deleteSong: async function deleteSong(trackId) {
@@ -159,7 +189,8 @@ export default {
           this.indexSongPlaying = undefined;
         })
         .catch((error) => {
-          this.errors.push(error);
+          this.errorMessage = error.message;
+          this.showErrorHandler = true;
         });
     },
     editPlaylistName: function editPlaylistName() {
@@ -183,8 +214,8 @@ export default {
           this.editing = false;
         })
         .catch((error) => {
-          console.log(error);
-          this.errors.push(error);
+          this.errorMessage = error.message;
+          this.showErrorHandler = true;
         });
     },
     updatePlaylist: async function updatePlaylist() {
@@ -199,7 +230,8 @@ export default {
           this.playlist = data;
         })
         .catch((error) => {
-          this.errors.push(error);
+          this.errorMessage = error.message;
+          this.showErrorHandler = true;
         });
     }
   }

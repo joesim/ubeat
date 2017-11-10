@@ -13,14 +13,15 @@
       </div>
       <div class="col-md-9">
        <h1>{{ collectionName }}</h1>
-        <a v-bind:href="'./#/artist/' + artistId"><h2 class="black-text">{{ artistName }}</h2></a>
+        <a v-if="artistName != 'Various Artists'" v-bind:href="'./#/artist/' + artistId"><h2 class="black-text">{{ artistName }}</h2></a>
+        <h2 v-if="artistName === 'Various Artists'" class="black-text">{{ artistName }}</h2>
         <h3 class="light-blue-text">
           <em>{{ primaryGenreName }}</em>
         </h3>
         <div class="row">
           <div class="col">
             <p>{{ releaseDate }} <br> {{ numberTracks }} tracks</p>
-            <button type="button" v-on:click="addAllTracks" class="btn btn-light-blue btn-sm" data-toggle="modal" data-target="#addToPlaylistModal">
+            <button v-bind:disabled="playlists.length <= 0" type="button" v-on:click="addAllTracks" class="btn btn-light-blue btn-sm" data-toggle="modal" data-target="#addToPlaylistModal">
               Add all tracks in playlist
             </button>
           </div>
@@ -53,7 +54,7 @@
               </audio>
            </td>
             <td>
-              <button type="button" v-on:click="addTrack(allTracks[index])" class="btn btn-light-blue btn-sm" data-toggle="modal" data-target="#addToPlaylistModal">
+              <button type="button" v-on:click="addTrack(allTracks[index])" v-bind:disabled="playlists.length <= 0" class="btn btn-light-blue btn-sm" data-toggle="modal" data-target="#addToPlaylistModal">
                 <i class="fa fa-plus" aria-hidden="true"></i>
               </button>
             </td>
@@ -88,15 +89,23 @@
         </div>
       </div>
     </div>
+    <!-- Modal for error handler -->
+    <ErrorHandler v-bind:message="errorMessage" v-if="showErrorHandler"/>
   </div>
 </template>
 
 <script>
   import Vue from 'vue';
+  import ErrorHandler from './ErrorHandler';
 
   export default {
+    components: {
+      ErrorHandler
+    },
     data() {
       return {
+        errorMessage: '',
+        showErrorHandler: false,
         tracksToAdd: [],
         selectedPlaylistIdx: 0,
         playlists: [],
@@ -136,7 +145,8 @@
           this.artistId = album.artistId;
         })
         .catch((err) => {
-          console.log(err);
+          this.errorMessage = err.message;
+          this.showErrorHandler = true;
         });
 
       const reqLocTracks = `${Vue.config.ubeatApiLocation}/albums/${albumId}/tracks`;
@@ -157,7 +167,8 @@
           this.numberTracks = this.tracks.length;
         })
         .catch((err) => {
-          console.log(err);
+          this.errorMessage = err.message;
+          this.showErrorHandler = true;
         });
 
       const reqLocPlaylists = `${Vue.config.ubeatApiLocation}/playlists`;

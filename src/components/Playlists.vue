@@ -19,7 +19,7 @@
                     <div class="card card-playlist-margin">
                         <div class="row align-items-center card-playlist-padding">
                             <div class="col-md-4 text-center">
-                                <img class="picture-size-80" :src="playlist.tracks[0].artworkUrl100" v-if="playlist.tracks.length!=0 && playlist.tracks[0] !== null">
+                                <img class="picture-size-80" :src="playlist.tracks[0].artworkUrl100" v-if="playlist.tracks.length!=0 && playlist.tracks[0] !== null" onError="this.onerror=null;this.src='https://cdn2.iconfinder.com/data/icons/smiling-face/512/Nothing_Face-512.png'">
                                 <img class="picture-size-80" src="https://cdn2.iconfinder.com/data/icons/smiling-face/512/Nothing_Face-512.png" v-if="playlist.tracks.length===0 || playlist.tracks[0]===null">
                             </div>
                             <div class="col-md-8">
@@ -65,15 +65,24 @@
                 </div>
             </div>
         </div>
+
+        <!-- Modal for error handler -->
+        <ErrorHandler v-bind:message="errorMessage" v-if="showErrorHandler"/>
     </div>
 </template>
 
 <script>
 import Vue from 'vue';
+import ErrorHandler from './ErrorHandler';
 
 export default {
+  components: {
+    ErrorHandler
+  },
   data() {
     return {
+      showErrorHandler: false,
+      errorMessage: '',
       playlists: [],
       errors: [],
       newPlaylistName: '',
@@ -95,7 +104,8 @@ export default {
       }
     })
     .catch((error) => {
-      this.errors.push(error);
+      this.errorMessage = error.message;
+      this.showErrorHandler = true;
     });
   },
   methods: {
@@ -115,7 +125,8 @@ export default {
         }
       })
       .catch((error) => {
-        this.error.push(error);
+        this.errorMessage = error.message;
+        this.showErrorHandler = true;
       });
     },
     createPlaylist: async function createPlaylist() {
@@ -132,7 +143,8 @@ export default {
           this.playlists.push(data);
         })
         .catch((error) => {
-          this.errors.push(error);
+          this.errorMessage = error.message;
+          this.showErrorHandler = true;
         });
     }
   }
