@@ -20,7 +20,7 @@
             <th>Album</th>
             <th>Date</th>
             <th>Tracks</th>
-            <th>Duration</th>
+            <th>Price</th>
           </tr>
           </thead>
           <tbody>
@@ -73,6 +73,8 @@ export default {
     try {
       const data = await api.getAlbumFromArtist(artistId);
       this.albums = data.results;
+      this.albums.sort((a, b) => parseInt(b.releaseDate, 10) - parseInt(a.releaseDate, 10));
+      console.log(this.albums);
     } catch (err) {
       this.errorMessage = err.message;
       this.showErrorHandler = true;
