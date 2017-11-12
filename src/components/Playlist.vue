@@ -50,7 +50,7 @@
           </thead>
           <tbody>
             <tr v-for="(track, index) of playlist.tracks" v-if="track !== undefined && track !== null" v-bind:class="{'table-active-song': (index==indexSongPlaying)}">
-              <th v-on:click="playSong(track.previewUrl, index)" scope="row" class="align-middle"><img class="picture-size-50" v-bind:src="track.artworkUrl60" onError="this.onerror=null;this.src='https://cdn2.iconfinder.com/data/icons/smiling-face/512/Nothing_Face-512.png'"></th>
+              <th v-on:click="playSong(track.previewUrl, index)" scope="row" class="align-middle"><img class="picture-size-50" v-bind:src="track.artworkUrl60" onError="this.style.visibility = 'hidden'"></th>
               <th scope="row" class="align-middle">
                 {{index + 1}}
               </th>
@@ -83,9 +83,7 @@
             </p>
           </div>
           <div class="modal-footer">
-            <router-link to="/playlists">
-              <button type="button" class="btn btn-light-blue" data-dismiss="modal" v-on:click="deletePlaylist">Yes</button>
-            </router-link>
+            <button type="button" class="btn btn-light-blue" data-dismiss="modal" v-on:click="deletePlaylist">Yes</button>
             <button type="button" class="btn btn-red btn-space-between" data-dismiss="modal">No</button>
           </div>
         </div>
@@ -116,8 +114,8 @@
 </template>
 
 <script>
-import Vue from 'vue';
 import ErrorHandler from './ErrorHandler';
+import api from '../api';
 
 export default {
   components: {
@@ -159,39 +157,27 @@ export default {
       return `${min}:${sec}`;
     },
     deletePlaylist: async function deletePlaylist() {
-      const reqHeaders = new Headers({
-        Authorization: Vue.config.ubeatToken,
-      });
       this.$refs.audio.pause();
-      const playlistId = this.$route.params.id;
-      const reqLoc = `${Vue.config.ubeatApiLocation}/playlists/${playlistId}`;
-      fetch(new Request(reqLoc, { method: 'DELETE', headers: reqHeaders }))
-        .then(resp => resp.json())
-        .then(() => {
-          this.playlist = undefined;
-        })
-        .catch((error) => {
-          this.errorMessage = error.message;
-          this.showErrorHandler = true;
-        });
+      try {
+        const playlistId = this.$route.params.id;
+        this.playlist = await api.deletePlaylist(playlistId);
+        document.location = './#/playlists';
+      } catch (err) {
+        this.errorMessage = err.message;
+        this.showErrorHandler = true;
+      }
     },
     deleteSong: async function deleteSong(trackId) {
-      const reqHeaders = new Headers({
-        Authorization: Vue.config.ubeatToken,
-      });
       const playlistId = this.$route.params.id;
-      const reqLoc = `${Vue.config.ubeatApiLocation}/playlists/${playlistId}/tracks/${trackId}`;
-      fetch(new Request(reqLoc, { method: 'DELETE', headers: reqHeaders }))
-      .then(resp => resp.json())
-        .then(() => {
-          this.updatePlaylist();
-          this.$refs.audio.src = '';
-          this.indexSongPlaying = undefined;
-        })
-        .catch((error) => {
-          this.errorMessage = error.message;
-          this.showErrorHandler = true;
-        });
+      try {
+        await api.deleteSong(playlistId, trackId);
+        this.updatePlaylist();
+        this.$refs.audio.src = '';
+        this.indexSongPlaying = undefined;
+      } catch (err) {
+        this.errorMessage = err.message;
+        this.showErrorHandler = true;
+      }
     },
     editPlaylistName: function editPlaylistName() {
       this.editing = true;
@@ -199,40 +185,24 @@ export default {
     cancelEdit: function cancelEdit() {
       this.editing = false;
     },
-    updatePlaylistName: function updatePlaylistName() {
-      const reqHeaders = new Headers({
-        Authorization: Vue.config.ubeatToken
-      });
-      const reqBody = new URLSearchParams(this.playlist);
-      reqBody.set('name', this.newPlaylistName);
-      const playlistId = this.$route.params.id;
-      const reqLoc = `${Vue.config.ubeatApiLocation}/playlists/${playlistId}`;
-      fetch(new Request(reqLoc, { method: 'PUT', headers: reqHeaders, body: reqBody }))
-        .then(resp => resp.json())
-        .then((data) => {
-          this.playlist = data;
-          this.editing = false;
-        })
-        .catch((error) => {
-          this.errorMessage = error.message;
-          this.showErrorHandler = true;
-        });
+    updatePlaylistName: async function updatePlaylistName() {
+      try {
+        this.playlist = await api.updatePlaylistName(this.playlist, this.newPlaylistName,
+            this.$route.params.id);
+        this.editing = false;
+      } catch (err) {
+        this.errorMessage = err.message;
+        this.showErrorHandler = true;
+      }
     },
     updatePlaylist: async function updatePlaylist() {
-      const reqHeaders = new Headers({
-        Authorization: Vue.config.ubeatToken
-      });
-      const playlistId = this.$route.params.id;
-      const reqLoc = `${Vue.config.ubeatApiLocation}/playlists/${playlistId}`;
-      fetch(new Request(reqLoc, { method: 'GET', headers: reqHeaders }))
-        .then(resp => resp.json())
-        .then((data) => {
-          this.playlist = data;
-        })
-        .catch((error) => {
-          this.errorMessage = error.message;
-          this.showErrorHandler = true;
-        });
+      try {
+        const playlistId = this.$route.params.id;
+        this.playlist = await api.getPlaylist(playlistId);
+      } catch (err) {
+        this.errorMessage = err.message;
+        this.showErrorHandler = true;
+      }
     }
   }
 };
