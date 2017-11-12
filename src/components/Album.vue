@@ -95,7 +95,6 @@
 </template>
 
 <script>
-  import Vue from 'vue';
   import ErrorHandler from './ErrorHandler';
   import api from '../api';
 
@@ -177,15 +176,13 @@
     methods: {
       addToPlaylist: function addToPlaylist() {
         if (this.selectedPlaylistIdx < this.playlists.length) {
-          const reqLocAdd = `${Vue.config.ubeatApiLocation}/playlists/${this.playlists[this.selectedPlaylistIdx].id}/tracks`;
-          const reqHeaders = new Headers({
-            Authorization: Vue.config.ubeatToken
-          });
-          this.tracksToAdd.forEach((track) => {
-            const data = new URLSearchParams(track);
-            fetch(new Request(reqLocAdd, { method: 'POST', headers: reqHeaders, body: data }));
-          });
-          this.tracksToAdd = [];
+          try {
+            api.addTrackToPlaylist(this.playlists[this.selectedPlaylistIdx].id, this.tracksToAdd);
+            this.tracksToAdd = [];
+          } catch (err) {
+            this.errorMessage = err.message;
+            this.showErrorHandler = true;
+          }
         }
       },
       addTrack: function addTrack(track) {

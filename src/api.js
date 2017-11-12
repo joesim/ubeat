@@ -88,5 +88,52 @@ export default {
       .catch(() => {
         throw new Error('Unable to get tracks');
       });
+  },
+  addTrackToPlaylist: function addTrackToPlaylist(playlistId, tracks) {
+    const reqLocAdd = `${Vue.config.ubeatApiLocation}/playlists/${playlistId}/tracks`;
+    tracks.forEach((track) => {
+      const data = new URLSearchParams(track);
+      fetch(new Request(reqLocAdd, { method: 'POST', headers: reqHeaders, body: data }))
+          .then()
+          .catch((err) => {
+            throw new Error(err.message);
+          });
+    });
+  },
+  getArtist: function getArtist(artistId) {
+    const reqLoc = `${Vue.config.ubeatApiLocation}/artists/${artistId}`;
+    return fetch(new Request(reqLoc, { method: 'GET', headers: reqHeaders }))
+      .then(resp => resp.json())
+      .then(data => data)
+      .catch(() => {
+        throw new Error('Unable to get an artist');
+      });
+  },
+  getAlbumFromArtist: function getAlbumFromArtist(artistId) {
+    const reqLocAlbums = `${Vue.config.ubeatApiLocation}/artists/${artistId}/albums`;
+    return fetch(new Request(reqLocAlbums, { method: 'GET', headers: reqHeaders }))
+      .then(resp => resp.json())
+      .then(data => data)
+      .catch(() => {
+        throw new Error('Unable to get albums');
+      });
+  },
+  searchArtists: function searchArtists(str) {
+    const reqLocArtists = `${Vue.config.ubeatApiLocation}/search/artists?q=${str}`;
+    return fetch(new Request(reqLocArtists, { method: 'GET', headers: reqHeaders }))
+      .then(resp => resp.json())
+      .then(data => data.results)
+      .catch(() => {
+        throw new Error('Unable to search an artist');
+      });
+  },
+  searchAlbums: function searchAlbums(str) {
+    const reqLocAlbums = `${Vue.config.ubeatApiLocation}/search/albums?q=${str}`;
+    return fetch(new Request(reqLocAlbums, { method: 'GET', headers: reqHeaders }))
+      .then(resp => resp.json())
+      .then(data => data.results)
+      .catch(() => {
+        throw new Error('Unable to search an album');
+      });
   }
 };

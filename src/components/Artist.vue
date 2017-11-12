@@ -41,8 +41,8 @@
 </template>
 
 <script>
-import Vue from 'vue';
 import ErrorHandler from './ErrorHandler';
+import api from '../api';
 
 export default {
   components: {
@@ -59,38 +59,24 @@ export default {
     };
   },
   created: async function created() {
-    const reqHeaders = new Headers({
-      Authorization: Vue.config.ubeatToken,
-    });
-
     const artistId = this.$route.params.id;
-
-    const reqLoc = `${Vue.config.ubeatApiLocation}/artists/${artistId}`;
-
-    fetch(new Request(reqLoc, { method: 'GET', headers: reqHeaders }))
-    .then(resp => resp.json())
-    .then((data) => {
+    try {
+      const data = await api.getArtist(artistId);
       const artist = data.results[0];
       this.name = artist.artistName;
       this.genre = artist.primaryGenreName;
       this.itunesLink = artist.artistLinkUrl;
-    })
-    .catch((err) => {
+    } catch (err) {
       this.errorMessage = err.message;
       this.showErrorHandler = true;
-    });
-
-    const reqLocAlbums = `${Vue.config.ubeatApiLocation}/artists/${artistId}/albums`;
-
-    fetch(new Request(reqLocAlbums, { method: 'GET', headers: reqHeaders }))
-    .then(resp => resp.json())
-    .then((data) => {
+    }
+    try {
+      const data = await api.getAlbumFromArtist(artistId);
       this.albums = data.results;
-    })
-    .catch((err) => {
+    } catch (err) {
       this.errorMessage = err.message;
       this.showErrorHandler = true;
-    });
+    }
   },
   computed: {
     albumsFiltered: function albumsFiltered() {
