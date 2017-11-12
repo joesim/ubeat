@@ -70,5 +70,23 @@ export default {
       .catch(() => {
         throw new Error('Unable to delete song');
       });
+  },
+  getAlbum: function getAlbum(albumId) {
+    const reqLoc = `${Vue.config.ubeatApiLocation}/albums/${albumId}`;
+    return fetch(new Request(reqLoc, { method: 'GET', headers: reqHeaders }))
+      .then(resp => resp.json())
+      .then(data => data)
+      .catch(() => {
+        throw new Error('Unable to get album');
+      });
+  },
+  getTracksAlbum: function getTracksAlbum(albumId) {
+    const reqLocTracks = `${Vue.config.ubeatApiLocation}/albums/${albumId}/tracks`;
+    return fetch(new Request(reqLocTracks, { method: 'GET', headers: reqHeaders }))
+      .then(resp => resp.json())
+      .then(data => data)
+      .catch(() => {
+        throw new Error('Unable to get tracks');
+      });
   }
 };

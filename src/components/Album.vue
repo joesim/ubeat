@@ -97,6 +97,7 @@
 <script>
   import Vue from 'vue';
   import ErrorHandler from './ErrorHandler';
+  import api from '../api';
 
   export default {
     components: {
@@ -122,71 +123,56 @@
       };
     },
     created: async function created() {
-      const reqHeaders = new Headers({
-        Authorization: Vue.config.ubeatToken,
-      });
-
       const albumId = this.$route.params.id;
+      try {
+        const data = await api.getAlbum(albumId);
+        const album = data.results[0];
+        const releaseDate = new Date(album.releaseDate);
+        this.artistName = album.artistName;
+        this.collectionName = album.collectionName;
+        this.primaryGenreName = album.primaryGenreName;
+        this.releaseDate = `${releaseDate.getDate()}/${releaseDate.getMonth()}/${releaseDate.getFullYear()}`;
+        this.artworkUrl = album.artworkUrl100.replace('100x100', '510x510');
+        this.collectionUrl = album.collectionViewUrl;
+        this.artistId = album.artistId;
+      } catch (err) {
+        this.errorMessage = err.message;
+        this.showErrorHandler = true;
+      }
 
-      const reqLoc = `${Vue.config.ubeatApiLocation}/albums/${albumId}`;
-
-      fetch(new Request(reqLoc, { method: 'GET', headers: reqHeaders }))
-        .then(resp => resp.json())
-        .then((data) => {
-          const album = data.results[0];
-          const releaseDate = new Date(album.releaseDate);
-
-          this.artistName = album.artistName;
-          this.collectionName = album.collectionName;
-          this.primaryGenreName = album.primaryGenreName;
-          this.releaseDate = `${releaseDate.getDate()}/${releaseDate.getMonth()}/${releaseDate.getFullYear()}`;
-          this.artworkUrl = album.artworkUrl100.replace('100x100', '510x510');
-          this.collectionUrl = album.collectionViewUrl;
-          this.artistId = album.artistId;
-        })
-        .catch((err) => {
-          this.errorMessage = err.message;
-          this.showErrorHandler = true;
-        });
-
-      const reqLocTracks = `${Vue.config.ubeatApiLocation}/albums/${albumId}/tracks`;
-
-      fetch(new Request(reqLocTracks, { method: 'GET', headers: reqHeaders }))
-        .then(resp => resp.json())
-        .then((data) => {
-          this.allTracks = data.results;
-          data.results.forEach((track) => {
-            const trackDurationFormat = `${Math.floor(track.trackTimeMillis / 60000)}:${((track.trackTimeMillis % 60000) / 1000).toFixed(0)}`;
-            this.tracks.push({
-              trackName: track.trackName,
-              trackDuration: trackDurationFormat,
-              previewUrl: track.previewUrl,
-              artwork: track.artworkUrl30
-            });
+      try {
+        const data = await api.getTracksAlbum(albumId);
+        this.allTracks = data.results;
+        data.results.forEach((track) => {
+          const trackDurationFormat = `${Math.floor(track.trackTimeMillis / 60000)}:${((track.trackTimeMillis %
+                                       60000) / 1000).toFixed(0)}`;
+          this.tracks.push({
+            trackName: track.trackName,
+            trackDuration: trackDurationFormat,
+            previewUrl: track.previewUrl,
+            artwork: track.artworkUrl30
           });
-          this.numberTracks = this.tracks.length;
-        })
-        .catch((err) => {
-          this.errorMessage = err.message;
-          this.showErrorHandler = true;
         });
+        this.numberTracks = this.tracks.length;
+      } catch (err) {
+        this.errorMessage = err.message;
+        this.showErrorHandler = true;
+      }
 
-      const reqLocPlaylists = `${Vue.config.ubeatApiLocation}/playlists`;
-      fetch(new Request(reqLocPlaylists, {
-        method: 'GET',
-        headers: reqHeaders
-      }))
-        .then(resp => resp.json())
-        .then((data) => {
-          for (let i = 0; i < data.length; i += 1) {
-            if (data[i].name !== undefined) {
-              this.playlists.push({
-                name: data[i].name,
-                id: data[i].id
-              });
-            }
+      try {
+        const playlists = await api.getPlaylists();
+        for (let i = 0; i < playlists.length; i += 1) {
+          if (playlists[i].name !== undefined) {
+            this.playlists.push({
+              name: playlists[i].name,
+              id: playlists[i].id
+            });
           }
-        });
+        }
+      } catch (err) {
+        this.errorMessage = err.message;
+        this.showErrorHandler = true;
+      }
     },
     methods: {
       addToPlaylist: function addToPlaylist() {
