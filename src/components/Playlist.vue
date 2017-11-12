@@ -2,14 +2,14 @@
   <div class="container content" v-if="playlist!==undefined">
     <div class="row align-items-center animated fadeIn">
       <!-- The playlist name -->
-      <div class="col-md-8 editable text-center text-xs-center text-sm-center text-md-left" v-if="!editing">
+      <div class="col-md-6 editable text-center text-xs-center text-sm-center text-md-left" v-if="!editing">
         <h1 class="inline-block" id="playlistname"> {{playlist.name}}
           <i class="fa fa-pencil" v-on:click="editPlaylistName"></i>
         </h1>
       </div>
 
       <!-- The input html to change the playlist name (invisible by default) -->
-      <div class="col-md-8 editable text-center text-xs-center text-sm-center text-md-left change-name-padding" v-if="editing">
+      <div class="col-md-6 editable text-center text-xs-center text-sm-center text-md-left change-name-padding" v-if="editing">
         <div class="input-group">
           <input type="text" class="form-control editInput" v-model="newPlaylistName" v-bind:placeholder="playlist.name">
           <span class="input-group-btn">
@@ -24,7 +24,11 @@
           </span>
         </div>
       </div>
-      <div class="col-md-4 text-center text-xs-center text-sm-center text-md-right">
+      <div class="col-md-6 text-center text-xs-center text-sm-center text-md-right">
+        <button v-on:click="searchTracks" class="btn btn-light-blue waves-effect waves-light" data-toggle="modal" data-target="#addTracks">
+          Add random tracks
+          <i class="fa fa-music fa-lg" aria-hidden="true"></i>
+        </button>
         <button class="btn btn-red waves-effect waves-light" data-toggle="modal" data-target="#deleteConfirm">
           Delete playlist
           <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
@@ -98,6 +102,7 @@
         </div>
       </div>
     </div>
+    <!-- Modal confirmation delete -->
     <div class="modal fade" id="deleteTrackConfirm" tabindex="-1" role="dialog" aria-labelledby="deleteTrackConfirmLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -119,6 +124,30 @@
         </div>
       </div>
     </div>
+    <!-- Modal add random music -->
+    <div class="modal fade" id="addTracks" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addTracksLabel">Add tracks</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <ul class="list-group">
+              <li v-for="track in tracksToAdd" class="list-group-item">
+                <button type="button" class="btn btn-sm btn-rounded btn-light-blue" v-on:click="addTrack(track)">Add</button>  {{ track.trackName }}
+              </li>
+            </ul>
+          </div>
+          <div class="modal-footer">
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <ErrorHandler v-bind:message="errorMessage" v-if="showErrorHandler"/>
   </div>
 </template>
 
@@ -139,13 +168,44 @@ export default {
       errors: [],
       editing: false,
       newPlaylistName: '',
-      indexSongPlaying: undefined
+      indexSongPlaying: undefined,
+      tracksToAdd: []
     };
   },
   created: async function created() {
     this.updatePlaylist();
   },
   methods: {
+    searchTracks: async function searchTracks() {
+      try {
+        this.tracksToAdd = [];
+        const character = Math.random().toString(36).substring(2, 3);
+        const tracks = await api.searchTracks(character);
+        for (let i = 0; this.tracksToAdd.length < 4 && i < tracks.length; i += 1) {
+          let find = false;
+          this.tracksToAdd.forEach((track) => {
+            if (track.trackName === tracks[i].trackName) {
+              find = true;
+            }
+          });
+          if (!find) {
+            this.tracksToAdd.push(tracks[i]);
+          }
+        }
+      } catch (err) {
+        this.errorMessage = err.message;
+        this.showErrorHandler = true;
+      }
+    },
+    addTrack: async function addTracks(track) {
+      try {
+        api.addTrackToPlaylist(this.playlist.id, new Array(track));
+        this.playlist.tracks.unshift(track);
+      } catch (err) {
+        this.errorMessage = err.message;
+        this.showErrorHandler = true;
+      }
+    },
     playSong: function playSong(song, index) {
       this.indexSongPlaying = index;
       this.$refs.audio.src = song;

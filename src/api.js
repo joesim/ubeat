@@ -135,5 +135,17 @@ export default {
       .catch(() => {
         throw new Error('Unable to search an album');
       });
+  },
+  searchTracks: function searchTracks(str) {
+    const reqLocTracks = `${Vue.config.ubeatApiLocation}/search/tracks?q=${str}`;
+    return fetch(new Request(reqLocTracks, {
+      method: 'GET',
+      headers: reqHeaders
+    }))
+    .then(resp => resp.json())
+    .then(data => data.results)
+    .catch(() => {
+      throw new Error('Unable to search tracks');
+    });
   }
 };
