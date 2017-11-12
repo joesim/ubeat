@@ -200,7 +200,7 @@ export default {
     addTrack: async function addTracks(track) {
       try {
         api.addTrackToPlaylist(this.playlist.id, new Array(track));
-        this.playlist.tracks.unshift(track);
+        this.playlist.tracks.push(track);
       } catch (err) {
         this.errorMessage = err.message;
         this.showErrorHandler = true;
