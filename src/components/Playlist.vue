@@ -32,30 +32,39 @@
       </div>
     </div>
     <hr>
-
+    <!-- Audio element -->
     <audio class="audio-playlist animated fadeIn" autoplay controls ref="audio" v-on:ended="nextSong"></audio>
-
+    <!-- Music list -->
     <div class="card mt-4 mb-4 animated fadeIn">
       <div class="card-body">
-        <table class="table table-hover text-center">
+        <table class="table text-center">
           <thead>
             <tr class="light-blue-text">
-              <th></th>
               <th>#</th>
-              <th class="text-center">Title</th>
+              <th>Play</th>
+              <th>Title</th>
               <th class="text-center">Artist</th>
+              <th class="text-center">Album</th>
               <th class="text-center">Duration</th>
               <th class="text-center">Delete</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="(track, index) of playlist.tracks" v-if="track !== undefined && track !== null" v-bind:class="{'table-active-song': (index==indexSongPlaying)}">
-              <th v-on:click="playSong(track.previewUrl, index)" scope="row" class="align-middle"><img class="picture-size-50" v-bind:src="track.artworkUrl60" onError="this.style.visibility = 'hidden'"></th>
               <th scope="row" class="align-middle">
                 {{index + 1}}
               </th>
-              <td class="align-middle">{{track.trackName}}</td>
-              <td class="align-middle">{{track.artistName}}</td>
+              <th class="align-middle">
+                <i v-if="index!=indexSongPlaying" class="fa fa-2x fa-play-circle color-play btn-cursor-pointer" v-on:click="playSong(track.previewUrl, index)"></i>
+                <i v-if="index==indexSongPlaying" class="fa fa-2x fa-stop-circle btn-cursor-pointer" v-on:click="stopSong"></i>
+              </th>
+              <td class="text-left align-middle">{{track.trackName}}</td>
+              <td class="align-middle">
+                <router-link :to="`/artist/${track.artistId}`" v-if="track.artistId!==undefined">{{track.artistName}}</router-link>
+              </td>
+              <td scope="row" class="align-middle">
+                <router-link :to="`/album/${track.collectionId}`" v-if="track.collectionId!==undefined"><img class="picture-size-50" v-bind:src="track.artworkUrl60" onError="this.onerror=null;this.src='https://cdn2.iconfinder.com/data/icons/smiling-face/512/Nothing_Face-512.png'"></router-link>
+              </td>
               <td class="align-middle">{{timeInMinutes(track.trackTimeMillis)}}</td>
               <td class="align-middle">
                 <button class="btn btn-red waves-effect waves-light delete-song-padding" v-on:click="trackToDelete = track.trackId" data-toggle="modal" data-target="#deleteTrackConfirm">
@@ -67,7 +76,7 @@
         </table>
       </div>
     </div>
-    <!-- Modal -->
+    <!-- Modal delete -->
     <div class="modal fade" id="deleteConfirm" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -142,6 +151,10 @@ export default {
       this.$refs.audio.src = song;
       this.$refs.audio.play();
     },
+    stopSong: function stopSong() {
+      this.$refs.audio.src = '';
+      this.indexSongPlaying = -1;
+    },
     nextSong: function nextSong() {
       if (this.indexSongPlaying < (this.playlist.tracks.length - 1)) {
         this.indexSongPlaying += 1;
@@ -187,7 +200,8 @@ export default {
     },
     updatePlaylistName: async function updatePlaylistName() {
       try {
-        this.playlist = await api.updatePlaylistName(this.playlist, this.newPlaylistName,
+        this.playlist.name = this.newPlaylistName;
+        this.playlist = await api.updatePlaylistName(JSON.stringify(this.playlist),
             this.$route.params.id);
         this.editing = false;
       } catch (err) {

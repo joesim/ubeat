@@ -69,6 +69,10 @@ button {
   color: white;
 }
 
+.color-play {
+	color:#82B1FF;
+}
+
 .table-icon {
   max-height: 50px;
   width: auto;
@@ -89,6 +93,10 @@ table.table th, table.table td {
 
 .btn-space-between {
   margin-left: 10px !important;
+}
+
+.btn-cursor-pointer {
+	cursor: pointer;
 }
 
 .editable .fa-pencil {
@@ -123,6 +131,10 @@ table.table th, table.table td {
 .table-active-song {
 	background-color: RGB(130, 177, 255);
 	color: white;
+}
+
+.table-active-song a {
+	color: white !important;
 }
 
 .audio-playlist {

@@ -50,11 +50,12 @@ export default {
       throw new Error('Unable to delete playlist');
     });
   },
-  updatePlaylistName: function updatePlaylistName(playlist, name, id) {
-    const reqBody = new URLSearchParams(playlist);
-    reqBody.set('name', name);
+  updatePlaylistName: function updatePlaylistName(playlist, id) {
+    const headersPut = new Headers(reqHeaders);
+    headersPut.append('Content-Type', 'application/json');
+    const reqBody = playlist;
     const reqLoc = `${Vue.config.ubeatApiLocation}/playlists/${id}`;
-    return fetch(new Request(reqLoc, { method: 'PUT', headers: reqHeaders, body: reqBody }))
+    return fetch(new Request(reqLoc, { method: 'PUT', headers: headersPut, body: reqBody }))
         .then(resp => resp.json())
         .then(data => data)
         .catch(() => {
