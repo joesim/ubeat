@@ -19,8 +19,8 @@
                     <div class="card card-playlist-margin">
                         <div class="row align-items-center card-playlist-padding">
                             <div class="col-md-4 text-center">
-                                <img class="picture-size-80" :src="playlist.tracks[0].artworkUrl100" v-if="playlist.tracks.length!=0">
-                                <img class="picture-size-80" src="https://cdn2.iconfinder.com/data/icons/smiling-face/512/Nothing_Face-512.png" v-if="playlist.tracks.length==0">
+                                <img class="picture-size-80" :src="playlist.tracks[0].artworkUrl100" v-if="playlist.tracks.length!=0 && playlist.tracks[0] !== null" onError="this.style.visibility = 'hidden'">
+                                <img class="picture-size-80" src="https://cdn2.iconfinder.com/data/icons/smiling-face/512/Nothing_Face-512.png" v-if="playlist.tracks.length===0 || playlist.tracks[0]===null">
                             </div>
                             <div class="col-md-8">
                                 <div>
@@ -65,15 +65,24 @@
                 </div>
             </div>
         </div>
+
+        <!-- Modal for error handler -->
+        <ErrorHandler v-bind:message="errorMessage" v-if="showErrorHandler"/>
     </div>
 </template>
 
 <script>
-import Vue from 'vue';
+import ErrorHandler from './ErrorHandler';
+import api from '../api';
 
 export default {
+  components: {
+    ErrorHandler
+  },
   data() {
     return {
+      showErrorHandler: false,
+      errorMessage: '',
       playlists: [],
       errors: [],
       newPlaylistName: '',
@@ -81,59 +90,22 @@ export default {
     };
   },
   created: async function created() {
-    const reqHeaders = new Headers({
-      Authorization: Vue.config.ubeatToken,
-    });
-    const reqLocTok = `${Vue.config.ubeatApiLocation}/tokeninfo`;
-    fetch(new Request(reqLocTok, { method: 'GET', headers: reqHeaders }))
-    .then(resp => resp.json())
-    .then((data) => {
-      for (let i = 0; i < data.length; i += 1) {
-        if (data[i].name !== undefined) {
-          this.playlists.push(data[i]);
-        }
-      }
-    })
-    .catch((error) => {
-      this.errors.push(error);
-    });
+    try {
+      this.playlists = await api.getPlaylists();
+    } catch (err) {
+      this.errorMessage = err.message;
+      this.showErrorHandler = true;
+    }
   },
   methods: {
-    showPlaylists: async function showPlaylists() {
-      const reqHeaders = new Headers({
-        Authorization: Vue.config.ubeatToken,
-      });
-      const reqLoc = `${Vue.config.ubeatApiLocation}/playlists`;
-      fetch(new Request(reqLoc, { method: 'GET', headers: reqHeaders }))
-      .then(resp => resp.json())
-      .then((data) => {
-        for (let i = 0; i < data.length; i += 1) {
-          if (data[i].owner !== undefined &&
-           data[i].owner.email === this.userEmail) {
-            this.playlists.push(data[i]);
-          }
-        }
-      })
-      .catch((error) => {
-        this.error.push(error);
-      });
-    },
     createPlaylist: async function createPlaylist() {
-      const reqHeaders = new Headers({
-        Authorization: Vue.config.ubeatToken
-      });
-      const reqBody = new URLSearchParams({
-        name: this.newPlaylistName
-      });
-      const reqLoc = `${Vue.config.ubeatApiLocation}/playlists`;
-      fetch(new Request(reqLoc, { method: 'POST', headers: reqHeaders, body: reqBody }))
-        .then(resp => resp.json())
-        .then((data) => {
-          this.playlists.push(data);
-        })
-        .catch((error) => {
-          this.errors.push(error);
-        });
+      try {
+        const playlist = await api.createPlaylist(this.newPlaylistName);
+        this.playlists.push(playlist);
+      } catch (err) {
+        this.errorMessage = err.message;
+        this.showErrorHandler = true;
+      }
     }
   }
 };

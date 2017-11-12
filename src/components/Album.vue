@@ -13,14 +13,15 @@
       </div>
       <div class="col-md-9">
        <h1>{{ collectionName }}</h1>
-        <a v-bind:href="'./#/artist/' + artistId"><h2 class="black-text">{{ artistName }}</h2></a>
+        <a v-if="artistName != 'Various Artists'" v-bind:href="'./#/artist/' + artistId"><h2 class="black-text">{{ artistName }}</h2></a>
+        <h2 v-if="artistName === 'Various Artists'" class="black-text">{{ artistName }}</h2>
         <h3 class="light-blue-text">
           <em>{{ primaryGenreName }}</em>
         </h3>
         <div class="row">
           <div class="col">
             <p>{{ releaseDate }} <br> {{ numberTracks }} tracks</p>
-            <button type="button" v-on:click="addAllTracks" class="btn btn-light-blue btn-sm" data-toggle="modal" data-target="#addToPlaylistModal">
+            <button v-bind:disabled="playlists.length <= 0" type="button" v-on:click="addAllTracks" class="btn btn-light-blue btn-sm" data-toggle="modal" data-target="#addToPlaylistModal">
               Add all tracks in playlist
             </button>
           </div>
@@ -53,7 +54,7 @@
               </audio>
            </td>
             <td>
-              <button type="button" v-on:click="addTrack(allTracks[index])" class="btn btn-light-blue btn-sm" data-toggle="modal" data-target="#addToPlaylistModal">
+              <button type="button" v-on:click="addTrack(allTracks[index])" v-bind:disabled="playlists.length <= 0" class="btn btn-light-blue btn-sm" data-toggle="modal" data-target="#addToPlaylistModal">
                 <i class="fa fa-plus" aria-hidden="true"></i>
               </button>
             </td>
@@ -88,15 +89,23 @@
         </div>
       </div>
     </div>
+    <!-- Modal for error handler -->
+    <ErrorHandler v-bind:message="errorMessage" v-if="showErrorHandler"/>
   </div>
 </template>
 
 <script>
-  import Vue from 'vue';
+  import ErrorHandler from './ErrorHandler';
+  import api from '../api';
 
   export default {
+    components: {
+      ErrorHandler
+    },
     data() {
       return {
+        errorMessage: '',
+        showErrorHandler: false,
         tracksToAdd: [],
         selectedPlaylistIdx: 0,
         playlists: [],
@@ -113,82 +122,67 @@
       };
     },
     created: async function created() {
-      const reqHeaders = new Headers({
-        Authorization: Vue.config.ubeatToken,
-      });
-
       const albumId = this.$route.params.id;
+      try {
+        const data = await api.getAlbum(albumId);
+        const album = data.results[0];
+        const releaseDate = new Date(album.releaseDate);
+        this.artistName = album.artistName;
+        this.collectionName = album.collectionName;
+        this.primaryGenreName = album.primaryGenreName;
+        this.releaseDate = `${releaseDate.getDate()}/${releaseDate.getMonth()}/${releaseDate.getFullYear()}`;
+        this.artworkUrl = album.artworkUrl100.replace('100x100', '510x510');
+        this.collectionUrl = album.collectionViewUrl;
+        this.artistId = album.artistId;
+      } catch (err) {
+        this.errorMessage = err.message;
+        this.showErrorHandler = true;
+      }
 
-      const reqLoc = `${Vue.config.ubeatApiLocation}/albums/${albumId}`;
-
-      fetch(new Request(reqLoc, { method: 'GET', headers: reqHeaders }))
-        .then(resp => resp.json())
-        .then((data) => {
-          const album = data.results[0];
-          const releaseDate = new Date(album.releaseDate);
-
-          this.artistName = album.artistName;
-          this.collectionName = album.collectionName;
-          this.primaryGenreName = album.primaryGenreName;
-          this.releaseDate = `${releaseDate.getDate()}/${releaseDate.getMonth()}/${releaseDate.getFullYear()}`;
-          this.artworkUrl = album.artworkUrl100.replace('100x100', '510x510');
-          this.collectionUrl = album.collectionViewUrl;
-          this.artistId = album.artistId;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-
-      const reqLocTracks = `${Vue.config.ubeatApiLocation}/albums/${albumId}/tracks`;
-
-      fetch(new Request(reqLocTracks, { method: 'GET', headers: reqHeaders }))
-        .then(resp => resp.json())
-        .then((data) => {
-          this.allTracks = data.results;
-          data.results.forEach((track) => {
-            const trackDurationFormat = `${Math.floor(track.trackTimeMillis / 60000)}:${((track.trackTimeMillis % 60000) / 1000).toFixed(0)}`;
-            this.tracks.push({
-              trackName: track.trackName,
-              trackDuration: trackDurationFormat,
-              previewUrl: track.previewUrl,
-              artwork: track.artworkUrl30
-            });
+      try {
+        const data = await api.getTracksAlbum(albumId);
+        this.allTracks = data.results;
+        data.results.forEach((track) => {
+          const trackDurationFormat = `${Math.floor(track.trackTimeMillis / 60000)}:${((track.trackTimeMillis %
+                                       60000) / 1000).toFixed(0)}`;
+          this.tracks.push({
+            trackName: track.trackName,
+            trackDuration: trackDurationFormat,
+            previewUrl: track.previewUrl,
+            artwork: track.artworkUrl30
           });
-          this.numberTracks = this.tracks.length;
-        })
-        .catch((err) => {
-          console.log(err);
         });
+        this.numberTracks = this.tracks.length;
+      } catch (err) {
+        this.errorMessage = err.message;
+        this.showErrorHandler = true;
+      }
 
-      const reqLocPlaylists = `${Vue.config.ubeatApiLocation}/playlists`;
-      fetch(new Request(reqLocPlaylists, {
-        method: 'GET',
-        headers: reqHeaders
-      }))
-        .then(resp => resp.json())
-        .then((data) => {
-          for (let i = 0; i < data.length; i += 1) {
-            if (data[i].name !== undefined) {
-              this.playlists.push({
-                name: data[i].name,
-                id: data[i].id
-              });
-            }
+      try {
+        const playlists = await api.getPlaylists();
+        for (let i = 0; i < playlists.length; i += 1) {
+          if (playlists[i].name !== undefined) {
+            this.playlists.push({
+              name: playlists[i].name,
+              id: playlists[i].id
+            });
           }
-        });
+        }
+      } catch (err) {
+        this.errorMessage = err.message;
+        this.showErrorHandler = true;
+      }
     },
     methods: {
       addToPlaylist: function addToPlaylist() {
         if (this.selectedPlaylistIdx < this.playlists.length) {
-          const reqLocAdd = `${Vue.config.ubeatApiLocation}/playlists/${this.playlists[this.selectedPlaylistIdx].id}/tracks`;
-          const reqHeaders = new Headers({
-            Authorization: Vue.config.ubeatToken
-          });
-          this.tracksToAdd.forEach((track) => {
-            const data = new URLSearchParams(track);
-            fetch(new Request(reqLocAdd, { method: 'POST', headers: reqHeaders, body: data }));
-          });
-          this.tracksToAdd = [];
+          try {
+            api.addTrackToPlaylist(this.playlists[this.selectedPlaylistIdx].id, this.tracksToAdd);
+            this.tracksToAdd = [];
+          } catch (err) {
+            this.errorMessage = err.message;
+            this.showErrorHandler = true;
+          }
         }
       },
       addTrack: function addTrack(track) {

@@ -65,18 +65,25 @@
             </li>
           </ul>
         </div>
-
-
       </div>
+
+      <!-- Modal for error handler -->
+      <ErrorHandler v-bind:message="errorMessage" v-if="showErrorHandler"/>
     </div>
 </template>
 
 <script>
-  import Vue from 'vue';
+  import ErrorHandler from './ErrorHandler';
+  import api from '../api';
 
   export default {
+    components: {
+      ErrorHandler
+    },
     data() {
       return {
+        showErrorHandler: false,
+        errorMessage: '',
         indexPageAlbum: 0,
         indexPageArtist: 0,
         artists: [],
@@ -84,33 +91,15 @@
       };
     },
     created: async function created() {
-      const reqHeaders = new Headers({
-        Authorization: Vue.config.ubeatToken,
-      });
-
       const character = Math.random().toString(36).substring(2, 3);
 
-      const reqLocArtists = `${Vue.config.ubeatApiLocation}/search/artists?q=${character}`;
-
-      fetch(new Request(reqLocArtists, { method: 'GET', headers: reqHeaders }))
-        .then(resp => resp.json())
-        .then((data) => {
-          this.artists = data.results;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-
-      const reqLocAlbums = `${Vue.config.ubeatApiLocation}/search/albums?q=${character}`;
-
-      fetch(new Request(reqLocAlbums, { method: 'GET', headers: reqHeaders }))
-        .then(resp => resp.json())
-        .then((data) => {
-          this.albums = data.results;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      try {
+        this.artists = await api.searchArtists(character);
+        this.albums = await api.searchAlbums(character);
+      } catch (err) {
+        this.errorMessage = err.message;
+        this.showErrorHandler = true;
+      }
     },
     methods: {
       nextPage: function nextPage() {

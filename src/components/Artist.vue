@@ -20,7 +20,7 @@
             <th>Album</th>
             <th>Date</th>
             <th>Tracks</th>
-            <th>Duration</th>
+            <th>Price</th>
           </tr>
           </thead>
           <tbody>
@@ -35,15 +35,23 @@
         </table>
       </div>
     </div>
+    <!-- Modal for error handler -->
+    <ErrorHandler v-bind:message="errorMessage" v-if="showErrorHandler"/>
   </div>
 </template>
 
 <script>
-import Vue from 'vue';
+import ErrorHandler from './ErrorHandler';
+import api from '../api';
 
 export default {
+  components: {
+    ErrorHandler
+  },
   data() {
     return {
+      errorMessage: '',
+      showErrorHandler: false,
       name: '',
       genre: '',
       itunesLink: '',
@@ -51,30 +59,25 @@ export default {
     };
   },
   created: async function created() {
-    const reqHeaders = new Headers({
-      Authorization: Vue.config.ubeatToken,
-    });
-
     const artistId = this.$route.params.id;
-
-    const reqLoc = `${Vue.config.ubeatApiLocation}/artists/${artistId}`;
-
-    fetch(new Request(reqLoc, { method: 'GET', headers: reqHeaders }))
-    .then(resp => resp.json())
-    .then((data) => {
+    try {
+      const data = await api.getArtist(artistId);
       const artist = data.results[0];
       this.name = artist.artistName;
       this.genre = artist.primaryGenreName;
       this.itunesLink = artist.artistLinkUrl;
-    });
-
-    const reqLocAlbums = `${Vue.config.ubeatApiLocation}/artists/${artistId}/albums`;
-
-    fetch(new Request(reqLocAlbums, { method: 'GET', headers: reqHeaders }))
-    .then(resp => resp.json())
-    .then((data) => {
+    } catch (err) {
+      this.errorMessage = err.message;
+      this.showErrorHandler = true;
+    }
+    try {
+      const data = await api.getAlbumFromArtist(artistId);
       this.albums = data.results;
-    });
+      this.albums.sort((a, b) => parseInt(b.releaseDate, 10) - parseInt(a.releaseDate, 10));
+    } catch (err) {
+      this.errorMessage = err.message;
+      this.showErrorHandler = true;
+    }
   },
   computed: {
     albumsFiltered: function albumsFiltered() {
