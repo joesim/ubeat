@@ -1,22 +1,9 @@
 <template>
-    <div class="container animated">
+    <div class="container animated"> 
         <div class="row align-items-center">
-            <!-- The playlist name -->
-            <div class="col-md-8 text-center text-xs-center text-sm-center text-md-left">
-                <h1 class="inline-block" id="playlistname"> Playlists </h1>
-            </div>
-            <div class="col-md-4 text-center text-xs-center text-sm-center text-md-right">
-                <button type="button" class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-target="#newPlaylistModal">
-                    Create new playlist
-                    <i class="fa fa-headphones fa-lg" aria-hidden="true"></i>
-                </button>
-            </div>
-        </div>
-        <hr>
-        <div class="row">
             <div class="col-6 col-lg-4 col-md-6 col-sm-6" v-for="playlist of playlists" v-if="playlist!==undefined">
                 <a v-bind:href="`/#/playlists/${playlist.id}`">
-                    <div class="card card-playlist-margin">
+                    <div class="card card-playlist-margin card-outline-success">
                         <div class="row align-items-center card-playlist-padding">
                             <div class="col-md-4 text-center">
                                 <img class="picture-size-80" :src="playlist.tracks[0].artworkUrl100" v-if="playlist.tracks.length!=0 && playlist.tracks[0] !== null" onError="this.style.visibility = 'hidden'">
@@ -38,6 +25,12 @@
                         </div>
                     </div>
                 </a>
+            </div>
+            <div class="col-6 col-lg-4 col-md-6 col-sm-6 text-center" style="padding-top:30px;padding-bottom:30px">
+            <button type="button" class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-target="#newPlaylistModal">
+                    Create new playlist
+                    <i class="fa fa-headphones fa-lg" aria-hidden="true"></i>
+                </button>
             </div>
         </div>
 
