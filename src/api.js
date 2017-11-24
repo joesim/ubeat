@@ -147,5 +147,29 @@ export default {
     .catch(() => {
       throw new Error('Unable to search tracks');
     });
+  },
+  searchUsers: function searchUsers(str) {
+    const reqLocUsers = `${Vue.config.ubeatApiLocation}/search/users?q=${str}`;
+    return fetch(new Request(reqLocUsers, {
+      method: 'GET',
+      headers: reqHeaders
+    }))
+    .then(resp => resp.json())
+    .then(data => data.results)
+    .catch(() => {
+      throw new Error('Unable to search users');
+    });
+  },
+  search: function search(str) {
+    const reqLocUsers = `${Vue.config.ubeatApiLocation}/search?q=${str}&limit=20`;
+    return fetch(new Request(reqLocUsers, {
+      method: 'GET',
+      headers: reqHeaders
+    }))
+      .then(resp => resp.json())
+      .then(data => data.results)
+      .catch(() => {
+        throw new Error('Unable to search');
+      });
   }
 };
