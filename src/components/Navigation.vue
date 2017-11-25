@@ -17,7 +17,7 @@
 
         <ul class="navbar-nav mr-auto">
           <li class="nav-item navbar-search">
-            <form class="form-inline waves-effect waves-light">
+            <form class="form-inline waves-effect waves-light" onSubmit="return false;">
               <input class="form-control" type="text" placeholder="Search" aria-label="Search" v-model="searchText" v-on:keyup="keypressed" >
             </form>
           </li>
@@ -63,6 +63,7 @@
         if (event.keyCode === 13 && this.searchText !== '') {
           document.location = `./#/globalresearch/${this.searchText}`;
         }
+        return false;
       }
     }
   };
