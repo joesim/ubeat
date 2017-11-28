@@ -39,6 +39,8 @@
 
 </template>
 <script>
+  import router from '../router';
+
   export default {
     data() {
       return {
@@ -61,7 +63,7 @@
       },
       keypressed(event) {
         if (event.keyCode === 13 && this.searchText !== '') {
-          document.location = `./#/globalresearch/${this.searchText}`;
+          router.push({ name: 'GlobalResearch', params: { search: this.searchText } });
         }
         return false;
       }

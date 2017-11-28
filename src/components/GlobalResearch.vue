@@ -2,7 +2,7 @@
   <div class="container">
     <div class="card-body">
       <br/>
-      <h3 class="text-center">Search results for: <strong>{{ this.$route.params.search }}</strong></h3>
+      <h3 class="text-center">Search results for: <strong>{{ search }}</strong></h3>
     </div>
 
     <ul class="nav nav-tabs nav-justified bg-light-blue">
@@ -121,25 +121,13 @@
         users: []
       };
     },
-    created: async function created() {
-      const search = this.$route.params.search;
-
-      try {
-        const result = await api.search(search);
-        result.forEach((item) => {
-          if (item.wrapperType === 'track') {
-            this.songs.push(item);
-          } else if (item.wrapperType === 'artist') {
-            this.artists.push(item);
-          } else if (item.wrapperType === 'collection') {
-            this.albums.push(item);
-          } else {
-            this.users.push(item);
-          }
-        });
-      } catch (err) {
-        this.errorMessage = err.message;
-        this.showErrorHandler = true;
+    created: function created() {
+      this.research();
+    },
+    props: ['search'],
+    watch: {
+      search: function update() {
+        this.research();
       }
     },
     methods: {
@@ -169,6 +157,29 @@
         }
         if (this.indexPageUsers - 3 >= 0) {
           this.indexPageUsers -= 3;
+        }
+      },
+      research: async function research() {
+        this.songs = [];
+        this.albums = [];
+        this.artists = [];
+        this.users = [];
+        try {
+          const result = await api.search(this.search);
+          result.forEach((item) => {
+            if (item.wrapperType === 'track') {
+              this.songs.push(item);
+            } else if (item.wrapperType === 'artist') {
+              this.artists.push(item);
+            } else if (item.wrapperType === 'collection') {
+              this.albums.push(item);
+            } else {
+              this.users.push(item);
+            }
+          });
+        } catch (err) {
+          this.errorMessage = err.message;
+          this.showErrorHandler = true;
         }
       }
     }

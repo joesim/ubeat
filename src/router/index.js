@@ -54,7 +54,8 @@ export default new Router({
     }, {
       path: '/globalresearch/:search',
       name: 'GlobalResearch',
-      component: GlobalResearch
+      component: GlobalResearch,
+      props: true
     }
   ],
 });
