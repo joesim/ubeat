@@ -5,6 +5,7 @@ const reqHeaders = new Headers({
 });
 
 export default {
+
   getAllUsers: function getAllUsers() {
     const reqLocTok = `${Vue.config.ubeatApiLocation}/users`;
     return fetch(new Request(reqLocTok, {
@@ -118,11 +119,11 @@ export default {
       method: 'DELETE',
       headers: reqHeaders
     }))
-      .then(resp => resp.json())
-      .then(() => undefined)
-      .catch(() => {
-        throw new Error('Unable to delete playlist');
-      });
+    .then(resp => resp.json())
+    .then(() => undefined)
+    .catch(() => {
+      throw new Error('Unable to delete playlist');
+    });
   },
   updatePlaylistName: function updatePlaylistName(playlist, id) {
     const headersPut = new Headers(reqHeaders);
@@ -130,11 +131,11 @@ export default {
     const reqBody = playlist;
     const reqLoc = `${Vue.config.ubeatApiLocation}/playlists/${id}`;
     return fetch(new Request(reqLoc, { method: 'PUT', headers: headersPut, body: reqBody }))
-      .then(resp => resp.json())
-      .then(data => data)
-      .catch(() => {
-        throw new Error('Unable to change playlist name');
-      });
+        .then(resp => resp.json())
+        .then(data => data)
+        .catch(() => {
+          throw new Error('Unable to change playlist name');
+        });
   },
   deleteSong: function deleteSong(playlistId, trackId) {
     const reqLoc = `${Vue.config.ubeatApiLocation}/playlists/${playlistId}/tracks/${trackId}`;
@@ -168,10 +169,10 @@ export default {
     tracks.forEach((track) => {
       const data = new URLSearchParams(track);
       fetch(new Request(reqLocAdd, { method: 'POST', headers: reqHeaders, body: data }))
-        .then()
-        .catch((err) => {
-          throw new Error(err.message);
-        });
+          .then()
+          .catch((err) => {
+            throw new Error(err.message);
+          });
     });
   },
   getArtist: function getArtist(artistId) {
@@ -216,10 +217,34 @@ export default {
       method: 'GET',
       headers: reqHeaders
     }))
+    .then(resp => resp.json())
+    .then(data => data.results)
+    .catch(() => {
+      throw new Error('Unable to search tracks');
+    });
+  },
+  searchUsers: function searchUsers(str) {
+    const reqLocUsers = `${Vue.config.ubeatApiLocation}/search/users?q=${str}`;
+    return fetch(new Request(reqLocUsers, {
+      method: 'GET',
+      headers: reqHeaders
+    }))
+    .then(resp => resp.json())
+    .then(data => data.results)
+    .catch(() => {
+      throw new Error('Unable to search users');
+    });
+  },
+  search: function search(str) {
+    const reqLocUsers = `${Vue.config.ubeatApiLocation}/search?q=${str}&limit=20`;
+    return fetch(new Request(reqLocUsers, {
+      method: 'GET',
+      headers: reqHeaders
+    }))
       .then(resp => resp.json())
       .then(data => data.results)
       .catch(() => {
-        throw new Error('Unable to search tracks');
+        throw new Error('Unable to search');
       });
   }
 };

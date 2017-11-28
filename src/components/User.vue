@@ -41,11 +41,15 @@
             </div>
             <div class="card-block card-playlist-user">
                 <div class="tab-pane show active" ref="playlistsCard" id="playlists" role="tabpanel">
+                    <h4 class="text-center" v-if="playlists.length==0">No playlists :(</h4>
                     <playlists :isUser="isUser" :playlists="playlists"></playlists>
                 </div>
+               
                 <div class="tab-pane tabNothing" id="following" ref="followingCard" role="tabpanel">
                     <following :users="users" :followings="user.following"></following>
+                    <h4 class="text-center" v-if="user.following.length==0">Nothing to show :(</h4>
                 </div>
+                
             </div>
         </div>
     </div>
@@ -81,6 +85,7 @@ export default {
   methods: {
     fetchAllData: async function fetchAllData(userId) {
       try {
+        this.isFollowingUser = undefined;
         const currentUserId = await api.getCurrentUserId();
         this.isUser = (userId === currentUserId);
         Promise.all([api.getAllUsers(), api.getUser(userId), api.getPlaylists(userId),

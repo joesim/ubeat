@@ -9,6 +9,7 @@ import Signup from '@/components/Signup';
 import Playlists from '@/components/Playlists';
 import Playlist from '@/components/Playlist';
 import User from '@/components/User';
+import GlobalResearch from '@/components/GlobalResearch';
 
 Vue.use(Router);
 
@@ -50,6 +51,10 @@ export default new Router({
       path: '/user/:id',
       name: 'User',
       component: User
+    }, {
+      path: '/globalresearch/:search',
+      name: 'GlobalResearch',
+      component: GlobalResearch
     }
   ],
 });
