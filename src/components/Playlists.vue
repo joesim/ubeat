@@ -27,7 +27,7 @@
                 </a>
             </div>
             <div class="col-6 col-lg-4 col-md-6 col-sm-6 text-center" style="padding-top:30px;padding-bottom:30px">
-            <button type="button" class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-target="#newPlaylistModal">
+            <button type="button" class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-target="#newPlaylistModal" v-if="isUser">
                     Create new playlist
                     <i class="fa fa-headphones fa-lg" aria-hidden="true"></i>
                 </button>
@@ -72,23 +72,18 @@ export default {
   components: {
     ErrorHandler
   },
+  props: {
+    playlists: {
+      type: Array
+    },
+    isUser: false
+  },
   data() {
     return {
       showErrorHandler: false,
       errorMessage: '',
-      playlists: [],
-      errors: [],
-      newPlaylistName: '',
-      userEmail: ''
+      newPlaylistName: ''
     };
-  },
-  created: async function created() {
-    try {
-      this.playlists = await api.getPlaylists();
-    } catch (err) {
-      this.errorMessage = err.message;
-      this.showErrorHandler = true;
-    }
   },
   methods: {
     createPlaylist: async function createPlaylist() {
