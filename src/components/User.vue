@@ -1,5 +1,5 @@
 <template>
-    <div class="container" v-if="user!==undefined && isFollowingUser!==undefined">
+    <div class="container" v-if="user!==undefined && (isFollowingUser!==undefined || !isConnected)">
         <div class="row">
             <div class="col-md-3 text-center text-md-left">
                 <gravatar :email="user.email" :size="200" />
@@ -7,11 +7,11 @@
             <div class="col-md-9 text-center text-xs-center text-md-center text-lg-left">
                 <h1 class="user-follow">
                     {{user.name}} &nbsp;
-                    <button type="button" class="btn btn-primary waves-effect waves-light" v-if="!isUser && !isFollowingUser" v-on:click="followUser()">
+                    <button type="button" class="btn btn-primary waves-effect waves-light" v-if="!isUser && !isFollowingUser && isFollowingUser!==undefined" v-on:click="followUser()">
                         Follow
                         <i class="fa fa-user-plus fa-lg" aria-hidden="true"></i>
                     </button>
-                    <button type="button" class="btn btn-orange waves-effect waves-light" v-if="!isUser && isFollowingUser" v-on:click="unfollowUser()">
+                    <button type="button" class="btn btn-orange waves-effect waves-light" v-if="!isUser && isFollowingUser && isFollowingUser!==undefined" v-on:click="unfollowUser()">
                         Following
                         <i class="fa fa-check fa-lg"></i>
                     </button>
@@ -57,6 +57,7 @@
 
 <script>
 import Gravatar from 'vue-gravatar';
+import Vue from 'vue';
 import Playlists from './Playlists';
 import Following from './Following';
 import api from '../api';
@@ -76,7 +77,8 @@ export default {
       currentUser: undefined,
       showErrorHandler: false,
       errorMessage: '',
-      isFollowingUser: undefined
+      isFollowingUser: undefined,
+      isConnected: undefined
     };
   },
   created: async function created() {
@@ -85,18 +87,30 @@ export default {
   methods: {
     fetchAllData: async function fetchAllData(userId) {
       try {
-        this.isFollowingUser = undefined;
-        const currentUserId = await api.getCurrentUserId();
-        this.isUser = (userId === currentUserId);
-        Promise.all([api.getAllUsers(), api.getUser(userId), api.getPlaylists(userId),
-          api.getUser(currentUserId)])
-         .then(([allUsers, user, playlists, currentUser]) => {
-           this.users = allUsers;
-           this.user = user;
-           this.playlists = playlists;
-           this.currentUser = currentUser;
-           this.isFollowingTheUser();
-         });
+        if (Vue.config.ubeatToken === undefined) {
+          this.isConnected = false;
+          this.isFollowingUser = undefined;
+          Promise.all([api.getAllUsers(), api.getUser(userId), api.getPlaylists(userId)])
+           .then(([allUsers, user, playlists]) => {
+             this.users = allUsers;
+             this.user = user;
+             this.playlists = playlists;
+           });
+        } else {
+          this.isConnected = true;
+          this.isFollowingUser = undefined;
+          const currentUserId = await api.getCurrentUserId();
+          this.isUser = (userId === currentUserId);
+          Promise.all([api.getAllUsers(), api.getUser(userId), api.getPlaylists(userId),
+            api.getUser(currentUserId)])
+           .then(([allUsers, user, playlists, currentUser]) => {
+             this.users = allUsers;
+             this.user = user;
+             this.playlists = playlists;
+             this.currentUser = currentUser;
+             this.isFollowingTheUser();
+           });
+        }
       } catch (err) {
         this.errorMessage = err.message;
         this.showErrorHandler = true;
@@ -121,6 +135,9 @@ export default {
       }
     },
     isFollowingTheUser: async function isFollowingUser() {
+      if (!this.isConnected) {
+        return;
+      }
       this.currentUser = await api.getUser(this.currentUser.id);
       for (let i = 0; i < this.currentUser.following.length; i += 1) {
         if (this.currentUser.following[i].email === this.user.email) {
