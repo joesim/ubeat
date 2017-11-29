@@ -5,14 +5,89 @@ const reqHeaders = new Headers({
 });
 
 export default {
-  getPlaylists: function getPlaylists() {
-    const reqLocTok = `${Vue.config.ubeatApiLocation}/playlists`;
+
+  getAllUsers: function getAllUsers() {
+    const reqLocTok = `${Vue.config.ubeatApiLocation}/users`;
     return fetch(new Request(reqLocTok, {
       method: 'GET',
       headers: reqHeaders
     }))
       .then(resp => resp.json())
       .then(data => data)
+      .catch(() => {
+        throw new Error('Unable to get Users');
+      });
+  },
+  followUser: function followUser(userId) {
+    const headersFollow = new Headers(reqHeaders);
+    headersFollow.append('Content-Type', 'application/json');
+    const reqLoc = `${Vue.config.ubeatApiLocation}/follow`;
+    const reqBody = {
+      id: userId
+    };
+    return fetch(new Request(reqLoc, { method: 'POST', headers: headersFollow, body: JSON.stringify(reqBody) }))
+      .then(resp => resp.json())
+      .then(data => data)
+      .catch(() => {
+        throw new Error('Unable to follow user');
+      });
+  },
+  unfollowUser: function unfollowUser(user, userEmail) {
+    let userToDeleteId;
+    for (let i = 0; i < user.following.length; i += 1) {
+      if (user.following[i].email === userEmail) {
+        userToDeleteId = user.following[i]._id;
+      }
+    }
+    const reqLoc = `${Vue.config.ubeatApiLocation}/follow/${userToDeleteId}`;
+    return fetch(new Request(reqLoc, { method: 'DELETE', headers: reqHeaders }))
+      .then(resp => resp.json())
+      .then(() => undefined)
+      .catch(() => {
+        throw new Error('Unable to unfollow user');
+      });
+  },
+  getUser: function getUser(userId) {
+    const reqLocTok = `${Vue.config.ubeatApiLocation}/users/${userId}`;
+    return fetch(new Request(reqLocTok, {
+      method: 'GET',
+      headers: reqHeaders
+    }))
+      .then(resp => resp.json())
+      .then(data => data)
+      .catch(() => {
+        throw new Error('Unable to get User');
+      });
+  },
+  getCurrentUserId: function getCurrentUserId() {
+    const reqLocTok = `${Vue.config.ubeatApiLocation}/tokeninfo`;
+    return fetch(new Request(reqLocTok, { method: 'GET', headers: reqHeaders }))
+      .then(resp => resp.json())
+      .then(data => data.id)
+      .catch(() => {
+        throw new Error('Unable to get current user Id');
+      });
+  },
+  getPlaylists: function getPlaylists(userId) {
+    const reqLocTok = `${Vue.config.ubeatApiLocation}/playlists`;
+    return fetch(new Request(reqLocTok, {
+      method: 'GET',
+      headers: reqHeaders
+    }))
+      .then(resp => resp.json())
+      .then((data) => {
+        if (userId !== undefined) {
+          const playlistsUser = [];
+          for (let i = 0; i < data.length; i += 1) {
+            if (data[i].owner !== undefined &&
+              data[i].owner.id === userId) {
+              playlistsUser.push(data[i]);
+            }
+          }
+          return playlistsUser;
+        }
+        return data;
+      })
       .catch(() => {
         throw new Error('Unable to fetch playlists');
       });
@@ -147,5 +222,29 @@ export default {
     .catch(() => {
       throw new Error('Unable to search tracks');
     });
+  },
+  searchUsers: function searchUsers(str) {
+    const reqLocUsers = `${Vue.config.ubeatApiLocation}/search/users?q=${str}`;
+    return fetch(new Request(reqLocUsers, {
+      method: 'GET',
+      headers: reqHeaders
+    }))
+    .then(resp => resp.json())
+    .then(data => data.results)
+    .catch(() => {
+      throw new Error('Unable to search users');
+    });
+  },
+  search: function search(str) {
+    const reqLocUsers = `${Vue.config.ubeatApiLocation}/search?q=${str}&limit=20`;
+    return fetch(new Request(reqLocUsers, {
+      method: 'GET',
+      headers: reqHeaders
+    }))
+      .then(resp => resp.json())
+      .then(data => data.results)
+      .catch(() => {
+        throw new Error('Unable to search');
+      });
   }
 };

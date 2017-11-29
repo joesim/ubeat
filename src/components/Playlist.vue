@@ -233,8 +233,9 @@ export default {
       this.$refs.audio.pause();
       try {
         const playlistId = this.$route.params.id;
+        const ownerId = this.playlist.owner.id;
         this.playlist = await api.deletePlaylist(playlistId);
-        document.location = './#/playlists';
+        document.location = `./#/user/${ownerId}`;
       } catch (err) {
         this.errorMessage = err.message;
         this.showErrorHandler = true;

@@ -17,8 +17,8 @@
 
         <ul class="navbar-nav mr-auto">
           <li class="nav-item navbar-search">
-            <form class="form-inline waves-effect waves-light">
-              <input class="form-control" type="text" placeholder="Search" aria-label="Search" v-model="searchText">
+            <form class="form-inline waves-effect waves-light" onSubmit="return false;">
+              <input class="form-control" type="text" placeholder="Search" aria-label="Search" v-model="searchText" v-on:keyup="keypressed" >
             </form>
           </li>
         </ul>
@@ -39,6 +39,8 @@
 
 </template>
 <script>
+  import router from '../router';
+
   export default {
     data() {
       return {
@@ -58,6 +60,12 @@
       },
       redirectSignup: () => {
         document.location = './#/signup';
+      },
+      keypressed(event) {
+        if (event.keyCode === 13 && this.searchText !== '') {
+          router.push({ name: 'GlobalResearch', params: { search: this.searchText } });
+        }
+        return false;
       }
     }
   };
