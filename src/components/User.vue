@@ -81,6 +81,9 @@ export default {
       isConnected: undefined
     };
   },
+  beforeCreate: function beforeCreate() {
+    api.checkPrivileges();
+  },
   created: async function created() {
     this.fetchAllData(this.$route.params.id);
   },

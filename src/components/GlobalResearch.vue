@@ -121,6 +121,9 @@
         users: []
       };
     },
+    beforeCreate: function beforeCreate() {
+      api.checkPrivileges();
+    },
     created: function created() {
       this.research();
     },

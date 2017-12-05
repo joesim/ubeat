@@ -29,7 +29,7 @@
                aria-expanded="false"><i class="fa fa-user"></i> {{username}}</a>
             <div class="dropdown-menu dropdown-light-blue" aria-labelledby="navbarDropdownMenuLink">
               <a class="dropdown-item waves-effect waves-light" v-on:click="redirectSettings"><i class="fa fa-gear"></i> Settings</a>
-              <a class="dropdown-item aves-effect waves-light"><i class="fa fa-sign-out"></i> Logout</a>
+              <a v-on:click="logout" class="dropdown-item aves-effect waves-light"><i class="fa fa-sign-out"></i> Logout</a>
             </div>
           </li>
         </ul>
@@ -39,6 +39,7 @@
 
 </template>
 <script>
+  import Cookies from 'js-cookie';
   import router from '../router';
 
   export default {
@@ -60,6 +61,10 @@
       },
       redirectSignup: () => {
         document.location = './#/signup';
+      },
+      logout: () => {
+        Cookies.remove('token');
+        window.location = './#/login';
       },
       keypressed(event) {
         if (event.keyCode === 13 && this.searchText !== '') {

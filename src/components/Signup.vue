@@ -22,46 +22,64 @@
                 <label for="orangeForm-pass">Your password</label>
             </div>
 
-            <div class="text-center">
-                <button v-on:click="signup" class="btn btn-light-blue">Sign up</button>
+            <div class="text-center md-form">
+                <button type="button" v-on:click="signup" class="btn btn-light-blue">Sign up</button>
             </div>
-        </form>
+
+            <div class="text-center">
+              <a href="/#/login" title="Already have an account?">Already have an account?</a>
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
+
+    <!-- Modal for error handler -->
+    <ErrorHandler v-bind:message="errorMessage" v-if="showErrorHandler"/>
     </div>
 </template>
 
 
 <script>
-/*
-import Vue from 'vue';
+import Cookies from 'js-cookie';
+import ErrorHandler from './ErrorHandler';
+import api from '../api';
 
 export default {
+  components: {
+    ErrorHandler
+  },
   data() {
     return {
       email: '',
       name: '',
-      password: ''
+      password: '',
+      errorMessage: '',
+      showErrorHandler: false,
     };
   },
   methods: {
     signup: async function signup() {
       try {
-        const reqLoc = `${Vue.config.ubeatApiLocation}/signup`;
-        const reqBody = { email: this.email, password: this.password, name: this.name };
-        const reqHeaders = new Headers({
-          'Content-Type': 'application/x-www-form-urlencoded',
-        });
-        const res = await fetch(new Request(reqLoc, { method: 'POST',
-        body: JSON.stringify(reqBody), headers: reqHeaders }));
-        if (!res.ok) throw new Error(res.statusText);
-      } catch (e) {
-        throw new Error(e);
+        const re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        if (!re.test(this.email)) {
+          this.errorMessage = 'Invalid email address';
+          this.showErrorHandler = true;
+        } else if (this.password.length < 4) {
+          this.errorMessage = 'Password is too short';
+          this.showErrorHandler = true;
+        } else {
+          const user = await api.signup(this.email, this.password, this.name);
+          const login = await api.login(user.email, this.password);
+          Cookies.set('token', login.token, { expires: 7, path: '/' });
+          window.location = '/#/';
+        }
+      } catch (err) {
+        this.errorMessage = err.message;
+        this.showErrorHandler = true;
       }
     }
   }
 };
-*/
 </script>
 <style>
 </style>

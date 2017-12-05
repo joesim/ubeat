@@ -172,6 +172,9 @@ export default {
       tracksToAdd: []
     };
   },
+  beforeCreate: function beforeCreate() {
+    api.checkPrivileges();
+  },
   created: async function created() {
     this.updatePlaylist();
   },

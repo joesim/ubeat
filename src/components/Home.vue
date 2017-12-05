@@ -90,6 +90,9 @@
         albums: []
       };
     },
+    beforeCreate: function beforeCreate() {
+      api.checkPrivileges();
+    },
     created: async function created() {
       const character = Math.random().toString(36).substring(2, 3);
 

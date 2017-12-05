@@ -85,6 +85,9 @@ export default {
       newPlaylistName: ''
     };
   },
+  beforeCreate: function beforeCreate() {
+    api.checkPrivileges();
+  },
   methods: {
     createPlaylist: async function createPlaylist() {
       try {

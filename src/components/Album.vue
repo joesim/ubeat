@@ -121,6 +121,9 @@
         allTracks: []
       };
     },
+    beforeCreate: function beforeCreate() {
+      api.checkPrivileges();
+    },
     created: async function created() {
       const albumId = this.$route.params.id;
       try {

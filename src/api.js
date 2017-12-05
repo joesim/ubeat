@@ -1,13 +1,21 @@
-import Vue from 'vue';
+import Cookies from 'js-cookie';
 
-const reqHeaders = new Headers({
-  Authorization: Vue.config.ubeatToken
-});
+let token;
+const apiLocation = 'https://ubeat.herokuapp.com';
 
 export default {
 
+  checkPrivileges: function checkPrivileges() {
+    const cookieToken = Cookies.get('token');
+    if (cookieToken === undefined) {
+      window.location = '/?#/login';
+    } else {
+      token = cookieToken;
+    }
+  },
   getAllUsers: function getAllUsers() {
-    const reqLocTok = `${Vue.config.ubeatApiLocation}/users`;
+    const reqHeaders = new Headers({ Authorization: token });
+    const reqLocTok = `${apiLocation}/users`;
     return fetch(new Request(reqLocTok, {
       method: 'GET',
       headers: reqHeaders
@@ -19,13 +27,15 @@ export default {
       });
   },
   followUser: function followUser(userId) {
-    const headersFollow = new Headers(reqHeaders);
-    headersFollow.append('Content-Type', 'application/json');
-    const reqLoc = `${Vue.config.ubeatApiLocation}/follow`;
+    const reqHeaders = new Headers({
+      Authorization: token,
+      'Content-Type': 'application/json'
+    });
+    const reqLoc = `${apiLocation}/follow`;
     const reqBody = {
       id: userId
     };
-    return fetch(new Request(reqLoc, { method: 'POST', headers: headersFollow, body: JSON.stringify(reqBody) }))
+    return fetch(new Request(reqLoc, { method: 'POST', headers: reqHeaders, body: JSON.stringify(reqBody) }))
       .then(resp => resp.json())
       .then(data => data)
       .catch(() => {
@@ -33,13 +43,14 @@ export default {
       });
   },
   unfollowUser: function unfollowUser(user, userEmail) {
+    const reqHeaders = new Headers({ Authorization: token });
     let userToDeleteId;
     for (let i = 0; i < user.following.length; i += 1) {
       if (user.following[i].email === userEmail) {
         userToDeleteId = user.following[i]._id;
       }
     }
-    const reqLoc = `${Vue.config.ubeatApiLocation}/follow/${userToDeleteId}`;
+    const reqLoc = `${apiLocation}/follow/${userToDeleteId}`;
     return fetch(new Request(reqLoc, { method: 'DELETE', headers: reqHeaders }))
       .then(resp => resp.json())
       .then(() => undefined)
@@ -48,7 +59,8 @@ export default {
       });
   },
   getUser: function getUser(userId) {
-    const reqLocTok = `${Vue.config.ubeatApiLocation}/users/${userId}`;
+    const reqHeaders = new Headers({ Authorization: token });
+    const reqLocTok = `${apiLocation}/users/${userId}`;
     return fetch(new Request(reqLocTok, {
       method: 'GET',
       headers: reqHeaders
@@ -60,7 +72,8 @@ export default {
       });
   },
   getCurrentUserId: function getCurrentUserId() {
-    const reqLocTok = `${Vue.config.ubeatApiLocation}/tokeninfo`;
+    const reqHeaders = new Headers({ Authorization: token });
+    const reqLocTok = `${apiLocation}/tokeninfo`;
     return fetch(new Request(reqLocTok, { method: 'GET', headers: reqHeaders }))
       .then(resp => resp.json())
       .then(data => data.id)
@@ -69,7 +82,8 @@ export default {
       });
   },
   getPlaylists: function getPlaylists(userId) {
-    const reqLocTok = `${Vue.config.ubeatApiLocation}/playlists`;
+    const reqHeaders = new Headers({ Authorization: token });
+    const reqLocTok = `${apiLocation}/playlists`;
     return fetch(new Request(reqLocTok, {
       method: 'GET',
       headers: reqHeaders
@@ -93,10 +107,11 @@ export default {
       });
   },
   createPlaylist: function createPlaylist(name) {
+    const reqHeaders = new Headers({ Authorization: token });
     const reqBody = new URLSearchParams({
       name
     });
-    const reqLoc = `${Vue.config.ubeatApiLocation}/playlists`;
+    const reqLoc = `${apiLocation}/playlists`;
     return fetch(new Request(reqLoc, { method: 'POST', headers: reqHeaders, body: reqBody }))
       .then(resp => resp.json())
       .then(data => data)
@@ -105,7 +120,8 @@ export default {
       });
   },
   getPlaylist: function getPlaylist(id) {
-    const reqLoc = `${Vue.config.ubeatApiLocation}/playlists/${id}`;
+    const reqHeaders = new Headers({ Authorization: token });
+    const reqLoc = `${apiLocation}/playlists/${id}`;
     return fetch(new Request(reqLoc, { method: 'GET', headers: reqHeaders }))
       .then(resp => resp.json())
       .then(data => data)
@@ -114,7 +130,8 @@ export default {
       });
   },
   deletePlaylist: function deletePlaylist(id) {
-    const reqLoc = `${Vue.config.ubeatApiLocation}/playlists/${id}`;
+    const reqHeaders = new Headers({ Authorization: token });
+    const reqLoc = `${apiLocation}/playlists/${id}`;
     return fetch(new Request(reqLoc, {
       method: 'DELETE',
       headers: reqHeaders
@@ -126,10 +143,11 @@ export default {
     });
   },
   updatePlaylistName: function updatePlaylistName(playlist, id) {
+    const reqHeaders = new Headers({ Authorization: token });
     const headersPut = new Headers(reqHeaders);
     headersPut.append('Content-Type', 'application/json');
     const reqBody = playlist;
-    const reqLoc = `${Vue.config.ubeatApiLocation}/playlists/${id}`;
+    const reqLoc = `${apiLocation}/playlists/${id}`;
     return fetch(new Request(reqLoc, { method: 'PUT', headers: headersPut, body: reqBody }))
         .then(resp => resp.json())
         .then(data => data)
@@ -138,7 +156,8 @@ export default {
         });
   },
   deleteSong: function deleteSong(playlistId, trackId) {
-    const reqLoc = `${Vue.config.ubeatApiLocation}/playlists/${playlistId}/tracks/${trackId}`;
+    const reqHeaders = new Headers({ Authorization: token });
+    const reqLoc = `${apiLocation}/playlists/${playlistId}/tracks/${trackId}`;
     return fetch(new Request(reqLoc, { method: 'DELETE', headers: reqHeaders }))
       .then(resp => resp.json())
       .then(() => undefined)
@@ -147,7 +166,8 @@ export default {
       });
   },
   getAlbum: function getAlbum(albumId) {
-    const reqLoc = `${Vue.config.ubeatApiLocation}/albums/${albumId}`;
+    const reqHeaders = new Headers({ Authorization: token });
+    const reqLoc = `${apiLocation}/albums/${albumId}`;
     return fetch(new Request(reqLoc, { method: 'GET', headers: reqHeaders }))
       .then(resp => resp.json())
       .then(data => data)
@@ -156,7 +176,8 @@ export default {
       });
   },
   getTracksAlbum: function getTracksAlbum(albumId) {
-    const reqLocTracks = `${Vue.config.ubeatApiLocation}/albums/${albumId}/tracks`;
+    const reqHeaders = new Headers({ Authorization: token });
+    const reqLocTracks = `${apiLocation}/albums/${albumId}/tracks`;
     return fetch(new Request(reqLocTracks, { method: 'GET', headers: reqHeaders }))
       .then(resp => resp.json())
       .then(data => data)
@@ -165,7 +186,8 @@ export default {
       });
   },
   addTrackToPlaylist: function addTrackToPlaylist(playlistId, tracks) {
-    const reqLocAdd = `${Vue.config.ubeatApiLocation}/playlists/${playlistId}/tracks`;
+    const reqHeaders = new Headers({ Authorization: token });
+    const reqLocAdd = `${apiLocation}/playlists/${playlistId}/tracks`;
     tracks.forEach((track) => {
       const data = new URLSearchParams(track);
       fetch(new Request(reqLocAdd, { method: 'POST', headers: reqHeaders, body: data }))
@@ -176,7 +198,8 @@ export default {
     });
   },
   getArtist: function getArtist(artistId) {
-    const reqLoc = `${Vue.config.ubeatApiLocation}/artists/${artistId}`;
+    const reqHeaders = new Headers({ Authorization: token });
+    const reqLoc = `${apiLocation}/artists/${artistId}`;
     return fetch(new Request(reqLoc, { method: 'GET', headers: reqHeaders }))
       .then(resp => resp.json())
       .then(data => data)
@@ -185,7 +208,8 @@ export default {
       });
   },
   getAlbumFromArtist: function getAlbumFromArtist(artistId) {
-    const reqLocAlbums = `${Vue.config.ubeatApiLocation}/artists/${artistId}/albums`;
+    const reqHeaders = new Headers({ Authorization: token });
+    const reqLocAlbums = `${apiLocation}/artists/${artistId}/albums`;
     return fetch(new Request(reqLocAlbums, { method: 'GET', headers: reqHeaders }))
       .then(resp => resp.json())
       .then(data => data)
@@ -194,7 +218,8 @@ export default {
       });
   },
   searchArtists: function searchArtists(str) {
-    const reqLocArtists = `${Vue.config.ubeatApiLocation}/search/artists?q=${str}`;
+    const reqHeaders = new Headers({ Authorization: token });
+    const reqLocArtists = `${apiLocation}/search/artists?q=${str}`;
     return fetch(new Request(reqLocArtists, { method: 'GET', headers: reqHeaders }))
       .then(resp => resp.json())
       .then(data => data.results)
@@ -203,7 +228,8 @@ export default {
       });
   },
   searchAlbums: function searchAlbums(str) {
-    const reqLocAlbums = `${Vue.config.ubeatApiLocation}/search/albums?q=${str}`;
+    const reqHeaders = new Headers({ Authorization: token });
+    const reqLocAlbums = `${apiLocation}/search/albums?q=${str}`;
     return fetch(new Request(reqLocAlbums, { method: 'GET', headers: reqHeaders }))
       .then(resp => resp.json())
       .then(data => data.results)
@@ -212,7 +238,8 @@ export default {
       });
   },
   searchTracks: function searchTracks(str) {
-    const reqLocTracks = `${Vue.config.ubeatApiLocation}/search/tracks?q=${str}`;
+    const reqHeaders = new Headers({ Authorization: token });
+    const reqLocTracks = `${apiLocation}/search/tracks?q=${str}`;
     return fetch(new Request(reqLocTracks, {
       method: 'GET',
       headers: reqHeaders
@@ -224,7 +251,8 @@ export default {
     });
   },
   searchUsers: function searchUsers(str) {
-    const reqLocUsers = `${Vue.config.ubeatApiLocation}/search/users?q=${str}`;
+    const reqHeaders = new Headers({ Authorization: token });
+    const reqLocUsers = `${apiLocation}/search/users?q=${str}`;
     return fetch(new Request(reqLocUsers, {
       method: 'GET',
       headers: reqHeaders
@@ -236,7 +264,8 @@ export default {
     });
   },
   search: function search(str) {
-    const reqLocUsers = `${Vue.config.ubeatApiLocation}/search?q=${str}&limit=20`;
+    const reqHeaders = new Headers({ Authorization: token });
+    const reqLocUsers = `${apiLocation}/search?q=${str}&limit=20`;
     return fetch(new Request(reqLocUsers, {
       method: 'GET',
       headers: reqHeaders
@@ -246,5 +275,27 @@ export default {
       .catch(() => {
         throw new Error('Unable to search');
       });
-  }
+  },
+  signup: function signup(email, password, name) {
+    const reqBody = new URLSearchParams({ name, password, email });
+    const headersSignup = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
+    const reqLoc = `${apiLocation}/signup`;
+    return fetch(new Request(reqLoc, { method: 'POST', headers: headersSignup, body: reqBody }))
+      .then(resp => resp.json())
+      .then(data => data)
+      .catch(() => {
+        throw new Error('User already exists');
+      });
+  },
+  login: function login(email, password) {
+    const reqBody = new URLSearchParams({ email, password });
+    const headersLogin = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
+    const reqLoc = `${apiLocation}/login`;
+    return fetch(new Request(reqLoc, { method: 'POST', headers: headersLogin, body: reqBody }))
+      .then(resp => resp.json())
+      .then(data => data)
+      .catch(() => {
+        throw new Error('Wrong login');
+      });
+  },
 };

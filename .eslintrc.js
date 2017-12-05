@@ -26,6 +26,7 @@ module.exports = {
   'rules': {
     "no-underscore-dangle": 0,
     "comma-dangle": 0,
+    "no-useless-escape": 0,
     // don't require .vue extension when importing
     'import/extensions': ['error', 'always', {
       'js': 'never',

@@ -14,7 +14,8 @@
           </div>
 
           <div class="modal-footer">
-            <button class="btn btn-red" @click="redirectHome">Return to Home page</button>
+            <button class="btn btn-red" @click="redirectHome" v-if="$route.name != 'Login' && $route.name != 'Signup'">Return to Home page</button>
+            <button class="btn btn-red" @click="$parent.showErrorHandler = false" v-else>OK</button>
           </div>
         </div>
       </div>

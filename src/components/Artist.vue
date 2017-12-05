@@ -58,6 +58,9 @@ export default {
       albums: []
     };
   },
+  beforeCreate: function beforeCreate() {
+    api.checkPrivileges();
+  },
   created: async function created() {
     const artistId = this.$route.params.id;
     try {
