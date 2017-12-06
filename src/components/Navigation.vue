@@ -31,6 +31,7 @@
             <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
                aria-expanded="false"><i class="fa fa-user"></i> {{username}}</a>
             <div class="dropdown-menu dropdown-light-blue" aria-labelledby="navbarDropdownMenuLink">
+              <router-link class="dropdown-item waves-effect waves-light" :to="`/user/${userId}`"><i class="fa fa-user"></i> My profile</router-link>
               <a class="dropdown-item waves-effect waves-light" v-on:click="redirectSettings"><i class="fa fa-gear"></i> Settings</a>
               <a v-on:click="logout" class="dropdown-item aves-effect waves-light"><i class="fa fa-sign-out"></i> Logout</a>
             </div>
@@ -44,16 +45,23 @@
 <script>
   import Cookies from 'js-cookie';
   import router from '../router';
+  import api from '../api';
 
   export default {
     data() {
       return {
         username: '',
-        searchText: ''
+        searchText: '',
+        userId: ''
       };
     },
+    beforeCreate: function beforeCreate() {
+      api.checkPrivileges();
+    },
     created: async function created() {
-      this.username = 'Username';
+      this.userId = await api.getCurrentUserId();
+      const user = await api.getUser(this.userId);
+      this.username = user.name;
     },
     methods: {
       redirectHome: () => {

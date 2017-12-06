@@ -1,5 +1,5 @@
 <template>
-    <div class="container" v-if="user!==undefined && (isFollowingUser!==undefined || !isConnected)">
+    <div class="container" v-if="user!==undefined && isFollowingUser!==undefined">
         <div class="row">
             <div class="col-md-3 text-center text-md-left">
                 <gravatar :email="user.email" :size="200" />
@@ -41,13 +41,13 @@
             </div>
             <div class="card-block card-playlist-user">
                 <div class="tab-pane show active" ref="playlistsCard" id="playlists" role="tabpanel">
-                    <h4 class="text-center" v-if="playlists.length==0">No playlists :(</h4>
+                    <h4 class="text-center" v-if="playlists.length==0 && !isUser">No playlists</h4>
                     <playlists :isUser="isUser" :playlists="playlists"></playlists>
                 </div>
                
                 <div class="tab-pane tabNothing" id="following" ref="followingCard" role="tabpanel">
                     <following :users="users" :followings="user.following"></following>
-                    <h4 class="text-center" v-if="user.following.length==0">Nothing to show :(</h4>
+                    <h4 class="text-center" v-if="user.following.length==0">Nothing to show</h4>
                 </div>
                 
             </div>
@@ -57,7 +57,6 @@
 
 <script>
 import Gravatar from 'vue-gravatar';
-import Vue from 'vue';
 import Playlists from './Playlists';
 import Following from './Following';
 import api from '../api';
@@ -77,8 +76,7 @@ export default {
       currentUser: undefined,
       showErrorHandler: false,
       errorMessage: '',
-      isFollowingUser: undefined,
-      isConnected: undefined
+      isFollowingUser: undefined
     };
   },
   beforeCreate: function beforeCreate() {
@@ -90,30 +88,18 @@ export default {
   methods: {
     fetchAllData: async function fetchAllData(userId) {
       try {
-        if (Vue.config.ubeatToken === undefined) {
-          this.isConnected = false;
-          this.isFollowingUser = undefined;
-          Promise.all([api.getAllUsers(), api.getUser(userId), api.getPlaylists(userId)])
-           .then(([allUsers, user, playlists]) => {
-             this.users = allUsers;
-             this.user = user;
-             this.playlists = playlists;
-           });
-        } else {
-          this.isConnected = true;
-          this.isFollowingUser = undefined;
-          const currentUserId = await api.getCurrentUserId();
-          this.isUser = (userId === currentUserId);
-          Promise.all([api.getAllUsers(), api.getUser(userId), api.getPlaylists(userId),
-            api.getUser(currentUserId)])
-           .then(([allUsers, user, playlists, currentUser]) => {
-             this.users = allUsers;
-             this.user = user;
-             this.playlists = playlists;
-             this.currentUser = currentUser;
-             this.isFollowingTheUser();
-           });
-        }
+        this.isFollowingUser = undefined;
+        const currentUserId = await api.getCurrentUserId();
+        this.isUser = (userId === currentUserId);
+        Promise.all([api.getAllUsers(), api.getUser(userId), api.getPlaylists(userId),
+          api.getUser(currentUserId)])
+         .then(([allUsers, user, playlists, currentUser]) => {
+           this.users = allUsers;
+           this.user = user;
+           this.playlists = playlists;
+           this.currentUser = currentUser;
+           this.isFollowingTheUser();
+         });
       } catch (err) {
         this.errorMessage = err.message;
         this.showErrorHandler = true;
@@ -121,8 +107,10 @@ export default {
     },
     followUser: async function followUser() {
       try {
-        await api.followUser(this.user.id);
-        this.isFollowingTheUser();
+        api.followUser(this.user.id)
+         .then(() => {
+           this.isFollowingTheUser();
+         });
       } catch (err) {
         this.errorMessage = err.message;
         this.showErrorHandler = true;
@@ -130,25 +118,29 @@ export default {
     },
     unfollowUser: async function unfollowUser() {
       try {
-        await api.unfollowUser(this.currentUser, this.user.email);
-        this.isFollowingTheUser();
+        api.unfollowUser(this.currentUser, this.user.email)
+         .then(() => {
+           this.isFollowingTheUser();
+         });
       } catch (err) {
         this.errorMessage = err.message;
         this.showErrorHandler = true;
       }
     },
     isFollowingTheUser: async function isFollowingUser() {
-      if (!this.isConnected) {
-        return;
-      }
-      this.currentUser = await api.getUser(this.currentUser.id);
-      for (let i = 0; i < this.currentUser.following.length; i += 1) {
-        if (this.currentUser.following[i].email === this.user.email) {
-          this.isFollowingUser = true;
-          return;
+      try {
+        this.currentUser = await api.getUser(this.currentUser.id);
+        for (let i = 0; i < this.currentUser.following.length; i += 1) {
+          if (this.currentUser.following[i].email === this.user.email) {
+            this.isFollowingUser = true;
+            return;
+          }
         }
+        this.isFollowingUser = false;
+      } catch (err) {
+        this.errorMessage = err.message;
+        this.showErrorHandler = true;
       }
-      this.isFollowingUser = false;
     },
     openFollowing: function openFollowing() {
       this.$refs.playlistsCard.style.display = 'none';
@@ -167,46 +159,49 @@ export default {
 
 <style>
 .avatar {
-    margin: auto;
+  margin: auto;
 }
 
 .nav-link {
-    border: 1px solid transparent;
-    border-top-left-radius: .25rem;
-    border-top-right-radius: .25rem;
-    display: block;
-    padding: .5rem 1rem;
-    font-size: 17px;
+  border: 1px solid transparent;
+  border-top-left-radius: 0.25rem;
+  border-top-right-radius: 0.25rem;
+  display: block;
+  padding: 0.5rem 1rem;
+  font-size: 17px;
 }
 
 .nav-link.active {
-    color: #495057;
-    background-color: #fff;
-    border-color: #ddd #ddd #fff;
-    border-bottom: 3px solid white;
+  color: #495057;
+  background-color: #fff;
+  border-color: #ddd #ddd #fff;
+  border-bottom: 3px solid white;
+  position: relative;
+  z-index: 1000;
+  margin-bottom: -5px;
 }
 
 .nav-link.active .badge {
-    color: #495057;
-    background-color: #fff;
-    border-color: #ddd #ddd #fff;
+  color: #495057;
+  background-color: #fff;
+  border-color: #ddd #ddd #fff;
 }
 
 .card-user {
-    margin: 30px 0 30px 0;
+  margin: 30px 0 30px 0;
 }
 
 .card-playlist-user {
-    margin: 10px;
+  margin: 10px;
 }
 
 .user-follow {
-    display: inline-block;
-    margin-right: 0px;
-    padding-top: 10px;
+  display: inline-block;
+  margin-right: 0px;
+  padding-top: 10px;
 }
 
 .tabNothing {
-    display: none;
+  display: none;
 }
 </style>
