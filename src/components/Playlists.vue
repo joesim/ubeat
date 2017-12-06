@@ -1,5 +1,5 @@
 <template>
-    <div class="container animated"> 
+    <div class="container animated" v-if="playlists.length!=0 || isUser"> 
         <div class="row align-items-center">
             <div class="col-6 col-lg-4 col-md-6 col-sm-6" v-for="playlist of playlists" v-if="playlist!==undefined">
                 <a v-bind:href="`/#/playlists/${playlist.id}`">

@@ -21,7 +21,6 @@
                                     </small>
                                 </p>
                             </div>
-
                         </div>
                     </div>
                 </a>
@@ -34,7 +33,6 @@
 </template>
 
 <script>
-
 import Gravatar from 'vue-gravatar';
 import ErrorHandler from './ErrorHandler';
 

@@ -4,7 +4,6 @@ let token;
 const apiLocation = 'https://ubeat.herokuapp.com';
 
 export default {
-
   checkPrivileges: function checkPrivileges() {
     const cookieToken = Cookies.get('token');
     if (cookieToken === undefined) {
