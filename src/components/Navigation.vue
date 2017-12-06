@@ -21,6 +21,9 @@
               <input class="form-control" type="text" placeholder="Search" aria-label="Search" v-model="searchText" v-on:keyup="keypressed" >
             </form>
           </li>
+          <li class="nav-item">
+            <a class="navbar-brand waves-effect waves-light" v-on:click="redirectSpecificResearch" ><img src="static/img/search/search-plus.png" class="searchPlus"></a>
+          </li>
         </ul>
 
         <ul class="navbar-nav">
@@ -55,6 +58,9 @@
     methods: {
       redirectHome: () => {
         document.location = './#/';
+      },
+      redirectSpecificResearch: () => {
+        document.location = './#/specificResearch/';
       },
       redirectSettings: () => {
         document.location = './#/settings/';

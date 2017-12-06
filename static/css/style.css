@@ -12,6 +12,10 @@ body {
   height: 35px;
 }
 
+.searchPlus {
+  height: 25px;
+}
+
 .navbar {
   margin-bottom: 30px;
 }
@@ -56,6 +60,14 @@ button {
 
 .btn {
 	margin: 0px !important;
+}
+
+.btn-collapse {
+  width: 100%;
+}
+
+.accordion {
+  margin-bottom: 20px;
 }
 
 .card-spacing {
