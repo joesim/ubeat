@@ -77,7 +77,7 @@
           <tbody v-for="(item, index) in artists">
           <tr v-if="index < indexPageArtist + displayNumbers && index >=  indexPageArtist">
             <th scope="row" class="align-middle"><img v-bind:id="item.artistId" v-bind:src="artworkUrl[index]" class="img-fluid table-icon" alt="artist picture"></th>
-            <td class="align-middle" v-bind:id="getArtworkImg(item)">{{ item.artistName }}</td>
+            <td class="align-middle">{{ item.artistName }}</td>
             <td class="align-middle light-blue-text"><em>{{ item.primaryGenreName }}</em></td>
             <td class="align-middle">
               <a class="btn btn-light-blue waves-effect waves-light btn-sm" v-bind:href="'./#/artist/'+item.artistId"><i class="fa fa-search mr-1"></i>See more</a>
@@ -281,9 +281,9 @@
           this.indexPageUsers -= this.displayNumbers;
         }
       },
-      getArtworkImg: async function getArtworkImg(artist) {
-        const artworkUrl = await api.getImageArtist(artist.artistLinkUrl);
-        document.getElementById(artist.artistId).src = artworkUrl;
+      getArtworkImg: async function getArtworkImg(artist, index) {
+        const artwork = await api.getImageArtist(artist.artistLinkUrl);
+        this.artworkUrl.splice(index, 1, artwork);
       },
       research: async function research() {
         this.songs = [];
@@ -302,7 +302,7 @@
               artistsResults.forEach((item) => {
                 this.artworkUrl.push('http://thinkfuture.com/wp-content/uploads/2013/10/loading_spinner.gif');
                 this.artists.push(item);
-                this.artworkUrl.splice(this.artworkUrl.length - 1, 1, this.getArtworkImg(item));
+                this.getArtworkImg(item, this.artworkUrl.length - 1);
               });
               break;
             }
