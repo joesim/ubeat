@@ -291,6 +291,22 @@ export default {
         throw new Error('Unable to load artist image');
       });
   },
+  getDescriptionArtist: function getDescritionArtist(itunesLink) {
+    return fetch(itunesLink)
+      .then(response => response.text())
+      .then((body) => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(body, 'text/html');
+        const x = doc.getElementsByTagName('p')[0];
+        if (x !== null) {
+          return x.getAttribute('aria-label');
+        }
+        return 'None';
+      })
+      .catch(() => {
+        throw new Error('Unable to load artist image');
+      });
+  },
   signup: function signup(email, password, name) {
     const reqBody = new URLSearchParams({ name, password, email });
     const headersSignup = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });

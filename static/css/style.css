@@ -185,3 +185,8 @@ table.table th, table.table td {
 	color: white;
 	cursor: pointer;
 }
+
+.description-artist {
+	text-align: justify;
+	font-size: 0.8em;
+}
