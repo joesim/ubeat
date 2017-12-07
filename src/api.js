@@ -1,7 +1,7 @@
 import Cookies from 'js-cookie';
 
 let token;
-const apiLocation = 'https://ubeat.herokuapp.com';
+const apiLocation = 'http://localhost:3000';
 
 export default {
   checkPrivileges: function checkPrivileges() {
