@@ -63,11 +63,6 @@
             <td class="align-middle"><strong>{{ item.trackName }}</strong></td>
             <td class="align-middle">{{ item.artistName }}</td>
             <td class="align-middle light-blue-text"><em>{{ item.primaryGenreName }}</em></td>
-            <!--<td class="align-middle">-->
-              <!--<audio controls class="audio-player">-->
-                <!--<source v-bind:src="item.previewUrl" type="audio/mp4">-->
-              <!--</audio>-->
-            <!--</td>-->
             <th class="align-middle">
               <i v-if="index!=indexSongPlaying" class="fa fa-2x fa-play-circle color-play btn-cursor-pointer" v-on:click="playSong(item.previewUrl, index)"></i>
               <i v-if="index==indexSongPlaying" class="fa fa-2x fa-stop-circle btn-cursor-pointer" v-on:click="stopSong"></i>
@@ -114,7 +109,7 @@
       </div>
     </div>
 
-    <audio class="audio-playlist animated fadeIn" id="audio" autoplay controls ref="audio" v-on:ended="stopSong" style="display: none"></audio>
+    <audio class="audio-playlist animated fadeIn" id="audio" autoplay controls ref="audio" v-on:ended="stopSong" v-bind:style=audioVisible></audio>
 
     <!-- Modal -->
     <div class="modal fade" id="addToPlaylistModal" tabindex="-1" role="dialog" aria-labelledby="addToPlaylistModalLabel" aria-hidden="true">
@@ -172,7 +167,8 @@
         allAlbumTracks: [],
         selectedPlaylistIdx: 0,
         playlists: [],
-        indexSongPlaying: undefined
+        indexSongPlaying: undefined,
+        audioVisible: 'display: none'
       };
     },
     beforeCreate: function beforeCreate() {
@@ -277,7 +273,7 @@
         this.tracksToAdd.push(track);
       },
       playSong: function playSong(song, index) {
-        document.getElementById('audio').style.display = '';
+        this.audioVisible = 'display: ';
         this.indexSongPlaying = index;
         this.$refs.audio.src = song;
         this.$refs.audio.play();
@@ -285,7 +281,7 @@
       stopSong: function stopSong() {
         this.$refs.audio.src = '';
         this.indexSongPlaying = -1;
-        document.getElementById('audio').style.display = 'none';
+        this.audioVisible = 'display: none';
       },
       getArtworkImg: async function getArtworkImg(artist, index) {
         const artwork = await api.getImageArtist(artist.artistLinkUrl);
