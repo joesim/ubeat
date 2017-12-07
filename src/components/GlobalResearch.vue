@@ -26,8 +26,8 @@
         <table class="table text-center" id="table-list-all-artists">
           <tbody v-for="(item, index) in artists">
           <tr v-if="index < indexPageArtist + 3 && index >=  indexPageArtist">
-            <th scope="row" class="align-middle"><img v-bind:id="item.artistId" src="http://thinkfuture.com/wp-content/uploads/2013/10/loading_spinner.gif" class="img-fluid table-icon" alt="artist picture"></th>
-            <td class="align-middle" v-bind:id="getArtworkImg(item)"><strong>{{ item.artistName }}</strong></td>
+            <th scope="row" class="align-middle"><img v-bind:id="item.artistId" v-bind:src="artworkUrl[index]" class="img-fluid table-icon" alt="artist picture"></th>
+            <td class="align-middle"><strong>{{ item.artistName }}</strong></td>
             <td class="align-middle light-blue-text"><em>{{ item.primaryGenreName }}</em></td>
             <td class="align-middle">
               <a class="btn btn-light-blue waves-effect waves-light btn-sm" v-bind:href="'./#/artist/'+item.artistId"><i class="fa fa-search mr-1"></i>See more</a>
@@ -63,11 +63,6 @@
             <td class="align-middle"><strong>{{ item.trackName }}</strong></td>
             <td class="align-middle">{{ item.artistName }}</td>
             <td class="align-middle light-blue-text"><em>{{ item.primaryGenreName }}</em></td>
-            <!--<td class="align-middle">-->
-              <!--<audio controls class="audio-player">-->
-                <!--<source v-bind:src="item.previewUrl" type="audio/mp4">-->
-              <!--</audio>-->
-            <!--</td>-->
             <th class="align-middle">
               <i v-if="index!=indexSongPlaying" class="fa fa-2x fa-play-circle color-play btn-cursor-pointer" v-on:click="playSong(item.previewUrl, index)"></i>
               <i v-if="index==indexSongPlaying" class="fa fa-2x fa-stop-circle btn-cursor-pointer" v-on:click="stopSong"></i>
@@ -114,7 +109,7 @@
       </div>
     </div>
 
-    <audio class="audio-playlist animated fadeIn" id="audio" autoplay controls ref="audio" v-on:ended="stopSong" style="display: none"></audio>
+    <audio class="audio-playlist animated fadeIn" id="audio" autoplay controls ref="audio" v-on:ended="stopSong" v-bind:style=audioVisible></audio>
 
     <!-- Modal -->
     <div class="modal fade" id="addToPlaylistModal" tabindex="-1" role="dialog" aria-labelledby="addToPlaylistModalLabel" aria-hidden="true">
@@ -159,6 +154,7 @@
       return {
         showErrorHandler: false,
         errorMessage: '',
+        artworkUrl: [],
         indexPageAlbum: 0,
         indexPageArtist: 0,
         indexPageSongs: 0,
@@ -171,7 +167,8 @@
         allAlbumTracks: [],
         selectedPlaylistIdx: 0,
         playlists: [],
-        indexSongPlaying: undefined
+        indexSongPlaying: undefined,
+        audioVisible: 'display: none'
       };
     },
     beforeCreate: function beforeCreate() {
@@ -241,7 +238,9 @@
             if (item.wrapperType === 'track') {
               this.songs.push(item);
             } else if (item.wrapperType === 'artist') {
+              this.artworkUrl.push('http://thinkfuture.com/wp-content/uploads/2013/10/loading_spinner.gif');
               this.artists.push(item);
+              this.getArtworkImg(item, this.artworkUrl.length - 1);
             } else if (item.wrapperType === 'collection') {
               this.albums.push(item);
             } else {
@@ -274,7 +273,7 @@
         this.tracksToAdd.push(track);
       },
       playSong: function playSong(song, index) {
-        document.getElementById('audio').style.display = '';
+        this.audioVisible = 'display: ';
         this.indexSongPlaying = index;
         this.$refs.audio.src = song;
         this.$refs.audio.play();
@@ -282,12 +281,12 @@
       stopSong: function stopSong() {
         this.$refs.audio.src = '';
         this.indexSongPlaying = -1;
-        document.getElementById('audio').style.display = 'none';
+        this.audioVisible = 'display: none';
       },
-      getArtworkImg: async function getArtworkImg(artist) {
-        const artworkUrl = await api.getImageArtist(artist.artistLinkUrl);
-        document.getElementById(artist.artistId).src = artworkUrl;
-      }
+      getArtworkImg: async function getArtworkImg(artist, index) {
+        const artwork = await api.getImageArtist(artist.artistLinkUrl);
+        this.artworkUrl.splice(index, 1, artwork);
+      },
     }
   };
 </script>
