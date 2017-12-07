@@ -66,6 +66,16 @@ button {
   width: 100%;
 }
 
+.collapse-spacing {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.card-body .form-group {
+  margin-left: 20px;
+  margin-bottom : 0px;
+}
+
 .accordion {
   margin-bottom: 20px;
 }
