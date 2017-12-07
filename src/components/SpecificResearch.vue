@@ -113,8 +113,12 @@
             <td class="align-middle"><strong>{{ item.trackName }}</strong></td>
             <td class="align-middle">{{ item.artistName }}</td>
             <td class="align-middle light-blue-text"><em>{{ item.primaryGenreName }}</em></td>
+            <th class="align-middle">
+              <i v-if="index!=indexSongPlaying" class="fa fa-2x fa-play-circle color-play btn-cursor-pointer" v-on:click="playSong(item.previewUrl, index)"></i>
+              <i v-if="index==indexSongPlaying" class="fa fa-2x fa-stop-circle btn-cursor-pointer" v-on:click="stopSong"></i>
+            </th>
             <td class="align-middle">
-              <button type="button" v-on:click="addTrack(songs[index])" v-bind:disabled="playlists.length <= 0" class="btn btn-light-blue waves-effect waves-light btn-sm" data-toggle="modal" data-target="#addToPlaylistModal">
+              <button type="button" v-on:click="addTrack(item)" v-bind:disabled="playlists.length <= 0" class="btn btn-light-blue waves-effect waves-light btn-sm" data-toggle="modal" data-target="#addToPlaylistModal">
                 <i class="fa fa-plus" aria-hidden="true"></i>
               </button>
             </td>
@@ -164,6 +168,9 @@
         </ul>
       </div>
     </div>
+
+    <!-- audio -->
+    <audio class="audio-playlist animated fadeIn" id="audio" autoplay controls ref="audio" v-on:ended="stopSong" v-bind:style=audioVisible></audio>
 
     <!-- Modal -->
     <div class="modal fade" id="addToPlaylistModal" tabindex="-1" role="dialog" aria-labelledby="addToPlaylistModalLabel" aria-hidden="true">
@@ -228,7 +235,9 @@
         currentUserId: '',
         currentUser: undefined,
         isUser: [],
-        isFollowingUser: []
+        isFollowingUser: [],
+        indexSongPlaying: undefined,
+        audioVisible: 'display: none'
       };
     },
     beforeCreate: function beforeCreate() {
@@ -284,6 +293,17 @@
       getArtworkImg: async function getArtworkImg(artist, index) {
         const artwork = await api.getImageArtist(artist.artistLinkUrl);
         this.artworkUrl.splice(index, 1, artwork);
+      },
+      playSong: function playSong(song, index) {
+        this.audioVisible = 'display: ';
+        this.indexSongPlaying = index;
+        this.$refs.audio.src = song;
+        this.$refs.audio.play();
+      },
+      stopSong: function stopSong() {
+        this.$refs.audio.src = '';
+        this.indexSongPlaying = -1;
+        this.audioVisible = 'display: none';
       },
       research: async function research() {
         this.songs = [];

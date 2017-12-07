@@ -109,6 +109,7 @@
       </div>
     </div>
 
+    <!-- audio -->
     <audio class="audio-playlist animated fadeIn" id="audio" autoplay controls ref="audio" v-on:ended="stopSong" v-bind:style=audioVisible></audio>
 
     <!-- Modal -->
