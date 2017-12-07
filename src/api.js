@@ -257,7 +257,7 @@ export default {
       headers: reqHeaders
     }))
     .then(resp => resp.json())
-    .then(data => data.results)
+    .then(data => data)
     .catch(() => {
       throw new Error('Unable to search users');
     });

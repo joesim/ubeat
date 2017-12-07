@@ -26,7 +26,8 @@
         <table class="table text-center" id="table-list-all-artists">
           <tbody v-for="(item, index) in artists">
           <tr v-if="index < indexPageArtist + 3 && index >=  indexPageArtist">
-            <td class="align-middle"><strong>{{ item.artistName }}</strong></td>
+            <th scope="row" class="align-middle"><img v-bind:id="item.artistId" src="http://thinkfuture.com/wp-content/uploads/2013/10/loading_spinner.gif" class="img-fluid table-icon" alt="artist picture"></th>
+            <td class="align-middle" v-bind:id="getArtworkImg(item)"><strong>{{ item.artistName }}</strong></td>
             <td class="align-middle light-blue-text"><em>{{ item.primaryGenreName }}</em></td>
             <td class="align-middle">
               <a class="btn btn-light-blue waves-effect waves-light btn-sm" v-bind:href="'./#/artist/'+item.artistId"><i class="fa fa-search mr-1"></i>See more</a>
@@ -44,6 +45,11 @@
             <td class="align-middle"><strong>{{ item.collectionName }}</strong></td>
             <td class="align-middle">{{ item.artistName }}</td>
             <td class="align-middle"><a class="btn btn-light-blue waves-effect waves-light btn-sm" v-bind:href="'./#/album/'+item.collectionId"><i class="fa fa-search mr-1"></i>See more</a></td>
+            <td class="align-middle">
+              <button type="button" v-on:click="addAllAlbumTracks(item)" v-bind:disabled="playlists.length <= 0" class="btn btn-light-blue waves-effect waves-light btn-sm" data-toggle="modal" data-target="#addToPlaylistModal">
+                Add all tracks in playlist
+              </button>
+            </td>
           </tr>
           </tbody>
         </table>
@@ -57,6 +63,20 @@
             <td class="align-middle"><strong>{{ item.trackName }}</strong></td>
             <td class="align-middle">{{ item.artistName }}</td>
             <td class="align-middle light-blue-text"><em>{{ item.primaryGenreName }}</em></td>
+            <!--<td class="align-middle">-->
+              <!--<audio controls class="audio-player">-->
+                <!--<source v-bind:src="item.previewUrl" type="audio/mp4">-->
+              <!--</audio>-->
+            <!--</td>-->
+            <th class="align-middle">
+              <i v-if="index!=indexSongPlaying" class="fa fa-2x fa-play-circle color-play btn-cursor-pointer" v-on:click="playSong(item.previewUrl, index)"></i>
+              <i v-if="index==indexSongPlaying" class="fa fa-2x fa-stop-circle btn-cursor-pointer" v-on:click="stopSong"></i>
+            </th>
+            <td class="align-middle">
+              <button type="button" v-on:click="addTrack(item)" v-bind:disabled="playlists.length <= 0" class="btn btn-light-blue waves-effect waves-light btn-sm" data-toggle="modal" data-target="#addToPlaylistModal">
+                <i class="fa fa-plus" aria-hidden="true"></i>
+              </button>
+            </td>
           </tr>
           </tbody>
         </table>
@@ -94,6 +114,34 @@
       </div>
     </div>
 
+    <audio class="audio-playlist animated fadeIn" id="audio" autoplay controls ref="audio" v-on:ended="stopSong" style="display: none"></audio>
+
+    <!-- Modal -->
+    <div class="modal fade" id="addToPlaylistModal" tabindex="-1" role="dialog" aria-labelledby="addToPlaylistModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addToPlaylistModalLabel">Add to playlist</h5>
+          </div>
+          <div class="text-center text-xs-center text-sm-center">
+            <div class="modal-body">
+              <div class="btn-group">
+                <button class="btn btn-light-blue dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ playlists.length > 0 ? playlists[selectedPlaylistIdx].name : '' }}</button>
+                <div class="dropdown-menu">
+                  <a v-for="(playlist, index) in playlists" v-on:click="selectedPlaylistIdx = index" class="dropdown-item">{{playlist.name}}</a>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-light-blue" v-on:click="addToPlaylist" data-dismiss="modal">Add</button>
+            <button type="button" class="btn btn-red btn-space-between" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Modal for error handler -->
     <ErrorHandler v-bind:message="errorMessage" v-if="showErrorHandler"/>
   </div>
@@ -118,14 +166,34 @@
         artists: [],
         albums: [],
         songs: [],
-        users: []
+        users: [],
+        tracksToAdd: [],
+        allAlbumTracks: [],
+        selectedPlaylistIdx: 0,
+        playlists: [],
+        indexSongPlaying: undefined
       };
     },
     beforeCreate: function beforeCreate() {
       api.checkPrivileges();
     },
-    created: function created() {
+    created: async function created() {
       this.research();
+      try {
+        const currentUserId = await api.getCurrentUserId();
+        const playlists = await api.getPlaylists(currentUserId);
+        for (let i = 0; i < playlists.length; i += 1) {
+          if (playlists[i].name !== undefined) {
+            this.playlists.push({
+              name: playlists[i].name,
+              id: playlists[i].id
+            });
+          }
+        }
+      } catch (err) {
+        this.errorMessage = err.message;
+        this.showErrorHandler = true;
+      }
     },
     props: ['search'],
     watch: {
@@ -184,6 +252,41 @@
           this.errorMessage = err.message;
           this.showErrorHandler = true;
         }
+      },
+      addToPlaylist: function addToPlaylist() {
+        if (this.selectedPlaylistIdx < this.playlists.length) {
+          try {
+            api.addTrackToPlaylist(this.playlists[this.selectedPlaylistIdx].id, this.tracksToAdd);
+            this.tracksToAdd = [];
+          } catch (err) {
+            this.errorMessage = err.message;
+            this.showErrorHandler = true;
+          }
+        }
+      },
+      addAllAlbumTracks: async function addAllTracks(album) {
+        const data = await api.getTracksAlbum(album.collectionId);
+        data.results.forEach((track) => {
+          this.tracksToAdd.push(track);
+        });
+      },
+      addTrack: function addTrack(track) {
+        this.tracksToAdd.push(track);
+      },
+      playSong: function playSong(song, index) {
+        document.getElementById('audio').style.display = '';
+        this.indexSongPlaying = index;
+        this.$refs.audio.src = song;
+        this.$refs.audio.play();
+      },
+      stopSong: function stopSong() {
+        this.$refs.audio.src = '';
+        this.indexSongPlaying = -1;
+        document.getElementById('audio').style.display = 'none';
+      },
+      getArtworkImg: async function getArtworkImg(artist) {
+        const artworkUrl = await api.getImageArtist(artist.artistLinkUrl);
+        document.getElementById(artist.artistId).src = artworkUrl;
       }
     }
   };

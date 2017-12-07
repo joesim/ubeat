@@ -39,8 +39,8 @@
           <table class="table text-center" id="table-list-all-artists">
             <tbody v-for="(item, index) in artists">
               <tr v-if="index < indexPageArtist + 3 && index >=  indexPageArtist">
-                <th scope="row" class="align-middle"><img v-bind:id="item.artistId" src="http://thinkfuture.com/wp-content/uploads/2013/10/loading_spinner.gif" class="img-fluid table-icon" alt="artist picture"></th>
-                <td class="align-middle" v-bind:id="getArtworkImg(item)">{{ item.artistName }}</td>
+                <th scope="row" class="align-middle"><img v-bind:id="item.artistId" v-bind:src="artworkUrl[index]" class="img-fluid table-icon" alt="artist picture"></th>
+                <td class="align-middle">{{ item.artistName }}</td>
                 <td class="align-middle light-blue-text"><em>{{ item.primaryGenreName }}</em></td>
                 <td class="align-middle">
                   <a class="btn btn-light-blue waves-effect waves-light btn-sm" v-bind:href="'./#/artist/'+item.artistId"><i class="fa fa-search mr-1"></i>See more</a>
@@ -85,6 +85,7 @@
       return {
         showErrorHandler: false,
         errorMessage: '',
+        artworkUrl: [],
         indexPageAlbum: 0,
         indexPageArtist: 0,
         artists: [],
@@ -100,6 +101,11 @@
       try {
         this.artists = await api.searchArtists(character);
         this.albums = await api.searchAlbums(character);
+
+        this.artists.forEach((artist) => {
+          this.artworkUrl.push('http://thinkfuture.com/wp-content/uploads/2013/10/loading_spinner.gif');
+          this.getArtworkImg(artist, this.artworkUrl.length - 1);
+        });
       } catch (err) {
         this.errorMessage = err.message;
         this.showErrorHandler = true;
@@ -122,9 +128,9 @@
           this.indexPageArtist -= 3;
         }
       },
-      getArtworkImg: async function getArtworkImg(artist) {
-        const artworkUrl = await api.getImageArtist(artist.artistLinkUrl);
-        document.getElementById(artist.artistId).src = artworkUrl;
+      getArtworkImg: async function getArtworkImg(artist, index) {
+        const artwork = await api.getImageArtist(artist.artistLinkUrl);
+        this.artworkUrl.splice(index, 1, artwork);
       }
     }
   };

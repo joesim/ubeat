@@ -5,7 +5,7 @@
       <div class="col-md-3 hm-black-strong">
         <a v-bind:href="itunesLink" target="_blank">
           <div class="view overlay hm-zoom z-depth-2 rounded mb-4">
-            <img id="artworkImg" src="artworkUrl" class="img-fluid">
+            <img id="artworkImg" v-bind:src="artworkUrl" class="img-fluid">
             <div class="mask flex-center waves-effect waves-light">
               <p class="white-text">See on iTunes</p>
             </div>
@@ -123,7 +123,7 @@ export default {
       this.showErrorHandler = true;
     }
     try {
-      document.getElementById('artworkImg').src = await api.getImageArtist(this.itunesLink);
+      this.artworkUrl = await api.getImageArtist(this.itunesLink);
       this.descriptionArtist = await api.getDescriptionArtist(this.itunesLink);
     } catch (err) {
       this.errorMessage = err.message;

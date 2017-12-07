@@ -10,6 +10,7 @@ import Playlists from '@/components/Playlists';
 import Playlist from '@/components/Playlist';
 import User from '@/components/User';
 import GlobalResearch from '@/components/GlobalResearch';
+import SpecificResearch from '@/components/SpecificResearch';
 
 Vue.use(Router);
 
@@ -56,6 +57,10 @@ export default new Router({
       name: 'GlobalResearch',
       component: GlobalResearch,
       props: true
+    }, {
+      path: '/specificResearch',
+      name: 'SpecificResearch',
+      component: SpecificResearch
     }
   ],
 });
