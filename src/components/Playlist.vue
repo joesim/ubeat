@@ -4,8 +4,11 @@
       <!-- The playlist name -->
       <div class="col-md-6 editable text-center text-xs-center text-sm-center text-md-left" v-if="!editing">
         <h1 class="inline-block" id="playlistname"> {{playlist.name}}
-          <i class="fa fa-pencil" v-on:click="editPlaylistName"></i>
+          <i class="fa fa-pencil" v-on:click="editPlaylistName" v-if="isUserOwner"></i>
         </h1>
+        <p v-if="playlist.owner!==undefined && playlist.owner.id!==undefined">
+          By  <router-link :to="`/user/${playlist.owner.id}`">{{playlist.owner.name}}</router-link>
+        </p>
       </div>
 
       <!-- The input html to change the playlist name (invisible by default) -->
@@ -25,11 +28,11 @@
         </div>
       </div>
       <div class="col-md-6 text-center text-xs-center text-sm-center text-md-right">
-        <button v-on:click="searchTracks" class="btn btn-light-blue waves-effect waves-light" data-toggle="modal" data-target="#addTracks">
+        <button v-on:click="searchTracks" class="btn btn-light-blue waves-effect waves-light" data-toggle="modal" data-target="#addTracks" v-if="isUserOwner">
           Add random tracks
           <i class="fa fa-music fa-lg" aria-hidden="true"></i>
         </button>
-        <button class="btn btn-red waves-effect waves-light" data-toggle="modal" data-target="#deleteConfirm">
+        <button class="btn btn-red waves-effect waves-light" data-toggle="modal" data-target="#deleteConfirm" v-if="isUserOwner">
           Delete playlist
           <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
         </button>
@@ -50,7 +53,7 @@
               <th class="text-center">Artist</th>
               <th class="text-center">Album</th>
               <th class="text-center">Duration</th>
-              <th class="text-center">Delete</th>
+              <th class="text-center" v-if="isUserOwner">Delete</th>
             </tr>
           </thead>
           <tbody>
@@ -70,7 +73,7 @@
                 <router-link :to="`/album/${track.collectionId}`" v-if="track.collectionId!==undefined"><img class="picture-size-50" v-bind:src="track.artworkUrl60" onError="this.onerror=null;this.src='https://cdn2.iconfinder.com/data/icons/smiling-face/512/Nothing_Face-512.png'"></router-link>
               </td>
               <td class="align-middle">{{timeInMinutes(track.trackTimeMillis)}}</td>
-              <td class="align-middle">
+              <td class="align-middle" v-if="isUserOwner">
                 <button class="btn btn-red waves-effect waves-light delete-song-padding" v-on:click="trackToDelete = track.trackId" data-toggle="modal" data-target="#deleteTrackConfirm">
                   <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
                 </button>
@@ -165,6 +168,7 @@ export default {
       showErrorHandler: false,
       trackToDelete: 0,
       playlist: undefined,
+      isUserOwner: false,
       errors: [],
       editing: false,
       newPlaylistName: '',
@@ -277,6 +281,10 @@ export default {
       try {
         const playlistId = this.$route.params.id;
         this.playlist = await api.getPlaylist(playlistId);
+        const currentUserId = await api.getCurrentUserId();
+        if (this.playlist.owner !== undefined) {
+          this.isUserOwner = (this.playlist.owner.id === currentUserId);
+        }
       } catch (err) {
         this.errorMessage = err.message;
         this.showErrorHandler = true;

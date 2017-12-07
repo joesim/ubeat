@@ -52,17 +52,21 @@
                 
             </div>
         </div>
+        <!-- Modal for error handler -->
+        <ErrorHandler v-bind:message="errorMessage" v-if="showErrorHandler"/>
     </div>
 </template>
 
 <script>
 import Gravatar from 'vue-gravatar';
-import Playlists from './Playlists';
+import Playlists from './PlaylistsUser';
 import Following from './Following';
 import api from '../api';
+import ErrorHandler from './ErrorHandler';
 
 export default {
   components: {
+    ErrorHandler,
     Playlists,
     Gravatar,
     Following
