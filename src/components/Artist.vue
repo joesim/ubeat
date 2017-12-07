@@ -1,16 +1,28 @@
 <template>
   <div class="container content">
+
     <div class="row">
-      <div class="col-md-12">
+      <div class="col-md-3 hm-black-strong">
+        <a v-bind:href="itunesLink" target="_blank">
+          <div class="view overlay hm-zoom z-depth-2 rounded mb-4">
+            <img id="artworkImg" src="artworkUrl" class="img-fluid">
+            <div class="mask flex-center waves-effect waves-light">
+              <p class="white-text">See on iTunes</p>
+            </div>
+          </div>
+        </a>
+      </div>
+      <div class="col-md-9">
         <h2>{{ name }}</h2>
         <h3 class="light-blue-text"><em>{{ genre }}</em></h3>
         <div class="row">
           <div class="col-md-3">
-             <a v-bind:href="itunesLink" target="_blank" class="hoverable rounded itunes"></a>
+             <a v-bind:href="itunesLink" target="_blank" class="rounded itunes"></a>
           </div>
         </div>
       </div>
     </div>
+
     <div class="card mt-4 mb-4 animated fadeIn">
       <div class="card-body">
         <table class="table table-hover">
@@ -55,7 +67,8 @@ export default {
       name: '',
       genre: '',
       itunesLink: '',
-      albums: []
+      albums: [],
+      artworkUrl: ''
     };
   },
   beforeCreate: function beforeCreate() {
@@ -81,6 +94,12 @@ export default {
       this.errorMessage = err.message;
       this.showErrorHandler = true;
     }
+    try {
+      document.getElementById('artworkImg').src = await api.getImageArtist(this.itunesLink);
+    } catch (err) {
+      this.errorMessage = err.message;
+      this.showErrorHandler = true;
+    }
   },
   computed: {
     albumsFiltered: function albumsFiltered() {
@@ -97,4 +116,5 @@ export default {
     }
   }
 };
+
 </script>

@@ -275,6 +275,22 @@ export default {
         throw new Error('Unable to search');
       });
   },
+  getImageArtist: function getImageArtist(itunesLink) {
+    return fetch(itunesLink)
+      .then(response => response.text())
+      .then((body) => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(body, 'text/html');
+        const x = doc.querySelector('meta[property="og:image"]');
+        if (x !== null) {
+          return `${x.getAttribute('content').substring(0, x.getAttribute('content').lastIndexOf('/') + 1)}510x510-999.jpg`;
+        }
+        return 'https://cdn2.iconfinder.com/data/icons/smiling-face/512/Nothing_Face-512.png';
+      })
+      .catch(() => {
+        throw new Error('Unable to load artist image');
+      });
+  },
   signup: function signup(email, password, name) {
     const reqBody = new URLSearchParams({ name, password, email });
     const headersSignup = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
