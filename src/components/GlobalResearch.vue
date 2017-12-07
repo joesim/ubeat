@@ -86,6 +86,16 @@
             <td class="align-middle">
               <a class="btn btn-light-blue waves-effect waves-light btn-sm" v-bind:href="'./#/user/'+item.id"><i class="fa fa-search mr-1"></i>See more</a>
             </td>
+            <td v-if="!isUser[index]">
+              <button type="button" class="btn btn-sm btn-light-blue waves-effect waves-light" v-if="!isFollowingUser[index] && isFollowingUser[index]!==undefined" v-on:click="followUser(item,index)">
+                Follow
+                <i class="fa fa-user-plus fa-lg" aria-hidden="true"></i>
+              </button>
+              <button type="button" class="btn btn-sm btn-orange waves-effect waves-light" v-if="isFollowingUser[index] && isFollowingUser[index] !== undefined" v-on:click="unfollowUser(item,index)">
+                Following
+                <i class="fa fa-check fa-lg"></i>
+              </button>
+            </td>
           </tr>
           </tbody>
         </table>
@@ -169,7 +179,11 @@
         selectedPlaylistIdx: 0,
         playlists: [],
         indexSongPlaying: undefined,
-        audioVisible: 'display: none'
+        audioVisible: 'display: none',
+        currentUserId: '',
+        currentUser: undefined,
+        isUser: [],
+        isFollowingUser: []
       };
     },
     beforeCreate: function beforeCreate() {
@@ -177,21 +191,7 @@
     },
     created: async function created() {
       this.research();
-      try {
-        const currentUserId = await api.getCurrentUserId();
-        const playlists = await api.getPlaylists(currentUserId);
-        for (let i = 0; i < playlists.length; i += 1) {
-          if (playlists[i].name !== undefined) {
-            this.playlists.push({
-              name: playlists[i].name,
-              id: playlists[i].id
-            });
-          }
-        }
-      } catch (err) {
-        this.errorMessage = err.message;
-        this.showErrorHandler = true;
-      }
+      this.getUser();
     },
     props: ['search'],
     watch: {
@@ -248,6 +248,21 @@
               this.users.push(item);
             }
           });
+          const usersResults = await api.searchUsers(this.search);
+          usersResults.forEach((item) => {
+            this.users.push(item);
+            if (this.isTheUser(item)) {
+              this.isUser.push(true);
+            } else {
+              this.isUser.push(false);
+            }
+
+            if (this.isFollowingTheUser(item)) {
+              this.isFollowingUser.push(true);
+            } else {
+              this.isFollowingUser.push(false);
+            }
+          });
         } catch (err) {
           this.errorMessage = err.message;
           this.showErrorHandler = true;
@@ -288,6 +303,62 @@
         const artwork = await api.getImageArtist(artist.artistLinkUrl);
         this.artworkUrl.splice(index, 1, artwork);
       },
+      followUser: async function followUser(user, index) {
+        try {
+          await api.followUser(user.id)
+            .then(() => {
+              this.getUser();
+              this.isFollowingUser.splice(index, 1, true);
+            });
+        } catch (err) {
+          this.errorMessage = err.message;
+          this.showErrorHandler = true;
+        }
+      },
+      unfollowUser: async function unfollowUser(user, index) {
+        try {
+          await api.unfollowUser(this.currentUser, user.email)
+            .then(() => {
+              this.getUser();
+              this.isFollowingUser.splice(index, 1, false);
+            });
+        } catch (err) {
+          this.errorMessage = err.message;
+          this.showErrorHandler = true;
+        }
+      },
+      isFollowingTheUser: function isFollowingTheUser(user) {
+        for (let i = 0; i < this.currentUser.following.length; i += 1) {
+          if (this.currentUser.following[i].email === user.email) {
+            return true;
+          }
+        }
+        return false;
+      },
+      isTheUser: function isTheUser(user) {
+        if (this.currentUserId === user.id) {
+          return true;
+        }
+        return false;
+      },
+      getUser: async function getUser() {
+        try {
+          this.currentUserId = await api.getCurrentUserId();
+          this.currentUser = await api.getUser(this.currentUserId);
+          const playlists = await api.getPlaylists(this.currentUserId);
+          for (let i = 0; i < playlists.length; i += 1) {
+            if (playlists[i].name !== undefined) {
+              this.playlists.push({
+                name: playlists[i].name,
+                id: playlists[i].id
+              });
+            }
+          }
+        } catch (err) {
+          this.errorMessage = err.message;
+          this.showErrorHandler = true;
+        }
+      }
     }
   };
 </script>
