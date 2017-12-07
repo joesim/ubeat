@@ -244,22 +244,7 @@
       api.checkPrivileges();
     },
     created: async function created() {
-      try {
-        this.currentUserId = await api.getCurrentUserId();
-        this.currentUser = await api.getUser(this.currentUserId);
-        const playlists = await api.getPlaylists(this.currentUserId);
-        for (let i = 0; i < playlists.length; i += 1) {
-          if (playlists[i].name !== undefined) {
-            this.playlists.push({
-              name: playlists[i].name,
-              id: playlists[i].id
-            });
-          }
-        }
-      } catch (err) {
-        this.errorMessage = err.message;
-        this.showErrorHandler = true;
-      }
+      this.getUser();
     },
     methods: {
       nextPage: function nextPage() {
@@ -395,7 +380,7 @@
         try {
           await api.followUser(user.id)
             .then(() => {
-              this.currentUser.following.push({ _id: user.id, email: user.email });
+              this.getUser();
               this.isFollowingUser.splice(index, 1, true);
             });
         } catch (err) {
@@ -407,6 +392,7 @@
         try {
           await api.unfollowUser(this.currentUser, user.email)
             .then(() => {
+              this.getUser();
               this.isFollowingUser.splice(index, 1, false);
             });
         } catch (err) {
@@ -427,6 +413,24 @@
           return true;
         }
         return false;
+      },
+      getUser: async function getUser() {
+        try {
+          this.currentUserId = await api.getCurrentUserId();
+          this.currentUser = await api.getUser(this.currentUserId);
+          const playlists = await api.getPlaylists(this.currentUserId);
+          for (let i = 0; i < playlists.length; i += 1) {
+            if (playlists[i].name !== undefined) {
+              this.playlists.push({
+                name: playlists[i].name,
+                id: playlists[i].id
+              });
+            }
+          }
+        } catch (err) {
+          this.errorMessage = err.message;
+          this.showErrorHandler = true;
+        }
       },
       keypressed(event) {
         if (event.keyCode === 13 && this.searchType !== -1 && this.searchText !== '') {
