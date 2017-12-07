@@ -28,8 +28,8 @@
                 </div>
 
                 <div class="form-group">
-                  <input name="researchType" type="radio" class="with-gap" id="radioTrackType" value="2" v-model="searchType">
-                  <label for="radioTrackType">Tracks</label>
+                  <input name="researchType" type="radio" class="with-gap" id="radioSongType" value="2" v-model="searchType">
+                  <label for="radioSongType">Songs</label>
                 </div>
 
                 <div class="form-group">
@@ -37,7 +37,7 @@
                   <label for="radioUserType">Users</label>
                 </div>
               </div>
-              <div class="col-md-9">
+              <div class="col-md">
                 <div class="md-form">
                   <input id="specificResearchTextInput" class="form-control" type="text" v-model="searchText" v-on:keyup="keypressed">
                   <label for="specificResearchTextInput">Search</label>
@@ -57,16 +57,16 @@
         <a class="white-text">No specific request have been sent</a>
       </li>
       <li class="nav-item" v-if="searchTypeRequested == 0">
-        <a class="white-text">Artists corresponding to the following request : "{{searchText}}"</a>
+        <a class="white-text">Artists corresponding to the following request : "{{searchTextRequested}}"</a>
       </li>
       <li class="nav-item" v-if="searchTypeRequested == 1">
-        <a class="white-text">Albums corresponding to the following request : "{{searchText}}"</a>
+        <a class="white-text">Albums corresponding to the following request : "{{searchTextRequested}}"</a>
       </li>
       <li class="nav-item" v-if="searchTypeRequested == 2">
-        <a class="white-text">Songs corresponding to the following request : "{{searchText}}"</a>
+        <a class="white-text">Songs corresponding to the following request : "{{searchTextRequested}}"</a>
       </li>
       <li class="nav-item" v-if="searchTypeRequested == 3">
-        <a class="white-text">Users corresponding to the following request : "{{searchText}}"</a>
+        <a class="white-text">Users corresponding to the following request : "{{searchTextRequested}}"</a>
       </li>
     </ul>
 
@@ -75,7 +75,7 @@
       <div class="tab-pane fade in show active" v-if="searchTypeRequested == 0">
         <table class="table text-center" id="table-list-all-artists">
           <tbody v-for="(item, index) in artists">
-          <tr v-if="index < indexPageArtist + 3 && index >=  indexPageArtist">
+          <tr v-if="index < indexPageArtist + displayNumbers && index >=  indexPageArtist">
             <td class="align-middle"><strong>{{ item.artistName }}</strong></td>
             <td class="align-middle light-blue-text"><em>{{ item.primaryGenreName }}</em></td>
             <td class="align-middle">
@@ -89,11 +89,16 @@
       <div class="tab-pane fade in show active" v-if="searchTypeRequested == 1">
         <table class="table text-center" id="table-list-all-albums">
           <tbody v-for="(item, index) in albums">
-          <tr v-if="index < indexPageAlbum + 3 && index >=  indexPageAlbum">
+          <tr v-if="index < indexPageAlbum + displayNumbers && index >=  indexPageAlbum">
             <th scope="row" class="align-middle"><img v-bind:src="item.artworkUrl100" class="img-fluid table-icon" alt="album picture"></th>
             <td class="align-middle"><strong>{{ item.collectionName }}</strong></td>
             <td class="align-middle">{{ item.artistName }}</td>
             <td class="align-middle"><a class="btn btn-light-blue waves-effect waves-light btn-sm" v-bind:href="'./#/album/'+item.collectionId"><i class="fa fa-search mr-1"></i>See more</a></td>
+            <td class="align-middle">
+              <button type="button" v-on:click="addAllAlbumTracks(albums[index])" v-bind:disabled="playlists.length <= 0" class="btn btn-light-blue waves-effect waves-light btn-sm" data-toggle="modal" data-target="#addToPlaylistModal">
+                Add all tracks in playlist
+              </button>
+            </td>
           </tr>
           </tbody>
         </table>
@@ -102,11 +107,16 @@
       <div class="tab-pane fade in show active" v-if="searchTypeRequested == 2">
         <table class="table text-center" id="table-list-all-songs">
           <tbody v-for="(item, index) in songs">
-          <tr v-if="index < indexPageSongs + 3 && index >=  indexPageSongs">
+          <tr v-if="index < indexPageSongs + displayNumbers && index >=  indexPageSongs">
             <th scope="row" class="align-middle"><img v-bind:src="item.artworkUrl100" class="img-fluid table-icon" alt="song picture"></th>
             <td class="align-middle"><strong>{{ item.trackName }}</strong></td>
             <td class="align-middle">{{ item.artistName }}</td>
             <td class="align-middle light-blue-text"><em>{{ item.primaryGenreName }}</em></td>
+            <td class="align-middle">
+              <button type="button" v-on:click="addTrack(songs[index])" v-bind:disabled="playlists.length <= 0" class="btn btn-light-blue waves-effect waves-light btn-sm" data-toggle="modal" data-target="#addToPlaylistModal">
+                <i class="fa fa-plus" aria-hidden="true"></i>
+              </button>
+            </td>
           </tr>
           </tbody>
         </table>
@@ -115,7 +125,7 @@
       <div class="tab-pane fade in show active" v-if="searchTypeRequested == 3">
         <table class="table text-center" id="table-list-all-users">
           <tbody v-for="(item, index) in users">
-          <tr v-if="index < indexPageUsers + 3 && index >=  indexPageUsers">
+          <tr v-if="index < indexPageUsers + displayNumbers && index >=  indexPageUsers">
             <td class="align-middle"><strong>{{ item.name }}</strong></td>
             <td class="align-middle">{{ item.email }}</td>
             <td class="align-middle">
@@ -144,6 +154,31 @@
       </div>
     </div>
 
+    <!-- Modal -->
+    <div class="modal fade" id="addToPlaylistModal" tabindex="-1" role="dialog" aria-labelledby="addToPlaylistModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addToPlaylistModalLabel">Add to playlist</h5>
+          </div>
+          <div class="text-center text-xs-center text-sm-center">
+            <div class="modal-body">
+              <div class="btn-group">
+                <button class="btn btn-light-blue dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ playlists.length > 0 ? playlists[selectedPlaylistIdx].name : '' }}</button>
+                <div class="dropdown-menu">
+                  <a v-for="(playlist, index) in playlists" v-on:click="selectedPlaylistIdx = index" class="dropdown-item">{{playlist.name}}</a>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-light-blue" v-on:click="addToPlaylist" data-dismiss="modal">Add</button>
+            <button type="button" class="btn btn-red btn-space-between" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
     <!-- Modal for error handler -->
     <ErrorHandler v-bind:message="errorMessage" v-if="showErrorHandler"/>
   </div>
@@ -165,10 +200,15 @@
         indexPageArtist: 0,
         indexPageSongs: 0,
         indexPageUsers: 0,
+        displayNumbers: 5,
         searchType: '-1',
         searchText: '',
         searchTypeRequested: '-1',
         searchTextRequested: '',
+        tracksToAdd: [],
+        allAlbumTracks: [],
+        selectedPlaylistIdx: 0,
+        playlists: [],
         artists: [],
         albums: [],
         songs: [],
@@ -178,33 +218,50 @@
     beforeCreate: function beforeCreate() {
       api.checkPrivileges();
     },
+    created: async function created() {
+      try {
+        const currentUserId = await api.getCurrentUserId();
+        const playlists = await api.getPlaylists(currentUserId);
+        for (let i = 0; i < playlists.length; i += 1) {
+          if (playlists[i].name !== undefined) {
+            this.playlists.push({
+              name: playlists[i].name,
+              id: playlists[i].id
+            });
+          }
+        }
+      } catch (err) {
+        this.errorMessage = err.message;
+        this.showErrorHandler = true;
+      }
+    },
     methods: {
       nextPage: function nextPage() {
-        if (this.indexPageAlbum + 3 < this.albums.length) {
-          this.indexPageAlbum += 3;
+        if (this.indexPageAlbum + this.displayNumbers < this.albums.length) {
+          this.indexPageAlbum += this.displayNumbers;
         }
-        if (this.indexPageArtist + 3 < this.artists.length) {
-          this.indexPageArtist += 3;
+        if (this.indexPageArtist + this.displayNumbers < this.artists.length) {
+          this.indexPageArtist += this.displayNumbers;
         }
-        if (this.indexPageSongs + 3 < this.songs.length) {
-          this.indexPageSongs += 3;
+        if (this.indexPageSongs + this.displayNumbers < this.songs.length) {
+          this.indexPageSongs += this.displayNumbers;
         }
-        if (this.indexPageUsers + 3 < this.users.length) {
-          this.indexPageUsers += 3;
+        if (this.indexPageUsers + this.displayNumbers < this.users.length) {
+          this.indexPageUsers += this.displayNumbers;
         }
       },
       previousPage: function nextPage() {
-        if (this.indexPageAlbum - 3 >= 0) {
-          this.indexPageAlbum -= 3;
+        if (this.indexPageAlbum - this.displayNumbers >= 0) {
+          this.indexPageAlbum -= this.displayNumbers;
         }
-        if (this.indexPageArtist - 3 >= 0) {
-          this.indexPageArtist -= 3;
+        if (this.indexPageArtist - this.displayNumbers >= 0) {
+          this.indexPageArtist -= this.displayNumbers;
         }
-        if (this.indexPageSongs - 3 >= 0) {
-          this.indexPageSongs -= 3;
+        if (this.indexPageSongs - this.displayNumbers >= 0) {
+          this.indexPageSongs -= this.displayNumbers;
         }
-        if (this.indexPageUsers - 3 >= 0) {
-          this.indexPageUsers -= 3;
+        if (this.indexPageUsers - this.displayNumbers >= 0) {
+          this.indexPageUsers -= this.displayNumbers;
         }
       },
       research: async function research() {
@@ -234,9 +291,9 @@
               break;
             }
             case '2': {
-              const tracksResults = await api.searchTracks(this.searchText);
-              tracksResults.forEach((item) => {
-                this.tracks.push(item);
+              const songsResults = await api.searchTracks(this.searchText);
+              songsResults.forEach((item) => {
+                this.songs.push(item);
               });
               break;
             }
@@ -258,12 +315,32 @@
         this.searchTypeRequested = this.searchType;
         this.searchTextRequested = this.searchText;
       },
+      addToPlaylist: function addToPlaylist() {
+        if (this.selectedPlaylistIdx < this.playlists.length) {
+          try {
+            api.addTrackToPlaylist(this.playlists[this.selectedPlaylistIdx].id, this.tracksToAdd);
+            this.tracksToAdd = [];
+          } catch (err) {
+            this.errorMessage = err.message;
+            this.showErrorHandler = true;
+          }
+        }
+      },
+      addAllAlbumTracks: async function addAllTracks(album) {
+        const data = await api.getTracksAlbum(album.collectionId);
+        data.results.forEach((track) => {
+          this.tracksToAdd.push(track);
+        });
+      },
+      addTrack: function addTrack(track) {
+        this.tracksToAdd.push(track);
+      },
       keypressed(event) {
         if (event.keyCode === 13 && this.searchType !== -1 && this.searchText !== '') {
           this.research();
         }
         return false;
-      },
+      }
     }
   };
 </script>
