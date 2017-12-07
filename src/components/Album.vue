@@ -162,7 +162,8 @@
       }
 
       try {
-        const playlists = await api.getPlaylists();
+        const currentUserId = await api.getCurrentUserId();
+        const playlists = await api.getPlaylists(currentUserId);
         for (let i = 0; i < playlists.length; i += 1) {
           if (playlists[i].name !== undefined) {
             this.playlists.push({
