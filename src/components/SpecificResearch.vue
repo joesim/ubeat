@@ -137,11 +137,11 @@
               <a class="btn btn-light-blue waves-effect waves-light btn-sm" v-bind:href="'./#/user/'+item.id"><i class="fa fa-search mr-1"></i>See more</a>
             </td>
             <td v-if="!isUser[index]">
-              <button type="button" class="btn btn-primary waves-effect waves-light" v-if="!isFollowingUser[index] && isFollowingUser[index]!==undefined" v-on:click="followUser(item,index)">
+              <button type="button" class="btn btn-sm btn-light-blue waves-effect waves-light" v-if="!isFollowingUser[index] && isFollowingUser[index]!==undefined" v-on:click="followUser(item,index)">
                 Follow
                 <i class="fa fa-user-plus fa-lg" aria-hidden="true"></i>
               </button>
-              <button type="button" class="btn btn-orange waves-effect waves-light" v-if="isFollowingUser[index] && isFollowingUser[index] !== undefined" v-on:click="unfollowUser(item,index)">
+              <button type="button" class="btn btn-sm btn-orange waves-effect waves-light" v-if="isFollowingUser[index] && isFollowingUser[index] !== undefined" v-on:click="unfollowUser(item,index)">
                 Following
                 <i class="fa fa-check fa-lg"></i>
               </button>
