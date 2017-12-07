@@ -395,6 +395,7 @@
         try {
           await api.followUser(user.id)
             .then(() => {
+              this.currentUser.following.push({ _id: user.id, email: user.email });
               this.isFollowingUser.splice(index, 1, true);
             });
         } catch (err) {
