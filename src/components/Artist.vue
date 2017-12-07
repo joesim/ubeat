@@ -22,7 +22,7 @@
         </div>
         <div class="row">
           <div class="col-md-3">
-          <button class="btn btn-light-blue btn-md waves-effect waves-light" data-toggle="modal" data-target="#description">
+          <button v-bind:disabled="descriptionArtist === null" class="btn btn-light-blue btn-md waves-effect waves-light" data-toggle="modal" data-target="#description">
             See more
           </button>
           </div>

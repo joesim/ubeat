@@ -1,7 +1,7 @@
 import Cookies from 'js-cookie';
 
 let token;
-const apiLocation = 'http://localhost:3000';
+const apiLocation = 'https://ubeat.herokuapp.com';
 
 export default {
   checkPrivileges: function checkPrivileges() {
@@ -297,14 +297,14 @@ export default {
       .then((body) => {
         const parser = new DOMParser();
         const doc = parser.parseFromString(body, 'text/html');
-        const x = doc.getElementsByTagName('p')[0];
-        if (x !== null) {
-          return x.getAttribute('aria-label');
+        const x = doc.getElementsByTagName('p');
+        if (x !== null && x[0] !== undefined) {
+          return x[0].getAttribute('aria-label');
         }
-        return 'None';
+        return null;
       })
       .catch(() => {
-        throw new Error('Unable to load artist image');
+        throw new Error('Unable to load artist description');
       });
   },
   signup: function signup(email, password, name) {
