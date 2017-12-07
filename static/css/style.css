@@ -71,6 +71,10 @@ button {
   margin-right: 10px;
 }
 
+.collapse-spacing .col-md{
+  margin-top: 20px;
+}
+
 .card-body .form-group {
   margin-left: 20px;
   margin-bottom : 0px;
@@ -206,4 +210,9 @@ table.table th, table.table td {
 	background-color: RGB(130,177,255);
 	color: white;
 	cursor: pointer;
+}
+
+.description-artist {
+	text-align: justify;
+	font-size: 0.8em;
 }

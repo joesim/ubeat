@@ -39,7 +39,8 @@
           <table class="table text-center" id="table-list-all-artists">
             <tbody v-for="(item, index) in artists">
               <tr v-if="index < indexPageArtist + 3 && index >=  indexPageArtist">
-                <td class="align-middle">{{ item.artistName }}</td>
+                <th scope="row" class="align-middle"><img v-bind:id="item.artistId" src="http://thinkfuture.com/wp-content/uploads/2013/10/loading_spinner.gif" class="img-fluid table-icon" alt="artist picture"></th>
+                <td class="align-middle" v-bind:id="getArtworkImg(item)">{{ item.artistName }}</td>
                 <td class="align-middle light-blue-text"><em>{{ item.primaryGenreName }}</em></td>
                 <td class="align-middle">
                   <a class="btn btn-light-blue waves-effect waves-light btn-sm" v-bind:href="'./#/artist/'+item.artistId"><i class="fa fa-search mr-1"></i>See more</a>
@@ -120,6 +121,10 @@
         if (this.indexPageArtist - 3 >= 0) {
           this.indexPageArtist -= 3;
         }
+      },
+      getArtworkImg: async function getArtworkImg(artist) {
+        const artworkUrl = await api.getImageArtist(artist.artistLinkUrl);
+        document.getElementById(artist.artistId).src = artworkUrl;
       }
     }
   };
