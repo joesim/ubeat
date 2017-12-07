@@ -76,7 +76,8 @@
         <table class="table text-center" id="table-list-all-artists">
           <tbody v-for="(item, index) in artists">
           <tr v-if="index < indexPageArtist + displayNumbers && index >=  indexPageArtist">
-            <td class="align-middle"><strong>{{ item.artistName }}</strong></td>
+            <th scope="row" class="align-middle"><img v-bind:id="item.artistId" v-bind:src="artworkUrl[index]" class="img-fluid table-icon" alt="artist picture"></th>
+            <td class="align-middle" v-bind:id="getArtworkImg(item)">{{ item.artistName }}</td>
             <td class="align-middle light-blue-text"><em>{{ item.primaryGenreName }}</em></td>
             <td class="align-middle">
               <a class="btn btn-light-blue waves-effect waves-light btn-sm" v-bind:href="'./#/artist/'+item.artistId"><i class="fa fa-search mr-1"></i>See more</a>
@@ -130,6 +131,16 @@
             <td class="align-middle">{{ item.email }}</td>
             <td class="align-middle">
               <a class="btn btn-light-blue waves-effect waves-light btn-sm" v-bind:href="'./#/user/'+item.id"><i class="fa fa-search mr-1"></i>See more</a>
+            </td>
+            <td v-if="!isUser[index]">
+              <button type="button" class="btn btn-primary waves-effect waves-light" v-if="!isFollowingUser[index] && isFollowingUser[index]!==undefined" v-on:click="followUser(item,index)">
+                Follow
+                <i class="fa fa-user-plus fa-lg" aria-hidden="true"></i>
+              </button>
+              <button type="button" class="btn btn-orange waves-effect waves-light" v-if="isFollowingUser[index] && isFollowingUser[index] !== undefined" v-on:click="unfollowUser(item,index)">
+                Following
+                <i class="fa fa-check fa-lg"></i>
+              </button>
             </td>
           </tr>
           </tbody>
@@ -196,6 +207,7 @@
       return {
         showErrorHandler: false,
         errorMessage: '',
+        artworkUrl: [],
         indexPageAlbum: 0,
         indexPageArtist: 0,
         indexPageSongs: 0,
@@ -212,7 +224,11 @@
         artists: [],
         albums: [],
         songs: [],
-        users: []
+        users: [],
+        currentUserId: '',
+        currentUser: undefined,
+        isUser: [],
+        isFollowingUser: []
       };
     },
     beforeCreate: function beforeCreate() {
@@ -220,8 +236,9 @@
     },
     created: async function created() {
       try {
-        const currentUserId = await api.getCurrentUserId();
-        const playlists = await api.getPlaylists(currentUserId);
+        this.currentUserId = await api.getCurrentUserId();
+        this.currentUser = await api.getUser(this.currentUserId);
+        const playlists = await api.getPlaylists(this.currentUserId);
         for (let i = 0; i < playlists.length; i += 1) {
           if (playlists[i].name !== undefined) {
             this.playlists.push({
@@ -264,6 +281,10 @@
           this.indexPageUsers -= this.displayNumbers;
         }
       },
+      getArtworkImg: async function getArtworkImg(artist) {
+        const artworkUrl = await api.getImageArtist(artist.artistLinkUrl);
+        document.getElementById(artist.artistId).src = artworkUrl;
+      },
       research: async function research() {
         this.songs = [];
         this.albums = [];
@@ -279,7 +300,9 @@
             case '0': {
               const artistsResults = await api.searchArtists(this.searchText);
               artistsResults.forEach((item) => {
+                this.artworkUrl.push('http://thinkfuture.com/wp-content/uploads/2013/10/loading_spinner.gif');
                 this.artists.push(item);
+                this.artworkUrl.splice(this.artworkUrl.length - 1, 1, this.getArtworkImg(item));
               });
               break;
             }
@@ -301,7 +324,20 @@
               const usersResults = await api.searchUsers(this.searchText);
               usersResults.forEach((item) => {
                 this.users.push(item);
+
+                if (this.isTheUser(item)) {
+                  this.isUser.push(true);
+                } else {
+                  this.isUser.push(false);
+                }
+
+                if (this.isFollowingTheUser(item)) {
+                  this.isFollowingUser.push(true);
+                } else {
+                  this.isFollowingUser.push(false);
+                }
               });
+
               break;
             }
             default:
@@ -334,6 +370,42 @@
       },
       addTrack: function addTrack(track) {
         this.tracksToAdd.push(track);
+      },
+      followUser: async function followUser(user, index) {
+        try {
+          await api.followUser(user.id)
+            .then(() => {
+              this.isFollowingUser.splice(index, 1, true);
+            });
+        } catch (err) {
+          this.errorMessage = err.message;
+          this.showErrorHandler = true;
+        }
+      },
+      unfollowUser: async function unfollowUser(user, index) {
+        try {
+          await api.unfollowUser(this.currentUser, user.email)
+            .then(() => {
+              this.isFollowingUser.splice(index, 1, false);
+            });
+        } catch (err) {
+          this.errorMessage = err.message;
+          this.showErrorHandler = true;
+        }
+      },
+      isFollowingTheUser: function isFollowingTheUser(user) {
+        for (let i = 0; i < this.currentUser.following.length; i += 1) {
+          if (this.currentUser.following[i].email === user.email) {
+            return true;
+          }
+        }
+        return false;
+      },
+      isTheUser: function isTheUser(user) {
+        if (this.currentUserId === user.id) {
+          return true;
+        }
+        return false;
       },
       keypressed(event) {
         if (event.keyCode === 13 && this.searchType !== -1 && this.searchText !== '') {
