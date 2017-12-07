@@ -123,7 +123,8 @@ export default {
       this.showErrorHandler = true;
     }
     try {
-      this.artworkUrl = await api.getImageArtist(this.itunesLink);
+      this.artworkUrl = 'http://thinkfuture.com/wp-content/uploads/2013/10/loading_spinner.gif';
+      this.getArtworkImg();
       this.descriptionArtist = await api.getDescriptionArtist(this.itunesLink);
     } catch (err) {
       this.errorMessage = err.message;
@@ -142,6 +143,10 @@ export default {
   methods: {
     redirectAlbum: (nav) => {
       document.location = `./#/album/${nav}`;
+    },
+    getArtworkImg: async function getArtworkImg() {
+      const artwork = await api.getImageArtist(this.itunesLink);
+      this.artworkUrl = artwork;
     }
   }
 };
