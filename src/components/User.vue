@@ -2,7 +2,7 @@
     <div class="container" v-if="user!==undefined && isFollowingUser!==undefined">
         <div class="row">
             <div class="col-md-3 text-center text-md-left">
-                <gravatar :email="user.email" :size="200" />
+                <gravatar :email="user.email" :size="200" class="rounded"/>
             </div>
             <div class="col-md-9 text-center text-xs-center text-md-center text-lg-left">
                 <h1 class="user-follow">
@@ -44,25 +44,29 @@
                     <h4 class="text-center" v-if="playlists.length==0 && !isUser">No playlists</h4>
                     <playlists :isUser="isUser" :playlists="playlists"></playlists>
                 </div>
-               
+
                 <div class="tab-pane tabNothing" id="following" ref="followingCard" role="tabpanel">
                     <following :users="users" :followings="user.following"></following>
                     <h4 class="text-center" v-if="user.following.length==0">Nothing to show</h4>
                 </div>
-                
+
             </div>
         </div>
+        <!-- Modal for error handler -->
+        <ErrorHandler v-bind:message="errorMessage" v-if="showErrorHandler"/>
     </div>
 </template>
 
 <script>
 import Gravatar from 'vue-gravatar';
-import Playlists from './Playlists';
+import Playlists from './PlaylistsUser';
 import Following from './Following';
 import api from '../api';
+import ErrorHandler from './ErrorHandler';
 
 export default {
   components: {
+    ErrorHandler,
     Playlists,
     Gravatar,
     Following

@@ -258,7 +258,7 @@ export default {
       headers: reqHeaders
     }))
     .then(resp => resp.json())
-    .then(data => data.results)
+    .then(data => data)
     .catch(() => {
       throw new Error('Unable to search users');
     });
@@ -274,6 +274,38 @@ export default {
       .then(data => data.results)
       .catch(() => {
         throw new Error('Unable to search');
+      });
+  },
+  getImageArtist: function getImageArtist(itunesLink) {
+    return fetch(itunesLink)
+      .then(response => response.text())
+      .then((body) => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(body, 'text/html');
+        const x = doc.querySelector('meta[property="og:image"]');
+        if (x !== null) {
+          return `${x.getAttribute('content').substring(0, x.getAttribute('content').lastIndexOf('/') + 1)}510x510-999.jpg`;
+        }
+        return 'https://cdn2.iconfinder.com/data/icons/smiling-face/512/Nothing_Face-512.png';
+      })
+      .catch(() => {
+        throw new Error('Unable to load artist image');
+      });
+  },
+  getDescriptionArtist: function getDescritionArtist(itunesLink) {
+    return fetch(itunesLink)
+      .then(response => response.text())
+      .then((body) => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(body, 'text/html');
+        const x = doc.getElementsByTagName('p');
+        if (x !== null && x[0] !== undefined) {
+          return x[0].getAttribute('aria-label');
+        }
+        return null;
+      })
+      .catch(() => {
+        throw new Error('Unable to load artist description');
       });
   },
   signup: function signup(email, password, name) {

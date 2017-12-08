@@ -1,16 +1,35 @@
 <template>
   <div class="container content">
+
     <div class="row">
-      <div class="col-md-12">
+      <div class="col-md-3 hm-black-strong">
+        <a v-bind:href="itunesLink" target="_blank">
+          <div class="view overlay hm-zoom z-depth-2 rounded mb-4">
+            <img id="artworkImg" v-bind:src="artworkUrl" class="img-fluid">
+            <div class="mask flex-center waves-effect waves-light">
+              <p class="white-text">See on iTunes</p>
+            </div>
+          </div>
+        </a>
+      </div>
+      <div class="col-md-9">
         <h2>{{ name }}</h2>
         <h3 class="light-blue-text"><em>{{ genre }}</em></h3>
         <div class="row">
           <div class="col-md-3">
-             <a v-bind:href="itunesLink" target="_blank" class="hoverable rounded itunes"></a>
+             <a v-bind:href="itunesLink" target="_blank" class="rounded itunes"></a>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">
+          <button v-bind:disabled="descriptionArtist === null" class="btn btn-light-blue btn-md waves-effect waves-light" data-toggle="modal" data-target="#description">
+            See more
+          </button>
           </div>
         </div>
       </div>
     </div>
+
     <div class="card mt-4 mb-4 animated fadeIn">
       <div class="card-body">
         <table class="table table-hover">
@@ -35,6 +54,26 @@
         </table>
       </div>
     </div>
+    <div class="modal fade" id="description" tabindex="-1" role="dialog" aria-labelledby="descriptionLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addTracksLabel">Description</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body description-artist">
+            <p>
+              {{descriptionArtist}}
+            </p>
+          </div>
+          <div class="modal-footer">
+
+          </div>
+        </div>
+      </div>
+    </div>
     <!-- Modal for error handler -->
     <ErrorHandler v-bind:message="errorMessage" v-if="showErrorHandler"/>
   </div>
@@ -55,7 +94,9 @@ export default {
       name: '',
       genre: '',
       itunesLink: '',
-      albums: []
+      albums: [],
+      artworkUrl: '',
+      descriptionArtist: ''
     };
   },
   beforeCreate: function beforeCreate() {
@@ -81,6 +122,14 @@ export default {
       this.errorMessage = err.message;
       this.showErrorHandler = true;
     }
+    try {
+      this.artworkUrl = 'http://thinkfuture.com/wp-content/uploads/2013/10/loading_spinner.gif';
+      this.getArtworkImg();
+      this.descriptionArtist = await api.getDescriptionArtist(this.itunesLink);
+    } catch (err) {
+      this.errorMessage = err.message;
+      this.showErrorHandler = true;
+    }
   },
   computed: {
     albumsFiltered: function albumsFiltered() {
@@ -94,7 +143,12 @@ export default {
   methods: {
     redirectAlbum: (nav) => {
       document.location = `./#/album/${nav}`;
+    },
+    getArtworkImg: async function getArtworkImg() {
+      const artwork = await api.getImageArtist(this.itunesLink);
+      this.artworkUrl = artwork;
     }
   }
 };
+
 </script>

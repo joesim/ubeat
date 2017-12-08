@@ -1,33 +1,83 @@
 <template>
   <div class="container">
-    <div class="card-body">
-      <br/>
-      <h3 class="text-center">Search results for: <strong>{{ search }}</strong></h3>
+    <div class="accordion" id="accordionReseachParams" role="tablist" aria-multiselectable="true">
+      <div class="card">
+
+        <div class="card-header" role="tab" id="headingOne">
+          <a class="btn btn-collapse bg-light-blue" data-toggle="collapse" data-parent="#accordionReseachParams" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            <h5 class="mb-0">
+              Search parameters <i class="fa fa-angle-down rotate-icon"></i>
+            </h5>
+          </a>
+        </div>
+
+        <div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne">
+          <div class="card-body collapse-spacing">
+            <div class="row">
+              <div class="col-md-3">
+                <h5>Research type</h5>
+
+                <div class="form-group">
+                  <input name="researchType" type="radio" class="with-gap" id="radioArtistType" value="0" v-model="searchType">
+                  <label for="radioArtistType">Artists</label>
+                </div>
+
+                <div class="form-group">
+                  <input name="researchType" type="radio" class="with-gap" id="radioAlbumType" value="1" v-model="searchType">
+                  <label for="radioAlbumType">Albums</label>
+                </div>
+
+                <div class="form-group">
+                  <input name="researchType" type="radio" class="with-gap" id="radioSongType" value="2" v-model="searchType">
+                  <label for="radioSongType">Songs</label>
+                </div>
+
+                <div class="form-group">
+                  <input name="researchType" type="radio" class="with-gap" id="radioUserType" value="3" v-model="searchType">
+                  <label for="radioUserType">Users</label>
+                </div>
+              </div>
+              <div class="col-md">
+                <div class="md-form">
+                  <input id="specificResearchTextInput" class="form-control" type="text" v-model="searchText" v-on:keyup="keypressed">
+                  <label for="specificResearchTextInput">Search</label>
+                </div>
+                <div class="md-form float-right">
+                  <a class="btn btn-light-blue waves-effect waves-light btn-lg" v-on:click="research()">Research</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <ul class="nav nav-tabs nav-justified bg-light-blue">
-      <li class="nav-item">
-        <a class="nav-link active" v-on:click="indexPageArtist = 0"  data-toggle="tab" href="#panel1" role="tab">Artists</a>
+      <li class="nav-item" v-if="searchTypeRequested == -1">
+        <a class="white-text">No specific request have been sent</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" v-on:click="indexPageAlbum = 0" data-toggle="tab" href="#panel2" role="tab">Albums</a>
+      <li class="nav-item" v-if="searchTypeRequested == 0">
+        <a class="white-text">Artists corresponding to the following request : "{{searchTextRequested}}"</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" v-on:click="indexPageSongs = 0"  data-toggle="tab" href="#panel3" role="tab">Songs</a>
+      <li class="nav-item" v-if="searchTypeRequested == 1">
+        <a class="white-text">Albums corresponding to the following request : "{{searchTextRequested}}"</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" v-on:click="indexPageUsers = 0"  data-toggle="tab" href="#panel4" role="tab">Users</a>
+      <li class="nav-item" v-if="searchTypeRequested == 2">
+        <a class="white-text">Songs corresponding to the following request : "{{searchTextRequested}}"</a>
+      </li>
+      <li class="nav-item" v-if="searchTypeRequested == 3">
+        <a class="white-text">Users corresponding to the following request : "{{searchTextRequested}}"</a>
       </li>
     </ul>
 
     <div class="tab-content card mb-4">
 
-      <div class="tab-pane fade in show active" id="panel1" role="tabpane1">
+      <div class="tab-pane fade in show active" v-if="searchTypeRequested == 0">
         <table class="table text-center" id="table-list-all-artists">
           <tbody v-for="(item, index) in artists">
-          <tr v-if="index < indexPageArtist + 3 && index >=  indexPageArtist">
+          <tr v-if="index < indexPageArtist + displayNumbers && index >=  indexPageArtist">
             <th scope="row" class="align-middle"><img v-bind:id="item.artistId" v-bind:src="artworkUrl[index]" class="img-fluid table-icon" alt="artist picture"></th>
-            <td class="align-middle"><strong>{{ item.artistName }}</strong></td>
+            <td class="align-middle">{{ item.artistName }}</td>
             <td class="align-middle light-blue-text"><em>{{ item.primaryGenreName }}</em></td>
             <td class="align-middle">
               <a class="btn btn-light-blue waves-effect waves-light btn-sm" v-bind:href="'./#/artist/'+item.artistId"><i class="fa fa-search mr-1"></i>See more</a>
@@ -37,16 +87,16 @@
         </table>
       </div>
 
-      <div class="tab-pane fade" id="panel2" role="tabpanel">
+      <div class="tab-pane fade in show active" v-if="searchTypeRequested == 1">
         <table class="table text-center" id="table-list-all-albums">
           <tbody v-for="(item, index) in albums">
-          <tr v-if="index < indexPageAlbum + 3 && index >=  indexPageAlbum">
+          <tr v-if="index < indexPageAlbum + displayNumbers && index >=  indexPageAlbum">
             <th scope="row" class="align-middle"><img v-bind:src="item.artworkUrl100" class="img-fluid table-icon" alt="album picture"></th>
             <td class="align-middle"><strong>{{ item.collectionName }}</strong></td>
             <td class="align-middle">{{ item.artistName }}</td>
             <td class="align-middle"><a class="btn btn-light-blue waves-effect waves-light btn-sm" v-bind:href="'./#/album/'+item.collectionId"><i class="fa fa-search mr-1"></i>See more</a></td>
             <td class="align-middle">
-              <button type="button" v-on:click="addAllAlbumTracks(item)" v-bind:disabled="playlists.length <= 0" class="btn btn-light-blue waves-effect waves-light btn-sm" data-toggle="modal" data-target="#addToPlaylistModal">
+              <button type="button" v-on:click="addAllAlbumTracks(albums[index])" v-bind:disabled="playlists.length <= 0" class="btn btn-light-blue waves-effect waves-light btn-sm" data-toggle="modal" data-target="#addToPlaylistModal">
                 Add all tracks in playlist
               </button>
             </td>
@@ -55,10 +105,10 @@
         </table>
       </div>
 
-      <div class="tab-pane fade" id="panel3" role="tabpanel">
+      <div class="tab-pane fade in show active" v-if="searchTypeRequested == 2">
         <table class="table text-center" id="table-list-all-songs">
           <tbody v-for="(item, index) in songs">
-          <tr v-if="index < indexPageSongs + 3 && index >=  indexPageSongs">
+          <tr v-if="index < indexPageSongs + displayNumbers && index >=  indexPageSongs">
             <th scope="row" class="align-middle"><img v-bind:src="item.artworkUrl100" class="img-fluid table-icon" alt="song picture"></th>
             <td class="align-middle"><strong>{{ item.trackName }}</strong></td>
             <td class="align-middle">{{ item.artistName }}</td>
@@ -77,10 +127,10 @@
         </table>
       </div>
 
-      <div class="tab-pane fade" id="panel4" role="tabpanel">
+      <div class="tab-pane fade in show active" v-if="searchTypeRequested == 3">
         <table class="table text-center" id="table-list-all-users">
           <tbody v-for="(item, index) in users">
-          <tr v-if="index < indexPageUsers + 3 && index >=  indexPageUsers">
+          <tr v-if="index < indexPageUsers + displayNumbers && index >=  indexPageUsers">
             <td class="align-middle"><strong>{{ item.name }}</strong></td>
             <td class="align-middle">{{ item.email }}</td>
             <td class="align-middle">
@@ -101,7 +151,7 @@
         </table>
       </div>
 
-      <div class="d-flex justify-content-center">
+      <div class="d-flex justify-content-center" v-if="searchTypeRequested != -1">
         <ul class="pagination pagination-square pg-blue mb-0">
           <li class="page-item">
             <a class="page-link" aria-label="Previous" v-on:click="previousPage">
@@ -147,7 +197,6 @@
         </div>
       </div>
     </div>
-
     <!-- Modal for error handler -->
     <ErrorHandler v-bind:message="errorMessage" v-if="showErrorHandler"/>
   </div>
@@ -170,103 +219,142 @@
         indexPageArtist: 0,
         indexPageSongs: 0,
         indexPageUsers: 0,
-        artists: [],
-        albums: [],
-        songs: [],
-        users: [],
+        displayNumbers: 5,
+        searchType: '-1',
+        searchText: '',
+        searchTypeRequested: '-1',
+        searchTextRequested: '',
         tracksToAdd: [],
         allAlbumTracks: [],
         selectedPlaylistIdx: 0,
         playlists: [],
-        indexSongPlaying: undefined,
-        audioVisible: 'display: none',
+        artists: [],
+        albums: [],
+        songs: [],
+        users: [],
         currentUserId: '',
         currentUser: undefined,
         isUser: [],
-        isFollowingUser: []
+        isFollowingUser: [],
+        indexSongPlaying: undefined,
+        audioVisible: 'display: none'
       };
     },
     beforeCreate: function beforeCreate() {
       api.checkPrivileges();
     },
     created: async function created() {
-      this.research();
       this.getUser();
-    },
-    props: ['search'],
-    watch: {
-      search: function update() {
-        this.research();
-      }
     },
     methods: {
       nextPage: function nextPage() {
-        if (this.indexPageAlbum + 3 < this.albums.length) {
-          this.indexPageAlbum += 3;
+        if (this.indexPageAlbum + this.displayNumbers < this.albums.length) {
+          this.indexPageAlbum += this.displayNumbers;
         }
-        if (this.indexPageArtist + 3 < this.artists.length) {
-          this.indexPageArtist += 3;
+        if (this.indexPageArtist + this.displayNumbers < this.artists.length) {
+          this.indexPageArtist += this.displayNumbers;
         }
-        if (this.indexPageSongs + 3 < this.songs.length) {
-          this.indexPageSongs += 3;
+        if (this.indexPageSongs + this.displayNumbers < this.songs.length) {
+          this.indexPageSongs += this.displayNumbers;
         }
-        if (this.indexPageUsers + 3 < this.users.length) {
-          this.indexPageUsers += 3;
+        if (this.indexPageUsers + this.displayNumbers < this.users.length) {
+          this.indexPageUsers += this.displayNumbers;
         }
       },
       previousPage: function nextPage() {
-        if (this.indexPageAlbum - 3 >= 0) {
-          this.indexPageAlbum -= 3;
+        if (this.indexPageAlbum - this.displayNumbers >= 0) {
+          this.indexPageAlbum -= this.displayNumbers;
         }
-        if (this.indexPageArtist - 3 >= 0) {
-          this.indexPageArtist -= 3;
+        if (this.indexPageArtist - this.displayNumbers >= 0) {
+          this.indexPageArtist -= this.displayNumbers;
         }
-        if (this.indexPageSongs - 3 >= 0) {
-          this.indexPageSongs -= 3;
+        if (this.indexPageSongs - this.displayNumbers >= 0) {
+          this.indexPageSongs -= this.displayNumbers;
         }
-        if (this.indexPageUsers - 3 >= 0) {
-          this.indexPageUsers -= 3;
+        if (this.indexPageUsers - this.displayNumbers >= 0) {
+          this.indexPageUsers -= this.displayNumbers;
         }
+      },
+      getArtworkImg: async function getArtworkImg(artist, index) {
+        const artwork = await api.getImageArtist(artist.artistLinkUrl);
+        this.artworkUrl.splice(index, 1, artwork);
+      },
+      playSong: function playSong(song, index) {
+        this.audioVisible = 'display: ';
+        this.indexSongPlaying = index;
+        this.$refs.audio.src = song;
+        this.$refs.audio.play();
+      },
+      stopSong: function stopSong() {
+        this.$refs.audio.src = '';
+        this.indexSongPlaying = -1;
+        this.audioVisible = 'display: none';
       },
       research: async function research() {
         this.songs = [];
         this.albums = [];
         this.artists = [];
         this.users = [];
-        try {
-          const result = await api.search(this.search);
-          result.forEach((item) => {
-            if (item.wrapperType === 'track') {
-              this.songs.push(item);
-            } else if (item.wrapperType === 'artist') {
-              this.artworkUrl.push('http://thinkfuture.com/wp-content/uploads/2013/10/loading_spinner.gif');
-              this.artists.push(item);
-              this.getArtworkImg(item, this.artworkUrl.length - 1);
-            } else if (item.wrapperType === 'collection') {
-              this.albums.push(item);
-            } else {
-              this.users.push(item);
-            }
-          });
-          const usersResults = await api.searchUsers(this.search);
-          usersResults.forEach((item) => {
-            this.users.push(item);
-            if (this.isTheUser(item)) {
-              this.isUser.push(true);
-            } else {
-              this.isUser.push(false);
-            }
+        this.indexPageAlbum = 0;
+        this.indexPageArtist = 0;
+        this.indexPageSongs = 0;
+        this.indexPageUsers = 0;
 
-            if (this.isFollowingTheUser(item)) {
-              this.isFollowingUser.push(true);
-            } else {
-              this.isFollowingUser.push(false);
+        try {
+          switch (this.searchType) {
+            case '0': {
+              const artistsResults = await api.searchArtists(this.searchText);
+              artistsResults.forEach((item) => {
+                this.artworkUrl.push('http://thinkfuture.com/wp-content/uploads/2013/10/loading_spinner.gif');
+                this.artists.push(item);
+                this.getArtworkImg(item, this.artworkUrl.length - 1);
+              });
+              break;
             }
-          });
+            case '1': {
+              const albumsResults = await api.searchAlbums(this.searchText);
+              albumsResults.forEach((item) => {
+                this.albums.push(item);
+              });
+              break;
+            }
+            case '2': {
+              const songsResults = await api.searchTracks(this.searchText);
+              songsResults.forEach((item) => {
+                this.songs.push(item);
+              });
+              break;
+            }
+            case '3': {
+              const usersResults = await api.searchUsers(this.searchText);
+              usersResults.forEach((item) => {
+                this.users.push(item);
+
+                if (this.isTheUser(item)) {
+                  this.isUser.push(true);
+                } else {
+                  this.isUser.push(false);
+                }
+
+                if (this.isFollowingTheUser(item)) {
+                  this.isFollowingUser.push(true);
+                } else {
+                  this.isFollowingUser.push(false);
+                }
+              });
+
+              break;
+            }
+            default:
+              break;
+          }
         } catch (err) {
           this.errorMessage = err.message;
           this.showErrorHandler = true;
         }
+
+        this.searchTypeRequested = this.searchType;
+        this.searchTextRequested = this.searchText;
       },
       addToPlaylist: function addToPlaylist() {
         if (this.selectedPlaylistIdx < this.playlists.length) {
@@ -287,21 +375,6 @@
       },
       addTrack: function addTrack(track) {
         this.tracksToAdd.push(track);
-      },
-      playSong: function playSong(song, index) {
-        this.audioVisible = 'display: ';
-        this.indexSongPlaying = index;
-        this.$refs.audio.src = song;
-        this.$refs.audio.play();
-      },
-      stopSong: function stopSong() {
-        this.$refs.audio.src = '';
-        this.indexSongPlaying = -1;
-        this.audioVisible = 'display: none';
-      },
-      getArtworkImg: async function getArtworkImg(artist, index) {
-        const artwork = await api.getImageArtist(artist.artistLinkUrl);
-        this.artworkUrl.splice(index, 1, artwork);
       },
       followUser: async function followUser(user, index) {
         try {
@@ -358,6 +431,12 @@
           this.errorMessage = err.message;
           this.showErrorHandler = true;
         }
+      },
+      keypressed(event) {
+        if (event.keyCode === 13 && this.searchType !== -1 && this.searchText !== '') {
+          this.research();
+        }
+        return false;
       }
     }
   };

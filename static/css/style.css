@@ -4,12 +4,17 @@ body {
     background-position: center center;
     background-size: cover;
     background-attachment: fixed;
-    min-height: 100vh;
+    min-height: 80vh;
     padding-top: 80px;
 }
 
 .brand{
   height: 35px;
+}
+
+.searchPlus {
+  height: 25px;
+  padding-left: 5px;
 }
 
 .navbar {
@@ -56,6 +61,28 @@ button {
 
 .btn {
 	margin: 0px !important;
+}
+
+.btn-collapse {
+  width: 100%;
+}
+
+.collapse-spacing {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.collapse-spacing .col-md{
+  margin-top: 20px;
+}
+
+.card-body .form-group {
+  margin-left: 20px;
+  margin-bottom : 0px;
+}
+
+.accordion {
+  margin-bottom: 20px;
 }
 
 .card-spacing {
@@ -184,4 +211,9 @@ table.table th, table.table td {
 	background-color: RGB(130,177,255);
 	color: white;
 	cursor: pointer;
+}
+
+.description-artist {
+	text-align: justify;
+	font-size: 0.8em;
 }
