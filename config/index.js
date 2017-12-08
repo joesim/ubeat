@@ -4,7 +4,7 @@ var path = require('path')
 module.exports = {
   dev: {
     env: require('./dev.env'),
-    port: 8080,
+    port: process.env.PORT || 8080,
     autoOpenBrowser: true,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
