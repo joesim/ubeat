@@ -72,7 +72,7 @@
       },
       logout: () => {
         Cookies.remove('token');
-        window.location = './#/login';
+        router.push({ path: '/login' });
       },
       keypressed(event) {
         if (event.keyCode === 13 && this.searchText !== '') {
