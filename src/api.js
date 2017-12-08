@@ -20,7 +20,13 @@ export default {
       method: 'GET',
       headers: reqHeaders
     }))
-      .then(resp => resp.json())
+      .then((resp) => {
+        if (!resp.ok) {
+          if (resp.status === 401) router.push({ path: '/login' });
+          throw Error(resp.statusText);
+        }
+        return resp.json();
+      })
       .then(data => data)
       .catch(() => {
         throw new Error('Unable to get Users');
@@ -36,7 +42,13 @@ export default {
       id: userId
     };
     return fetch(new Request(reqLoc, { method: 'POST', headers: reqHeaders, body: JSON.stringify(reqBody) }))
-      .then(resp => resp.json())
+      .then((resp) => {
+        if (!resp.ok) {
+          if (resp.status === 401) router.push({ path: '/login' });
+          throw Error(resp.statusText);
+        }
+        return resp.json();
+      })
       .then(data => data)
       .catch(() => {
         throw new Error('Unable to follow user');
@@ -52,7 +64,13 @@ export default {
     }
     const reqLoc = `${apiLocation}/follow/${userToDeleteId}`;
     return fetch(new Request(reqLoc, { method: 'DELETE', headers: reqHeaders }))
-      .then(resp => resp.json())
+      .then((resp) => {
+        if (!resp.ok) {
+          if (resp.status === 401) router.push({ path: '/login' });
+          throw Error(resp.statusText);
+        }
+        return resp.json();
+      })
       .then(() => undefined)
       .catch(() => {
         throw new Error('Unable to unfollow user');
@@ -65,7 +83,13 @@ export default {
       method: 'GET',
       headers: reqHeaders
     }))
-      .then(resp => resp.json())
+      .then((resp) => {
+        if (!resp.ok) {
+          if (resp.status === 401) router.push({ path: '/login' });
+          throw Error(resp.statusText);
+        }
+        return resp.json();
+      })
       .then(data => data)
       .catch(() => {
         throw new Error('Unable to get User');
@@ -75,7 +99,13 @@ export default {
     const reqHeaders = new Headers({ Authorization: token });
     const reqLocTok = `${apiLocation}/tokeninfo`;
     return fetch(new Request(reqLocTok, { method: 'GET', headers: reqHeaders }))
-      .then(resp => resp.json())
+      .then((resp) => {
+        if (!resp.ok) {
+          if (resp.status === 401) router.push({ path: '/login' });
+          throw Error(resp.statusText);
+        }
+        return resp.json();
+      })
       .then(data => data.id)
       .catch(() => {
         throw new Error('Unable to get current user Id');
@@ -88,7 +118,13 @@ export default {
       method: 'GET',
       headers: reqHeaders
     }))
-      .then(resp => resp.json())
+      .then((resp) => {
+        if (!resp.ok) {
+          if (resp.status === 401) router.push({ path: '/login' });
+          throw Error(resp.statusText);
+        }
+        return resp.json();
+      })
       .then((data) => {
         if (userId !== undefined) {
           const playlistsUser = [];
@@ -113,7 +149,13 @@ export default {
     });
     const reqLoc = `${apiLocation}/playlists`;
     return fetch(new Request(reqLoc, { method: 'POST', headers: reqHeaders, body: reqBody }))
-      .then(resp => resp.json())
+      .then((resp) => {
+        if (!resp.ok) {
+          if (resp.status === 401) router.push({ path: '/login' });
+          throw Error(resp.statusText);
+        }
+        return resp.json();
+      })
       .then(data => data)
       .catch(() => {
         throw new Error('Unable to create playlist');
@@ -123,7 +165,13 @@ export default {
     const reqHeaders = new Headers({ Authorization: token });
     const reqLoc = `${apiLocation}/playlists/${id}`;
     return fetch(new Request(reqLoc, { method: 'GET', headers: reqHeaders }))
-      .then(resp => resp.json())
+      .then((resp) => {
+        if (!resp.ok) {
+          if (resp.status === 401) router.push({ path: '/login' });
+          throw Error(resp.statusText);
+        }
+        return resp.json();
+      })
       .then(data => data)
       .catch(() => {
         throw new Error('Unable to get playlist');
@@ -136,7 +184,13 @@ export default {
       method: 'DELETE',
       headers: reqHeaders
     }))
-    .then(resp => resp.json())
+    .then((resp) => {
+      if (!resp.ok) {
+        if (resp.status === 401) router.push({ path: '/login' });
+        throw Error(resp.statusText);
+      }
+      return resp.json();
+    })
     .then(() => undefined)
     .catch(() => {
       throw new Error('Unable to delete playlist');
@@ -149,7 +203,13 @@ export default {
     const reqBody = playlist;
     const reqLoc = `${apiLocation}/playlists/${id}`;
     return fetch(new Request(reqLoc, { method: 'PUT', headers: headersPut, body: reqBody }))
-        .then(resp => resp.json())
+        .then((resp) => {
+          if (!resp.ok) {
+            if (resp.status === 401) router.push({ path: '/login' });
+            throw Error(resp.statusText);
+          }
+          return resp.json();
+        })
         .then(data => data)
         .catch(() => {
           throw new Error('Unable to change playlist name');
@@ -159,7 +219,13 @@ export default {
     const reqHeaders = new Headers({ Authorization: token });
     const reqLoc = `${apiLocation}/playlists/${playlistId}/tracks/${trackId}`;
     return fetch(new Request(reqLoc, { method: 'DELETE', headers: reqHeaders }))
-      .then(resp => resp.json())
+      .then((resp) => {
+        if (!resp.ok) {
+          if (resp.status === 401) router.push({ path: '/login' });
+          throw Error(resp.statusText);
+        }
+        return resp.json();
+      })
       .then(() => undefined)
       .catch(() => {
         throw new Error('Unable to delete song');
@@ -169,7 +235,13 @@ export default {
     const reqHeaders = new Headers({ Authorization: token });
     const reqLoc = `${apiLocation}/albums/${albumId}`;
     return fetch(new Request(reqLoc, { method: 'GET', headers: reqHeaders }))
-      .then(resp => resp.json())
+      .then((resp) => {
+        if (!resp.ok) {
+          if (resp.status === 401) router.push({ path: '/login' });
+          throw Error(resp.statusText);
+        }
+        return resp.json();
+      })
       .then(data => data)
       .catch(() => {
         throw new Error('Unable to get album');
@@ -179,7 +251,13 @@ export default {
     const reqHeaders = new Headers({ Authorization: token });
     const reqLocTracks = `${apiLocation}/albums/${albumId}/tracks`;
     return fetch(new Request(reqLocTracks, { method: 'GET', headers: reqHeaders }))
-      .then(resp => resp.json())
+      .then((resp) => {
+        if (!resp.ok) {
+          if (resp.status === 401) router.push({ path: '/login' });
+          throw Error(resp.statusText);
+        }
+        return resp.json();
+      })
       .then(data => data)
       .catch(() => {
         throw new Error('Unable to get tracks');
@@ -191,7 +269,12 @@ export default {
     tracks.forEach((track) => {
       const data = new URLSearchParams(track);
       fetch(new Request(reqLocAdd, { method: 'POST', headers: reqHeaders, body: data }))
-          .then()
+          .then((resp) => {
+            if (!resp.ok) {
+              if (resp.status === 401) router.push({ path: '/login' });
+              throw Error(resp.statusText);
+            }
+          })
           .catch((err) => {
             throw new Error(err.message);
           });
@@ -201,7 +284,13 @@ export default {
     const reqHeaders = new Headers({ Authorization: token });
     const reqLoc = `${apiLocation}/artists/${artistId}`;
     return fetch(new Request(reqLoc, { method: 'GET', headers: reqHeaders }))
-      .then(resp => resp.json())
+      .then((resp) => {
+        if (!resp.ok) {
+          if (resp.status === 401) router.push({ path: '/login' });
+          throw Error(resp.statusText);
+        }
+        return resp.json();
+      })
       .then(data => data)
       .catch(() => {
         throw new Error('Unable to get an artist');
@@ -211,7 +300,13 @@ export default {
     const reqHeaders = new Headers({ Authorization: token });
     const reqLocAlbums = `${apiLocation}/artists/${artistId}/albums`;
     return fetch(new Request(reqLocAlbums, { method: 'GET', headers: reqHeaders }))
-      .then(resp => resp.json())
+      .then((resp) => {
+        if (!resp.ok) {
+          if (resp.status === 401) router.push({ path: '/login' });
+          throw Error(resp.statusText);
+        }
+        return resp.json();
+      })
       .then(data => data)
       .catch(() => {
         throw new Error('Unable to get albums');
@@ -221,7 +316,13 @@ export default {
     const reqHeaders = new Headers({ Authorization: token });
     const reqLocArtists = `${apiLocation}/search/artists?q=${str}`;
     return fetch(new Request(reqLocArtists, { method: 'GET', headers: reqHeaders }))
-      .then(resp => resp.json())
+      .then((resp) => {
+        if (!resp.ok) {
+          if (resp.status === 401) router.push({ path: '/login' });
+          throw Error(resp.statusText);
+        }
+        return resp.json();
+      })
       .then(data => data.results)
       .catch(() => {
         throw new Error('Unable to search an artist');
@@ -231,7 +332,13 @@ export default {
     const reqHeaders = new Headers({ Authorization: token });
     const reqLocAlbums = `${apiLocation}/search/albums?q=${str}`;
     return fetch(new Request(reqLocAlbums, { method: 'GET', headers: reqHeaders }))
-      .then(resp => resp.json())
+      .then((resp) => {
+        if (!resp.ok) {
+          if (resp.status === 401) router.push({ path: '/login' });
+          throw Error(resp.statusText);
+        }
+        return resp.json();
+      })
       .then(data => data.results)
       .catch(() => {
         throw new Error('Unable to search an album');
@@ -244,7 +351,13 @@ export default {
       method: 'GET',
       headers: reqHeaders
     }))
-    .then(resp => resp.json())
+    .then((resp) => {
+      if (!resp.ok) {
+        if (resp.status === 401) router.push({ path: '/login' });
+        throw Error(resp.statusText);
+      }
+      return resp.json();
+    })
     .then(data => data.results)
     .catch(() => {
       throw new Error('Unable to search tracks');
@@ -257,7 +370,13 @@ export default {
       method: 'GET',
       headers: reqHeaders
     }))
-    .then(resp => resp.json())
+    .then((resp) => {
+      if (!resp.ok) {
+        if (resp.status === 401) router.push({ path: '/login' });
+        throw Error(resp.statusText);
+      }
+      return resp.json();
+    })
     .then(data => data)
     .catch(() => {
       throw new Error('Unable to search users');
@@ -270,7 +389,13 @@ export default {
       method: 'GET',
       headers: reqHeaders
     }))
-      .then(resp => resp.json())
+      .then((resp) => {
+        if (!resp.ok) {
+          if (resp.status === 401) router.push({ path: '/login' });
+          throw Error(resp.statusText);
+        }
+        return resp.json();
+      })
       .then(data => data.results)
       .catch(() => {
         throw new Error('Unable to search');
@@ -278,7 +403,13 @@ export default {
   },
   getImageArtist: function getImageArtist(itunesLink) {
     return fetch(itunesLink)
-      .then(response => response.text())
+      .then((resp) => {
+        if (!resp.ok) {
+          if (resp.status === 401) router.push({ path: '/login' });
+          throw Error(resp.statusText);
+        }
+        return resp.text();
+      })
       .then((body) => {
         const parser = new DOMParser();
         const doc = parser.parseFromString(body, 'text/html');
@@ -294,7 +425,13 @@ export default {
   },
   getDescriptionArtist: function getDescritionArtist(itunesLink) {
     return fetch(itunesLink)
-      .then(response => response.text())
+      .then((resp) => {
+        if (!resp.ok) {
+          if (resp.status === 401) router.push({ path: '/login' });
+          throw Error(resp.statusText);
+        }
+        return resp.text();
+      })
       .then((body) => {
         const parser = new DOMParser();
         const doc = parser.parseFromString(body, 'text/html');
@@ -313,7 +450,12 @@ export default {
     const headersSignup = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
     const reqLoc = `${apiLocation}/signup`;
     return fetch(new Request(reqLoc, { method: 'POST', headers: headersSignup, body: reqBody }))
-      .then(resp => resp.json())
+      .then((resp) => {
+        if (!resp.ok) {
+          throw Error(resp.statusText);
+        }
+        return resp.json();
+      })
       .then(data => data)
       .catch(() => {
         throw new Error('User already exists');
@@ -324,7 +466,12 @@ export default {
     const headersLogin = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
     const reqLoc = `${apiLocation}/login`;
     return fetch(new Request(reqLoc, { method: 'POST', headers: headersLogin, body: reqBody }))
-      .then(resp => resp.json())
+      .then((resp) => {
+        if (!resp.ok) {
+          throw Error(resp.statusText);
+        }
+        return resp.json();
+      })
       .then(data => data)
       .catch(() => {
         throw new Error('Wrong login');
