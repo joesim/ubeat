@@ -190,8 +190,8 @@
       api.checkPrivileges();
     },
     created: async function created() {
-      this.research();
-      this.getUser();
+      await this.getUser();
+      await this.research();
     },
     props: ['search'],
     watch: {
