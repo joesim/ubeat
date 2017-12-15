@@ -229,6 +229,7 @@
         }
       },
       research: async function research() {
+        this.stopSong();
         this.songs = [];
         this.albums = [];
         this.artists = [];
