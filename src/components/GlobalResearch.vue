@@ -244,8 +244,6 @@
               this.getArtworkImg(item, this.artworkUrl.length - 1);
             } else if (item.wrapperType === 'collection') {
               this.albums.push(item);
-            } else {
-              this.users.push(item);
             }
           });
           const usersResults = await api.searchUsers(this.search);
