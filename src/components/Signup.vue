@@ -7,19 +7,16 @@
 
             <div class="md-form">
                 <i class="fa fa-user prefix grey-text"></i>
-                <input v-model="name" type="text" id="orangeForm-name" class="form-control">
-                <label for="orangeForm-name">Your name</label>
+                <input v-model="name" type="text" id="orangeForm-name" class="form-control" placeholder="Your name">
             </div>
             <div class="md-form">
                 <i class="fa fa-envelope prefix grey-text"></i>
-                <input v-model="email" type="text" id="orangeForm-email" class="form-control">
-                <label for="orangeForm-email">Your email</label>
+                <input v-model="email" type="text" id="orangeForm-email" class="form-control" placeholder="Your email">
             </div>
 
             <div class="md-form">
                 <i class="fa fa-lock prefix grey-text"></i>
-                <input v-model="password" type="password" id="orangeForm-pass" class="form-control">
-                <label for="orangeForm-pass">Your password</label>
+                <input v-model="password" type="password" id="orangeForm-pass" class="form-control" placeholder="Your password">
             </div>
 
             <div class="text-center md-form">

@@ -7,14 +7,12 @@
 
           <div class="md-form">
             <i class="fa fa-envelope prefix grey-text"></i>
-            <input v-model="email" type="text" id="defaultForm-email" class="form-control">
-            <label for="defaultForm-email">Your email</label>
+            <input v-model="email" type="text" id="defaultForm-email" class="form-control" placeholder="Your email">
           </div>
 
           <div class="md-form">
             <i class="fa fa-lock prefix grey-text"></i>
-            <input v-model="password" type="password" id="defaultForm-pass" class="form-control">
-            <label for="defaultForm-pass">Your password</label>
+            <input v-model="password" type="password" id="defaultForm-pass" class="form-control" placeholder="Your password">
           </div>
 
           <div class="text-center md-form">
